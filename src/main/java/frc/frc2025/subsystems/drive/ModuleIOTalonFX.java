@@ -11,9 +11,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.drive;
+package frc.frc2025.subsystems.drive;
 
-import static frc.robot.util.PhoenixUtil.*;
+import static frc.frc2025.util.PhoenixUtil.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
@@ -40,7 +40,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-import frc.robot.generated.TunerConstants;
+import frc.frc2025.generated.TunerConstants;
 import java.util.Queue;
 
 /**
