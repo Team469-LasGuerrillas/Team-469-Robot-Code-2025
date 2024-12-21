@@ -5,7 +5,9 @@ import org.littletonrobotics.junction.AutoLog;
 public interface MotorIO {
 
   @AutoLog
-  public static class MotorIOInputs {
+  class MotorIOInputs {
+    public boolean connected = false;
+
     public double velocityUnitsPerSecond = 0.0;
     public double unitPosition = 0.0;
     public double appliedVolts = 0.0;
