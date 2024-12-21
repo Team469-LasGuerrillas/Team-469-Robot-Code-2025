@@ -33,6 +33,8 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
 
+  // Wow I made some changes
+
   public Robot() {
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -47,6 +49,8 @@ public class Robot extends LoggedRobot {
       case 1:
         Logger.recordMetadata("GitDirty", "Uncomitted changes");
         break;
+      case 2:
+	break;
       default:
         Logger.recordMetadata("GitDirty", "Unknown");
         break;
