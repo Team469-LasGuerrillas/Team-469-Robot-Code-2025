@@ -50,7 +50,7 @@ public class Robot extends LoggedRobot {
         Logger.recordMetadata("GitDirty", "Uncomitted changes");
         break;
       case 2:
-	break;
+        break;
       default:
         Logger.recordMetadata("GitDirty", "Unknown");
         break;
