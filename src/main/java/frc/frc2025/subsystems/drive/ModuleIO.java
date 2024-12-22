@@ -20,6 +20,7 @@ public interface ModuleIO {
   @AutoLog
   public static class ModuleIOInputs {
     public boolean driveConnected = false;
+    public boolean driveBrake = false;
     public double drivePositionRad = 0.0;
     public double driveVelocityRadPerSec = 0.0;
     public double driveAppliedVolts = 0.0;
@@ -43,6 +44,8 @@ public interface ModuleIO {
 
   /** Run the drive motor at the specified open loop value. */
   public default void setDriveOpenLoop(double output) {}
+
+  public default void setDriveBrakeMode(boolean brake) {}
 
   /** Run the turn motor at the specified open loop value. */
   public default void setTurnOpenLoop(double output) {}
