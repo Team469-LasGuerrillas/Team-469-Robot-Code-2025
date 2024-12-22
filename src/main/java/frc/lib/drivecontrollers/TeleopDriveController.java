@@ -7,12 +7,11 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotState;
 import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.lib.util.SignedPower;
 
 public class TeleopDriveController {
-  
+
   private double controllerX = 0;
   private double controllerY = 0;
   private double controllerOmega = 0;
@@ -48,13 +47,14 @@ public class TeleopDriveController {
           linearVelocity.getY() * maxLinearVelocity,
           omega * maxAngularVelocity,
           new Rotation2d(0.0) // Implement get rotation
-      );
+          );
     }
   }
 
   public static Translation2d calcLinearVelocity(double x, double y) {
     // Apply deadband
-    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DriveConstants.STICK_DEADBAND);
+    double linearMagnitude =
+        MathUtil.applyDeadband(Math.hypot(x, y), DriveConstants.STICK_DEADBAND);
     Rotation2d linearDirection = new Rotation2d(x, y);
 
     // Square magnitude

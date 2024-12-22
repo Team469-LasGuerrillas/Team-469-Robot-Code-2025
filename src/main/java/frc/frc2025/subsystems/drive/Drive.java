@@ -53,7 +53,6 @@ import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.util.LocalADStarAK;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.TeleopDriveController;
-
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -92,7 +91,6 @@ public class Drive extends SubsystemBase {
 
   private final TeleopDriveController teleopDriveController;
   private HeadingController headingController = null;
-
 
   // TunerConstants doesn't include these constants, so they are declared locally
   static final double ODOMETRY_FREQUENCY =
@@ -146,12 +144,11 @@ public class Drive extends SubsystemBase {
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public static void createInstance(
-    GyroIO gyroIO,
-    ModuleIO flModuleIO,
-    ModuleIO frModuleIO,
-    ModuleIO blModuleIO,
-    ModuleIO brModuleIO
-  ) {
+      GyroIO gyroIO,
+      ModuleIO flModuleIO,
+      ModuleIO frModuleIO,
+      ModuleIO blModuleIO,
+      ModuleIO brModuleIO) {
     instance = new Drive(gyroIO, flModuleIO, frModuleIO, blModuleIO, brModuleIO);
   }
 
@@ -213,7 +210,6 @@ public class Drive extends SubsystemBase {
 
     // Configure controllers
     teleopDriveController = new TeleopDriveController();
-    
   }
 
   @Override
@@ -266,7 +262,7 @@ public class Drive extends SubsystemBase {
         Twist2d twist = kinematics.toTwist2d(moduleDeltas);
         rawGyroRotation = rawGyroRotation.plus(new Rotation2d(twist.dtheta));
       }
-      
+
       // Update gyro alert
       gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
@@ -283,7 +279,7 @@ public class Drive extends SubsystemBase {
       }
 
       ChassisSpeeds teleopSpeeds = teleopDriveController.update();
-      
+
       switch (currentDriveMode) {
         case TELEOP -> {
           desiredSpeeds = teleopSpeeds;
@@ -304,10 +300,9 @@ public class Drive extends SubsystemBase {
     if (!DriverStation.isDisabled()) {
       runVelocity(desiredSpeeds);
     }
-    
+
     Logger.recordOutput(
-        "Drive/SwerveStates/Desired(b4 Poofs)",
-        kinematics.toSwerveModuleStates(desiredSpeeds));
+        "Drive/SwerveStates/Desired(b4 Poofs)", kinematics.toSwerveModuleStates(desiredSpeeds));
     Logger.recordOutput("Drive/DesiredSpeeds", desiredSpeeds);
     Logger.recordOutput("Drive/DriveMode", currentDriveMode);
   }
@@ -316,11 +311,11 @@ public class Drive extends SubsystemBase {
     autoSpeeds = speeds;
   }
 
-  public void acceptTeleopInput(double controllerX, double controllerY, double controllerOmega, boolean robotRelative) {
+  public void acceptTeleopInput(
+      double controllerX, double controllerY, double controllerOmega, boolean robotRelative) {
     if (DriverStation.isTeleopEnabled()) {
       teleopDriveController.acceptDriveInput(
-        controllerX, controllerY, controllerOmega, robotRelative
-      );
+          controllerX, controllerY, controllerOmega, robotRelative);
     }
   }
 
@@ -339,7 +334,8 @@ public class Drive extends SubsystemBase {
       optimizedSetpointStates[i].optimize(modules[i].getAngle());
     }
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(optimizedSetpointStates, TunerConstants.kSpeedAt12Volts);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        optimizedSetpointStates, TunerConstants.kSpeedAt12Volts);
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("Drive/SwerveStates/Setpoints", optimizedSetpointStates);
@@ -428,7 +424,8 @@ public class Drive extends SubsystemBase {
 
   public Twist2d fieldVelocity() {
     Translation2d linearFieldVelocity =
-        new Translation2d(getRobotRelativeVelocity().dx, getRobotRelativeVelocity().dy).rotateBy(getRotation());
+        new Translation2d(getRobotRelativeVelocity().dx, getRobotRelativeVelocity().dy)
+            .rotateBy(getRotation());
     return new Twist2d(
         linearFieldVelocity.getX(), linearFieldVelocity.getY(), getRobotRelativeVelocity().dtheta);
   }

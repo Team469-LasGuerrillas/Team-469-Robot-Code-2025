@@ -1,18 +1,16 @@
 package frc.lib.drivecontrollers;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotState;
 import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.subsystems.drive.Drive;
 import frc.lib.util.ToleranceUtil;
+import java.util.function.Supplier;
 
 public class HeadingController {
-  
+
   private final ProfiledPIDController controller;
   private final Supplier<Rotation2d> goalHeadingSupplier;
 
@@ -29,21 +27,19 @@ public class HeadingController {
     this.goalHeadingSupplier = goalHeadingSupplier;
 
     controller.reset(
-        Drive.getInstance().getRotation().getRadians(),
-        Drive.getInstance().fieldVelocity().dtheta);
+        Drive.getInstance().getRotation().getRadians(), Drive.getInstance().fieldVelocity().dtheta);
   }
 
   public double update() {
     double maxAngularAcceleration = DriveConstants.MAX_ANGULAR_ACCEL;
     double maxAngularVelocity = DriveConstants.TELEOP_MAX_LINEAR_VELOCITY;
-    
+
     controller.setConstraints(
         new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularAcceleration));
 
     double output =
         controller.calculate(
-            Drive.getInstance().getRotation().getRadians(),
-            goalHeadingSupplier.get().getRadians());
+            Drive.getInstance().getRotation().getRadians(), goalHeadingSupplier.get().getRadians());
 
     // Logger.recordOutput("Drive/HeadingController/HeadingError", controller.getPositionError());
     return output;

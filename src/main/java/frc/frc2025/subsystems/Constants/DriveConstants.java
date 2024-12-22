@@ -24,6 +24,7 @@ public class DriveConstants {
   public static final double STICK_DEADBAND = 0.01;
   public static final double STICK_EXPO = 1;
 
-  public static final double TELEOP_MAX_LINEAR_VELOCITY = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+  public static final double TELEOP_MAX_LINEAR_VELOCITY =
+      TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
   public static final double TELEOP_MAX_ANGULAR_VELOCITY = TELEOP_MAX_LINEAR_VELOCITY / 0.5;
 }
