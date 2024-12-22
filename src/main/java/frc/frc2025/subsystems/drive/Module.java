@@ -86,6 +86,10 @@ public class Module {
     io.setTurnPosition(new Rotation2d());
   }
 
+  public void setBrakeMode(boolean enabled) {
+    io.setDriveBrakeMode(enabled);
+  }
+
   /** Disables all outputs to motors. */
   public void stop() {
     io.setDriveOpenLoop(0.0);

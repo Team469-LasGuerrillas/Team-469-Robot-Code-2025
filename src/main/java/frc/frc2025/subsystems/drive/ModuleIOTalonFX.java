@@ -232,6 +232,15 @@ public class ModuleIOTalonFX implements ModuleIO {
   }
 
   @Override
+  public void setDriveBrakeMode(boolean brake) {
+    if (brake) {
+      driveTalon.setNeutralMode(NeutralModeValue.Brake);
+    } else {
+      driveTalon.setNeutralMode(NeutralModeValue.Coast);
+    }
+  }
+
+  @Override
   public void setTurnOpenLoop(double output) {
     turnTalon.setControl(
         switch (constants.SteerMotorClosedLoopOutput) {
