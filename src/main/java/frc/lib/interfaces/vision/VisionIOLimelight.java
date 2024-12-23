@@ -26,7 +26,7 @@ public class VisionIOLimelight implements VisionIO {
    * @param limelightName Name of the limelight, configurable via web GUI. Should look something
    *     like limelight-customname.
    */
-  private VisionIOLimelight(String limelightName) {
+  public VisionIOLimelight(String limelightName) {
     this.limelightName = limelightName;
 
     fiducials = LimelightHelpers.getRawFiducials(limelightName);
@@ -74,7 +74,6 @@ public class VisionIOLimelight implements VisionIO {
     double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
     inputs.pinholeStdDevs = new double[] {stddevs[6], stddevs[7], stddevs[11]};
     inputs.solvePnpStdDevs = new double[] {stddevs[0], stddevs[1], stddevs[5]};
-
   }
 
   private TargettingType getPipeType() {

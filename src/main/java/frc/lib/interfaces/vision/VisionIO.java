@@ -16,6 +16,13 @@ public interface VisionIO {
       int fiducialId,
       TargettingType targetType) {}
 
+  public record PoseObservation(
+      double timestamp,
+      Pose3d pinholePose,
+      Pose3d solvePnpPose,
+      double[] pinholeStdDevs,
+      double[] solvePnpStdDevs) {}
+
   public enum TargettingType {
     FIDUCIAL,
     COLOR,
@@ -27,12 +34,14 @@ public interface VisionIO {
   class VisionIOInputs {
     public boolean hasLatestUpdate = false;
     public Pose3d cameraPose;
+    public boolean isConnected = false;
 
     // Pipeline
     public boolean hasTargets = false;
     public TargettingType targettingType;
 
     public TrackedTarget[] targets;
+    public PoseObservation[] poseObservations;
 
     // Performance information
     public double totalLatencyMs;
@@ -55,4 +64,6 @@ public interface VisionIO {
   public default void setPoseRobotSpace(Pose3d cameraPose) {}
 
   public default void setRobotRotationUpdate(Rotation2d rotation, Rotation2d angularVelocity) {}
+
+  public default void setPipelineIndex(int index) {}
 }
