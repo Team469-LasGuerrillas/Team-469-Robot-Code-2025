@@ -4,10 +4,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.photonvision.PhotonCamera;
 
 public class VisionIOPhotonVision implements VisionIO {
@@ -37,7 +35,7 @@ public class VisionIOPhotonVision implements VisionIO {
   }
 
   @Override
-  public void setPipelineIndex(int index){
+  public void setPipelineIndex(int index) {
     camera.setPipelineIndex(index);
   }
 
@@ -45,7 +43,7 @@ public class VisionIOPhotonVision implements VisionIO {
   public void updateInputs(VisionIOInputs inputs) {
     inputs.cameraPose = new Pose3d(robotToCam.getTranslation(), robotToCam.getRotation());
     inputs.isConnected = camera.isConnected();
-    
+
     inputs.hasTargets = hasTargets;
     inputs.targettingType = getPipeType();
 
@@ -62,7 +60,7 @@ public class VisionIOPhotonVision implements VisionIO {
       case APRIL_TAG_PIPELINE_INDEX:
         type = TargettingType.FIDUCIAL;
         break;
-      case OBJECT_DETECTION_PIPELINE_INDEX: 
+      case OBJECT_DETECTION_PIPELINE_INDEX:
         type = TargettingType.OBJECT_DETECTION;
       default:
         type = TargettingType.FIDUCIAL;
@@ -76,20 +74,20 @@ public class VisionIOPhotonVision implements VisionIO {
     ArrayList<TrackedTarget> targets = new ArrayList<TrackedTarget>();
 
     for (var result : camera.getAllUnreadResults()) {
-      if (result.hasTargets()){
+      if (result.hasTargets()) {
         hasTargets = true;
 
-        for (var target : result.targets){
+        for (var target : result.targets) {
           Pose3d cameraPose = new Pose3d(robotToCam.getTranslation(), robotToCam.getRotation());
           targets.add(
-            new TrackedTarget(
-                Clock.time() - result.metadata.getLatencyMillis(),
-                cameraPose.getTranslation(),
-                cameraPose.getRotation().getX() - Units.degreesToRadians(target.yaw),
-                cameraPose.getRotation().getY() + Units.degreesToRadians(target.pitch),
-                target.area,
-                target.fiducialId,
-                getPipeType()));
+              new TrackedTarget(
+                  Clock.time() - result.metadata.getLatencyMillis(),
+                  cameraPose.getTranslation(),
+                  cameraPose.getRotation().getX() - Units.degreesToRadians(target.yaw),
+                  cameraPose.getRotation().getY() + Units.degreesToRadians(target.pitch),
+                  target.area,
+                  target.fiducialId,
+                  getPipeType()));
         }
       }
     }
@@ -100,8 +98,8 @@ public class VisionIOPhotonVision implements VisionIO {
   private PoseObservation[] parsePoseObservations() {
     ArrayList<PoseObservation> poseObservations = new ArrayList<PoseObservation>();
 
-    for (var result : camera.getAllUnreadResults()){
-      if (result.multitagResult.isPresent()){
+    for (var result : camera.getAllUnreadResults()) {
+      if (result.multitagResult.isPresent()) {
         var multitagResult = result.multitagResult.get();
 
         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
@@ -109,14 +107,8 @@ public class VisionIOPhotonVision implements VisionIO {
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
         poseObservations.add(
-          new PoseObservation(
-            Clock.time() - result.metadata.getLatencyMillis(), 
-            null, 
-            robotPose, 
-            null, 
-            null
-          )
-        );
+            new PoseObservation(
+                Clock.time() - result.metadata.getLatencyMillis(), null, robotPose, null, null));
       }
     }
 

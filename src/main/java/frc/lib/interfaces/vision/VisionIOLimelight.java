@@ -8,6 +8,25 @@ import frc.frc2025.util.LimelightHelpers.RawFiducial;
 import frc.lib.util.Clock;
 import java.util.HashMap;
 
+/*
+                  .:------:.
+              .-===-:::::--=+=-.
+            :=+-.            .-+=:
+         .=+:    -+**##**=.    :=+:
+       .=+.   .:-:    :+#####.      =+.
+     :+-   .#########*    *##: :%*    -+:
+  .-=+.    *####+-.       .#*  -##=    :+=-:
++=        -%*:  .:            =####.        =+
++-        -#. .+#*           -####*         -+
+  -=+=.     .####.        =####*=.     .=+=-
+     =+:    -####:  *+:    ..         :+-
+      :+-   :####=  =%#*=-:..:-=*:   :+:
+       .+=   =####.  *########%#-   -+:
+          :+=.  :+##.  -=++=-   .-+-
+              :=+=-:......:-=+=:
+                 .:-======-:.
+*/
+
 public class VisionIOLimelight implements VisionIO {
   static HashMap<String, VisionIOLimelight> instances = new HashMap<String, VisionIOLimelight>();
 

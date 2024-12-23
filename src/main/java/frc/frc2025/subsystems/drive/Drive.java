@@ -17,12 +17,20 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindThenFollowPath;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.swerve.SwerveSetpoint;
+import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -53,9 +61,13 @@ import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.util.LocalADStarAK;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.TeleopDriveController;
+import frc.lib.util.InterpolatorUtil;
+import frc.lib.util.Station;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -90,7 +102,11 @@ public class Drive extends SubsystemBase {
   private ChassisSpeeds autoSpeeds;
 
   private final TeleopDriveController teleopDriveController;
+  private final PPHolonomicDriveController ppHolonomicDriveController;
+  private Command aimAssistController = null;
   private HeadingController headingController = null;
+
+  private double aimAssistWeight;
 
   // TunerConstants doesn't include these constants, so they are declared locally
   static final double ODOMETRY_FREQUENCY =
@@ -119,6 +135,14 @@ public class Drive extends SubsystemBase {
               1),
           getModuleTranslations());
 
+  // Pathplanner pathfinding constants
+  private static final PathConstraints CONSTRAINTS =
+      new PathConstraints(
+          DriveConstants.TELEOP_MAX_LINEAR_VELOCITY,
+          DriveConstants.MAX_LINEAR_ACCEL,
+          DriveConstants.TELEOP_MAX_ANGULAR_VELOCITY,
+          DriveConstants.MAX_ANGULAR_ACCEL);
+
   // Phonix odometry thread lockout
   static final Lock odometryLock = new ReentrantLock();
 
@@ -132,6 +156,8 @@ public class Drive extends SubsystemBase {
 
   // Swerve
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+  private final SwerveSetpointGenerator setpointGenerator;
+  private SwerveSetpoint previousSetpoint;
   private Rotation2d rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
@@ -175,14 +201,31 @@ public class Drive extends SubsystemBase {
     // Start odometry thread
     PhoenixOdometryThread.getInstance().start();
 
+    // Swerve setpoint generator
+    setpointGenerator = new SwerveSetpointGenerator(PP_CONFIG, getMaxAngularSpeedRadPerSec());
+    previousSetpoint =
+        new SwerveSetpoint(
+            getChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(PP_CONFIG.numModules));
+
+    // Pathplanner holonmic driver config
+    ppHolonomicDriveController =
+        new PPHolonomicDriveController(
+            new PIDConstants(
+                DriveConstants.PP_TRANSLATION_P,
+                DriveConstants.PP_TRANSLATION_I,
+                DriveConstants.PP_TRANSLATION_D),
+            new PIDConstants(
+                DriveConstants.PP_HEADING_P,
+                DriveConstants.PP_HEADING_I,
+                DriveConstants.PP_HEADING_D));
+
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(
         this::getPose,
         this::setPose,
         this::getChassisSpeeds,
-        this::runVelocity,
-        new PPHolonomicDriveController(
-            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+        this::setAutoSpeeds,
+        ppHolonomicDriveController,
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         this);
@@ -280,6 +323,14 @@ public class Drive extends SubsystemBase {
 
       ChassisSpeeds teleopSpeeds = teleopDriveController.update();
 
+      if (aimAssistController != null) {
+        currentDriveMode = DriveMode.AIMASSIST;
+      }
+
+      if (headingController != null) {
+        currentDriveMode = DriveMode.HEADING;
+      }
+
       switch (currentDriveMode) {
         case TELEOP -> {
           desiredSpeeds = teleopSpeeds;
@@ -292,6 +343,10 @@ public class Drive extends SubsystemBase {
 
         case PATHPLANNER -> {
           desiredSpeeds = autoSpeeds;
+        }
+
+        case AIMASSIST -> {
+          desiredSpeeds = InterpolatorUtil.chassisSpeeds(teleopSpeeds, autoSpeeds, aimAssistWeight);
         }
       }
     }
@@ -307,16 +362,105 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/DriveMode", currentDriveMode);
   }
 
-  public void setAutoSpeeds(ChassisSpeeds speeds) {
+  public Command followPath(PathPlannerPath path) {
+    return new FollowPathCommand(
+        path,
+        this::getPose,
+        this::getChassisSpeeds,
+        this::setAutoSpeeds,
+        ppHolonomicDriveController,
+        PP_CONFIG,
+        () -> Station.isRed(),
+        this);
+  }
+
+  public Command findPath(PathPlannerPath path) {
+    return new PathfindThenFollowPath(
+        path,
+        CONSTRAINTS,
+        this::getPose,
+        this::getChassisSpeeds,
+        this::setAutoSpeeds,
+        ppHolonomicDriveController,
+        PP_CONFIG,
+        () -> Station.isRed(),
+        this);
+  }
+
+  public Command findPath(Pose2d pose) {
+    return new PathfindingCommand(
+        pose,
+        CONSTRAINTS,
+        0.0,
+        this::getPose,
+        this::getChassisSpeeds,
+        this::setAutoSpeeds,
+        ppHolonomicDriveController,
+        PP_CONFIG,
+        this);
+  }
+
+  private void setAutoSpeeds(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
     autoSpeeds = speeds;
   }
 
+  /**
+   * Takes inputs from a joystick to drive the robot
+   *
+   * @param relativeX The X axis input
+   * @param relativeY The Y axis input
+   * @param omega The anglular axis input, cc positive
+   * @param robotRelative Is it robot relative?
+   */
   public void acceptTeleopInput(
-      double controllerX, double controllerY, double controllerOmega, boolean robotRelative) {
+      double relativeX, double relativeY, double omega, boolean robotRelative) {
     if (DriverStation.isTeleopEnabled()) {
-      teleopDriveController.acceptDriveInput(
-          controllerX, controllerY, controllerOmega, robotRelative);
+      if (currentDriveMode != DriveMode.AIMASSIST && currentDriveMode != DriveMode.HEADING) {
+        currentDriveMode = DriveMode.TELEOP;
+      }
+      teleopDriveController.acceptDriveInput(relativeX, relativeY, omega, robotRelative);
     }
+  }
+
+  /**
+   * Assigns a new heading goal for the drivetrain.
+   *
+   * @param goalHeadingSupplier Field relative heading
+   */
+  public void setHeadingGoal(Supplier<Rotation2d> goalHeadingSupplier) {
+    headingController = new HeadingController(goalHeadingSupplier);
+  }
+
+  /** Clears the heading goal */
+  public void clearHeadingGoal() {
+    headingController = null;
+  }
+
+  /**
+   * Creates and runs a command to assign the auto speeds and allows teleop input
+   *
+   * @param path The path to pathfind to
+   */
+  public void setAimAssist(PathPlannerPath path, DoubleSupplier weight) {
+    aimAssistWeight = weight.getAsDouble();
+    aimAssistController = findPath(path);
+    aimAssistController.schedule();
+  }
+
+  /**
+   * Creates and runs a command to assign the auto speeds and allows teleop input
+   *
+   * @param poseSupplier The pose to pathfind to
+   */
+  public void setAimAssist(Supplier<Pose2d> poseSupplier, DoubleSupplier weight) {
+    aimAssistWeight = weight.getAsDouble();
+    aimAssistController = findPath(poseSupplier.get());
+    aimAssistController.schedule();
+  }
+
+  public void clearAimAssist() {
+    aimAssistController.end(true);
+    aimAssistController = null;
   }
 
   /**
@@ -326,11 +470,11 @@ public class Drive extends SubsystemBase {
    */
   public SwerveModuleState[] runVelocity(ChassisSpeeds speeds) {
     // Calculate module setpoints
-    ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-    SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+    previousSetpoint = setpointGenerator.generateSetpoint(previousSetpoint, speeds, 0.02);
     SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
 
     for (int i = 0; i < 4; i++) {
+      optimizedSetpointStates[i] = previousSetpoint.moduleStates()[i];
       optimizedSetpointStates[i].optimize(modules[i].getAngle());
     }
 
@@ -339,7 +483,6 @@ public class Drive extends SubsystemBase {
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("Drive/SwerveStates/Setpoints", optimizedSetpointStates);
-    Logger.recordOutput("Drive/SwerveChassisSpeeds/Setpoints", discreteSpeeds);
 
     // Send setpoints to modules
     for (int i = 0; i < 4; i++) {
@@ -351,6 +494,8 @@ public class Drive extends SubsystemBase {
 
     return optimizedSetpointStates;
   }
+
+  public void applyFeedForwards(DriveFeedforwards feedforwards) {}
 
   /** Runs the drive in a straight line with the specified drive output. */
   public void runCharacterization(double output) {
@@ -418,10 +563,12 @@ public class Drive extends SubsystemBase {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
+  /** Puts speeds into a twist datatype */
   public Twist2d getRobotRelativeVelocity() {
     return getChassisSpeeds().toTwist2d(1);
   }
 
+  /** Field relative velocity */
   public Twist2d fieldVelocity() {
     Translation2d linearFieldVelocity =
         new Translation2d(getRobotRelativeVelocity().dx, getRobotRelativeVelocity().dy)
