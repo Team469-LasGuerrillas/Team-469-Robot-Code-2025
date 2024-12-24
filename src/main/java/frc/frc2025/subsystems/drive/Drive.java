@@ -41,7 +41,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.interpolation.Interpolator;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -59,7 +58,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.frc2025.Constants;
-import frc.frc2025.Robot;
 import frc.frc2025.Constants.Mode;
 import frc.frc2025.generated.TunerConstants;
 import frc.frc2025.subsystems.Constants.DriveConstants;
@@ -70,15 +68,11 @@ import frc.lib.util.Clock;
 import frc.lib.util.InterpolatorUtil;
 import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
-
-import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -109,7 +103,8 @@ public class Drive extends SubsystemBase {
     public DriveMode driveMode;
 
     private TimeInterpolatableBuffer<Pose3d> poseBuffer = TimeInterpolatableBuffer.createBuffer(2);
-    private TimeInterpolatableBuffer<DriveMode> modeBuffer = TimeInterpolatableBuffer.createBuffer(new DriveModeInterpolator(), 2);
+    private TimeInterpolatableBuffer<DriveMode> modeBuffer =
+        TimeInterpolatableBuffer.createBuffer(new DriveModeInterpolator(), 2);
 
     @Override
     public void addState(double timestamp) {
