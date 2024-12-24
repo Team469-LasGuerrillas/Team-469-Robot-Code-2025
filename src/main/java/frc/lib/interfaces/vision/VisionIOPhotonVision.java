@@ -84,7 +84,7 @@ public class VisionIOPhotonVision implements VisionIO {
       if (result.hasTargets()) {
         hasTargets = true;
         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
-        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time() - latency).get();
+        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
         for (var target : result.targets) {
           targets.add(
@@ -111,7 +111,7 @@ public class VisionIOPhotonVision implements VisionIO {
       if (result.multitagResult.isPresent()) {
         var multitagResult = result.multitagResult.get();
         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
-        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time() - latency).get();
+        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
         Transform3d fieldToRobot =

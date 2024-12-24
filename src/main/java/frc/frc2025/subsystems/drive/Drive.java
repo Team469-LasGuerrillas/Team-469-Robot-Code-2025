@@ -37,9 +37,13 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.interpolation.Interpolatable;
+import edu.wpi.first.math.interpolation.Interpolator;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -55,19 +59,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.frc2025.Constants;
+import frc.frc2025.Robot;
 import frc.frc2025.Constants.Mode;
 import frc.frc2025.generated.TunerConstants;
 import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.util.LocalADStarAK;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.TeleopDriveController;
+import frc.lib.util.Clock;
 import frc.lib.util.InterpolatorUtil;
+import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
+
+import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -92,6 +103,42 @@ public class Drive extends SubsystemBase {
     BRAKE,
     COAST
   }
+
+  class DriveState implements MonkeyState {
+    public Pose3d robotPose;
+    public DriveMode driveMode;
+
+    private TimeInterpolatableBuffer<Pose3d> poseBuffer = TimeInterpolatableBuffer.createBuffer(2);
+    private TimeInterpolatableBuffer<DriveMode> modeBuffer = TimeInterpolatableBuffer.createBuffer(new DriveModeInterpolator(), 2);
+
+    @Override
+    public void addState(double timestamp) {
+      poseBuffer.addSample(timestamp, robotPose);
+      modeBuffer.addSample(timestamp, currentDriveMode);
+    }
+
+    @Override
+    public MonkeyState getState(double timestamp) {
+      DriveState legacyState = new DriveState();
+      legacyState.robotPose = poseBuffer.getSample(timestamp).get();
+      legacyState.driveMode = modeBuffer.getSample(timestamp).get();
+
+      return legacyState;
+    }
+  }
+
+  private class DriveModeInterpolator implements Interpolator<DriveMode> {
+    @Override
+    public DriveMode interpolate(DriveMode startValue, DriveMode endValue, double t) {
+      if (t > 0.5) {
+        return endValue;
+      } else {
+        return startValue;
+      }
+    }
+  }
+
+  public DriveState state = new DriveState();
 
   // The robot's current drivemode
   private DriveMode currentDriveMode = DriveMode.TELEOP;
@@ -360,6 +407,10 @@ public class Drive extends SubsystemBase {
         "Drive/SwerveStates/Desired(b4 Poofs)", kinematics.toSwerveModuleStates(desiredSpeeds));
     Logger.recordOutput("Drive/DesiredSpeeds", desiredSpeeds);
     Logger.recordOutput("Drive/DriveMode", currentDriveMode);
+
+    state.robotPose = new Pose3d(getPose());
+    state.driveMode = currentDriveMode;
+    state.addState(Clock.time());
   }
 
   public Command followPath(PathPlannerPath path) {
