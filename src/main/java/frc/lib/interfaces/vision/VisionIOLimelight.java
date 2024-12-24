@@ -1,7 +1,9 @@
 package frc.lib.interfaces.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.frc2025.subsystems.drive.Drive;
 import frc.frc2025.util.LimelightHelpers;
 import frc.frc2025.util.LimelightHelpers.RawDetection;
 import frc.frc2025.util.LimelightHelpers.RawFiducial;
@@ -45,16 +47,18 @@ public class VisionIOLimelight implements VisionIO {
    * @param limelightName Name of the limelight, configurable via web GUI. Should look something
    *     like limelight-customname.
    */
-  public VisionIOLimelight(String limelightName) {
+  private VisionIOLimelight(String limelightName, Pose3d cameraPose) {
     this.limelightName = limelightName;
 
     fiducials = LimelightHelpers.getRawFiducials(limelightName);
     detections = LimelightHelpers.getRawDetections(limelightName);
+
+    setPoseRobotSpace(cameraPose);
   }
 
-  public static VisionIOLimelight getInstance(String limelightName) {
+  public static VisionIOLimelight getInstance(String limelightName, Pose3d cameraPose) {
     if (instances.get(limelightName) == null) {
-      instances.put(limelightName, new VisionIOLimelight(limelightName));
+      instances.put(limelightName, new VisionIOLimelight(limelightName, cameraPose));
     }
     return instances.get(limelightName);
   }
@@ -86,13 +90,30 @@ public class VisionIOLimelight implements VisionIO {
     inputs.fps = hw[0];
     inputs.cpuTemp = hw[1];
     inputs.ram = hw[2];
+  }
 
-    inputs.pinholePose = LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName);
-    inputs.solvePnpPose = LimelightHelpers.getBotPose3d_wpiBlue(limelightName);
+  @Override
+  public void setPoseRobotSpace(Pose3d pose) {
+    LimelightHelpers.setCameraPose_RobotSpace(
+        limelightName,
+        pose.getX(),
+        pose.getY(),
+        pose.getZ(),
+        pose.getRotation().getX(),
+        pose.getRotation().getY(),
+        pose.getRotation().getZ());
+  }
 
-    double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
-    inputs.pinholeStdDevs = new double[] {stddevs[6], stddevs[7], stddevs[11]};
-    inputs.solvePnpStdDevs = new double[] {stddevs[0], stddevs[1], stddevs[5]};
+  @Override
+  public void setRobotRotationUpdate(Rotation2d rotation, Rotation2d angularVelocity) {
+    LimelightHelpers.SetRobotOrientation(
+        limelightName,
+        Drive.getInstance().getRotation().getDegrees(),
+        Drive.getInstance().getRobotRelativeVelocity().dtheta,
+        0,
+        0,
+        0,
+        0);
   }
 
   private TargettingType getPipeType() {
@@ -148,5 +169,20 @@ public class VisionIOLimelight implements VisionIO {
     }
 
     return targets;
+  }
+
+  private PoseObservation[] parsePoseObservations() {
+    double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
+
+    PoseObservation[] poses = {
+      new PoseObservation(
+          Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
+          LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
+          LimelightHelpers.getBotPose3d_wpiBlue(limelightName),
+          new double[] {stddevs[6], stddevs[7], stddevs[11]},
+          new double[] {stddevs[0], stddevs[1], stddevs[5]})
+    };
+
+    return poses;
   }
 }

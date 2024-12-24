@@ -34,7 +34,6 @@ public interface VisionIO {
   class VisionIOInputs {
     public boolean hasLatestUpdate = false;
     public Pose3d cameraPose;
-    public boolean isConnected = false;
 
     // Pipeline
     public boolean hasTargets = false;
@@ -46,13 +45,6 @@ public interface VisionIO {
     // Performance information
     public double totalLatencyMs;
     public double fps;
-
-    // Megatag information
-    public Pose3d pinholePose;
-    public Pose3d solvePnpPose;
-
-    public double[] pinholeStdDevs;
-    public double[] solvePnpStdDevs;
 
     // Hardware information
     public double cpuTemp;

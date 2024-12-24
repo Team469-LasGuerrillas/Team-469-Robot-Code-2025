@@ -2,6 +2,7 @@ package frc.lib.interfaces.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
 import java.util.ArrayList;
@@ -14,41 +15,47 @@ public class VisionIOPhotonVision implements VisionIO {
 
   private final PhotonCamera camera;
   private final String cameraName;
-  private final Transform3d robotToCam;
+  private final TimeInterpolatableBuffer<Pose3d> robotToCam =
+      TimeInterpolatableBuffer.createBuffer(2);
 
   private final int APRIL_TAG_PIPELINE_INDEX = 0;
   private final int OBJECT_DETECTION_PIPELINE_INDEX = 1;
 
   private boolean hasTargets = false;
 
-  public VisionIOPhotonVision(String cameraName, Transform3d robotToCam) {
+  public VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
     camera = new PhotonCamera(cameraName);
     this.cameraName = cameraName;
-    this.robotToCam = robotToCam;
+    this.robotToCam.addSample(Clock.time(), robotToCam);
   }
 
-  public static VisionIOPhotonVision getInstance(String cameraName) {
+  public static VisionIOPhotonVision getInstance(String cameraName, Pose3d robotToCam) {
     if (instances.get(cameraName) == null) {
-      instances.put(cameraName, new VisionIOPhotonVision(cameraName, new Transform3d()));
+      instances.put(cameraName, new VisionIOPhotonVision(cameraName, robotToCam));
     }
     return instances.get(cameraName);
   }
 
   @Override
-  public void setPipelineIndex(int index) {
-    camera.setPipelineIndex(index);
-  }
-
-  @Override
   public void updateInputs(VisionIOInputs inputs) {
-    inputs.cameraPose = new Pose3d(robotToCam.getTranslation(), robotToCam.getRotation());
-    inputs.isConnected = camera.isConnected();
+    inputs.cameraPose = robotToCam.getSample(Clock.time()).get();
+    inputs.hasLatestUpdate = camera.isConnected();
 
     inputs.hasTargets = hasTargets;
     inputs.targettingType = getPipeType();
 
     inputs.targets = parseTargets();
     inputs.poseObservations = parsePoseObservations();
+  }
+
+  @Override
+  public void setPoseRobotSpace(Pose3d cameraPose) {
+    robotToCam.addSample(Clock.time(), cameraPose);
+  }
+
+  @Override
+  public void setPipelineIndex(int index) {
+    camera.setPipelineIndex(index);
   }
 
   private TargettingType getPipeType() {
@@ -76,15 +83,17 @@ public class VisionIOPhotonVision implements VisionIO {
     for (var result : camera.getAllUnreadResults()) {
       if (result.hasTargets()) {
         hasTargets = true;
+        double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
+        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time() - latency).get();
 
         for (var target : result.targets) {
-          Pose3d cameraPose = new Pose3d(robotToCam.getTranslation(), robotToCam.getRotation());
           targets.add(
               new TrackedTarget(
-                  Clock.time() - result.metadata.getLatencyMillis(),
-                  cameraPose.getTranslation(),
-                  cameraPose.getRotation().getX() - Units.degreesToRadians(target.yaw),
-                  cameraPose.getRotation().getY() + Units.degreesToRadians(target.pitch),
+                  Clock.time() - latency,
+                  instantaneousCameraPose.getTranslation(),
+                  instantaneousCameraPose.getRotation().getX() - Units.degreesToRadians(target.yaw),
+                  instantaneousCameraPose.getRotation().getY()
+                      + Units.degreesToRadians(target.pitch),
                   target.area,
                   target.fiducialId,
                   getPipeType()));
@@ -101,14 +110,16 @@ public class VisionIOPhotonVision implements VisionIO {
     for (var result : camera.getAllUnreadResults()) {
       if (result.multitagResult.isPresent()) {
         var multitagResult = result.multitagResult.get();
+        double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
+        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time() - latency).get();
 
         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
-        Transform3d fieldToRobot = fieldToCamera.plus(robotToCam.inverse());
+        Transform3d fieldToRobot =
+            fieldToCamera.plus(new Transform3d(new Pose3d(), instantaneousCameraPose).inverse());
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
         poseObservations.add(
-            new PoseObservation(
-                Clock.time() - result.metadata.getLatencyMillis(), null, robotPose, null, null));
+            new PoseObservation(Clock.time() - latency, null, robotPose, null, null));
       }
     }
 
