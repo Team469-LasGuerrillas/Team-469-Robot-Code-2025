@@ -64,6 +64,7 @@ import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.util.LocalADStarAK;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.TeleopDriveController;
+import frc.lib.interfaces.AndrewShi;
 import frc.lib.util.Clock;
 import frc.lib.util.InterpolatorUtil;
 import frc.lib.util.MonkeyState;
@@ -208,8 +209,8 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator poseEstimator =
-      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private AndrewShi poseEstimator =
+      new AndrewShi(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -352,7 +353,7 @@ public class Drive extends SubsystemBase {
       gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
       // Apply update
-      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions, rawGyroRotation, modulePositions);
 
       switch (coastRequest) {
         case BRAKE -> {
@@ -644,7 +645,7 @@ public class Drive extends SubsystemBase {
   /** Returns the current odometry pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
-    return poseEstimator.getEstimatedPosition();
+    return poseEstimator.getCurrentPoseEstimate();
   }
 
   /** Returns the current odometry rotation. */
