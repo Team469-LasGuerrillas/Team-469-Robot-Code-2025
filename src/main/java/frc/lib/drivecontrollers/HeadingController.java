@@ -6,7 +6,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.subsystems.drive.Drive;
-import frc.lib.util.ToleranceUtil;
+import frc.lib.util.math.ToleranceUtil;
+
 import java.util.function.Supplier;
 
 public class HeadingController {

@@ -1,4 +1,4 @@
-package frc.lib.util;
+package frc.lib.util.math;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 

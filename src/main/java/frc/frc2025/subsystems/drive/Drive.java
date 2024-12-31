@@ -35,7 +35,6 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -64,11 +63,12 @@ import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.frc2025.util.LocalADStarAK;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.TeleopDriveController;
-import frc.lib.interfaces.AndrewShi;
 import frc.lib.util.Clock;
-import frc.lib.util.InterpolatorUtil;
 import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
+import frc.lib.util.math.InterpolatorUtil;
+import frc.lib.util.math.estimator.MonkeySwerveDrivePoseEstimator;
+
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -209,8 +209,8 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-  private AndrewShi poseEstimator =
-      new AndrewShi(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private MonkeySwerveDrivePoseEstimator poseEstimator =
+      new MonkeySwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public static void createInstance(
       GyroIO gyroIO,

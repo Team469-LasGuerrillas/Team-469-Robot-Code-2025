@@ -1,4 +1,4 @@
-package frc.lib.interfaces;
+package frc.lib.util.math.estimator;
 
 import java.util.NavigableMap;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
-public class MonkeyAhhPoseEstimator<T> {
+public class MonkeyPoseEstimator<T> {
   private final Odometry<T> primaryOdometry;
   private final Odometry<T> secondaryOdometry;
 
@@ -33,7 +33,7 @@ public class MonkeyAhhPoseEstimator<T> {
   private Pose2d currentPoseEstimate;
 
   @SuppressWarnings("PMD.UnusedFormalParameter")
-  public MonkeyAhhPoseEstimator(
+  public MonkeyPoseEstimator(
     Kinematics<?, T> kinematics,
     Odometry<T> primaryOdometry,
     Odometry<T> secondaryOdometry,

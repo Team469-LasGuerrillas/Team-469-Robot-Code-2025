@@ -13,7 +13,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-import frc.lib.util.CTREUtil;
+import frc.lib.util.hardware.CTREUtil;
 
 public class MotorIOTalonFX implements MotorIO {
   protected final TalonFX talon;

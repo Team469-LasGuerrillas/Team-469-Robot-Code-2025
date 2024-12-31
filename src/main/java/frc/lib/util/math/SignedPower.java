@@ -1,4 +1,4 @@
-package frc.lib.util;
+package frc.lib.util.math;
 
 public class SignedPower {
   public static double calculate(double input, double power) {

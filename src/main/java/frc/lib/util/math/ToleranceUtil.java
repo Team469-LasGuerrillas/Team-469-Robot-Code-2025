@@ -1,4 +1,4 @@
-package frc.lib.util;
+package frc.lib.util.math;
 
 public class ToleranceUtil {
   public static boolean epsilonEquals(double current, double goal, double tolerance) {
