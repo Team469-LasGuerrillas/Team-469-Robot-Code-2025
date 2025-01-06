@@ -1,9 +1,5 @@
 package frc.lib.util.math.estimator;
 
-import java.util.NavigableMap;
-import java.util.Optional;
-import java.util.TreeMap;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -17,8 +13,11 @@ import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import java.util.NavigableMap;
+import java.util.Optional;
+import java.util.TreeMap;
 
-public class MonkeyPoseEstimator<T> {
+public class PoseSequencingEstimator<T> {
   private final Odometry<T> primaryOdometry;
   private final Odometry<T> secondaryOdometry;
 
@@ -26,19 +25,20 @@ public class MonkeyPoseEstimator<T> {
   private final Matrix<N3, N3> visionK = new Matrix<>(Nat.N3(), Nat.N3());
 
   private static final double bufferDuration = 2; // Seconds
-  private final TimeInterpolatableBuffer<Pose2d> odometryBuffer = TimeInterpolatableBuffer.createBuffer(bufferDuration);
+  private final TimeInterpolatableBuffer<Pose2d> odometryBuffer =
+      TimeInterpolatableBuffer.createBuffer(bufferDuration);
 
   private final NavigableMap<Double, VisionUpdate> visionUpdates = new TreeMap<>();
 
   private Pose2d currentPoseEstimate;
 
   @SuppressWarnings("PMD.UnusedFormalParameter")
-  public MonkeyPoseEstimator(
-    Kinematics<?, T> kinematics,
-    Odometry<T> primaryOdometry,
-    Odometry<T> secondaryOdometry,
-    Matrix<N3, N1> stateStdDevs,
-    Matrix<N3, N1> visionMeasurementStdDevs) {
+  public PoseSequencingEstimator(
+      Kinematics<?, T> kinematics,
+      Odometry<T> primaryOdometry,
+      Odometry<T> secondaryOdometry,
+      Matrix<N3, N1> stateStdDevs,
+      Matrix<N3, N1> visionMeasurementStdDevs) {
     this.primaryOdometry = primaryOdometry;
     this.secondaryOdometry = secondaryOdometry;
 
@@ -50,9 +50,10 @@ public class MonkeyPoseEstimator<T> {
     setVisionMeasurementStdDevs(visionMeasurementStdDevs);
   }
 
-  public void addVisionMeasurement(Pose2d pose, double timestamp, Matrix<N3, N1> hehe) {
+  public void addVisionMeasurement(Pose2d pose, double timestamp, Matrix<N3, N1> stds) {
 
-    if (odometryBuffer.getInternalBuffer().isEmpty() || odometryBuffer.getInternalBuffer().lastKey() - bufferDuration > timestamp) {
+    if (odometryBuffer.getInternalBuffer().isEmpty()
+        || odometryBuffer.getInternalBuffer().lastKey() - bufferDuration > timestamp) {
       return;
     }
 
@@ -70,16 +71,18 @@ public class MonkeyPoseEstimator<T> {
       return;
     }
 
-    setVisionMeasurementStdDevs(hehe);
+    setVisionMeasurementStdDevs(stds);
 
     var twist = estimatedSample.get().log(pose);
-    
+
     var kalmanFactor = visionK.times(VecBuilder.fill(twist.dx, twist.dy, twist.dtheta));
 
     var kalmanFactorTwist =
-      new Twist2d(kalmanFactor.get(0, 0), kalmanFactor.get(1, 0), kalmanFactor.get(2, 0));
+        new Twist2d(kalmanFactor.get(0, 0), kalmanFactor.get(1, 0), kalmanFactor.get(2, 0));
 
-    var visionUpdate = new VisionUpdate(pose, estimatedSample.get().exp(kalmanFactorTwist), odometrySample.get(), hehe);
+    var visionUpdate =
+        new VisionUpdate(
+            pose, estimatedSample.get().exp(kalmanFactorTwist), odometrySample.get(), stds);
     visionUpdates.put(timestamp, visionUpdate);
 
     // Replay pose estimates that are timestamped earlier
@@ -160,8 +163,7 @@ public class MonkeyPoseEstimator<T> {
       // TODO: implement legacy buffer
     }
 
-    timestamp =
-        MathUtil.clamp(timestamp, oldestOdometryTimestamp, newestOdometryTimestamp);
+    timestamp = MathUtil.clamp(timestamp, oldestOdometryTimestamp, newestOdometryTimestamp);
 
     if (visionUpdates.isEmpty() || timestamp < visionUpdates.firstKey()) {
       return odometryBuffer.getSample(timestamp);
@@ -197,11 +199,17 @@ public class MonkeyPoseEstimator<T> {
     visionUpdates.headMap(newestNeededVisionUpdateTimestamp, false).clear();
   }
 
-  public Pose2d updateWithTime(double currentTime, Rotation2d gyroAngle, T wheelPositions, Rotation2d gyroAngle2, T wheelPositions2) {
+  public Pose2d updateWithTime(
+      double currentTime,
+      Rotation2d gyroAngle,
+      T wheelPositions,
+      Rotation2d gyroAngle2,
+      T wheelPositions2) {
     var primaryOdometryEstimate = primaryOdometry.update(gyroAngle, wheelPositions);
     var secondaryOdometryEstimate = secondaryOdometry.update(gyroAngle2, wheelPositions2);
 
-    Pose2d interpolatedEstimate = primaryOdometryEstimate.interpolate(secondaryOdometryEstimate, 0.5);
+    Pose2d interpolatedEstimate =
+        primaryOdometryEstimate.interpolate(secondaryOdometryEstimate, 0.5);
 
     odometryBuffer.addSample(currentTime, interpolatedEstimate);
 
@@ -227,13 +235,11 @@ public class MonkeyPoseEstimator<T> {
       if (q.get(row, 0) == 0.0) {
         visionK.set(row, row, 0.0);
       } else {
-        visionK.set(
-            row, row, q.get(row, 0) / (q.get(row, 0) + Math.sqrt(q.get(row, 0) * r[row])));
+        visionK.set(row, row, q.get(row, 0) / (q.get(row, 0) + Math.sqrt(q.get(row, 0) * r[row])));
       }
     }
   }
 
-  
   private static final class VisionUpdate {
     // THe absolute measured vision pose
     private final Pose2d rawVisionPose;
@@ -253,7 +259,8 @@ public class MonkeyPoseEstimator<T> {
      * @param filteredVisionPose The vision-compensated pose estimate.
      * @param odometryPose The pose estimate based solely on odometry.
      */
-    private VisionUpdate(Pose2d rawVisionPose, Pose2d filteredVisionPose, Pose2d odometryPose, Matrix<N3, N1> stds) {
+    private VisionUpdate(
+        Pose2d rawVisionPose, Pose2d filteredVisionPose, Pose2d odometryPose, Matrix<N3, N1> stds) {
       this.rawVisionPose = rawVisionPose;
       this.filteredVisionPose = filteredVisionPose;
       this.odometryPose = odometryPose;

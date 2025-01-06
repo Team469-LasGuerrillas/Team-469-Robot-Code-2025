@@ -4,10 +4,13 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.util.Units;
+import frc.frc2025.subsystems.Constants.VisionConstants;
 import frc.lib.util.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.MultiTargetPNPResult;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 public class VisionIOPhotonVision implements VisionIO {
   static HashMap<String, VisionIOPhotonVision> instances =
@@ -23,7 +26,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
   private boolean hasTargets = false;
 
-  public VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
+  private VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
     camera = new PhotonCamera(cameraName);
     this.cameraName = cameraName;
     this.robotToCam.addSample(Clock.time(), robotToCam);
@@ -46,6 +49,8 @@ public class VisionIOPhotonVision implements VisionIO {
 
     inputs.targets = parseTargets();
     inputs.poseObservations = parsePoseObservations();
+
+    inputs.cameraName = cameraName;
   }
 
   @Override
@@ -109,7 +114,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
     for (var result : camera.getAllUnreadResults()) {
       if (result.multitagResult.isPresent()) {
-        var multitagResult = result.multitagResult.get();
+        MultiTargetPNPResult multitagResult = result.multitagResult.get();
         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
         Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
@@ -119,10 +124,33 @@ public class VisionIOPhotonVision implements VisionIO {
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
         poseObservations.add(
-            new PoseObservation(Clock.time() - latency, null, robotPose, null, null));
+            new PoseObservation(
+              Clock.time() - latency,
+              multitagResult.estimatedPose.ambiguity,
+              multitagResult.fiducialIDsUsed.size(),
+              robotPose, 
+              calculateSTDS(result, multitagResult), 
+              PoseObservationType.MULTITAG)
+            );
       }
     }
 
     return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
+  }
+
+  private double[] calculateSTDS(PhotonPipelineResult result, MultiTargetPNPResult multitagResult){
+    double totalTagDistance = 0.0;
+    for (var target : result.targets){
+      totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
+    }
+
+    double averageTagDistance = totalTagDistance / result.targets.size();
+    double tagCount = multitagResult.fiducialIDsUsed.size();
+    
+    double stdDevFactor = Math.pow(averageTagDistance, 2) / tagCount;
+    double linearStdDev = VisionConstants.LINEAR_STD_BASELINE * stdDevFactor;
+    double angularStdDev = VisionConstants.ANGULAR_STD_BASELINE * stdDevFactor;
+
+    return new double[] {linearStdDev, linearStdDev, angularStdDev};
   }
 }

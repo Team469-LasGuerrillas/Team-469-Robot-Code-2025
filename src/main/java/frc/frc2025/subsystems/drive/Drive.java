@@ -67,8 +67,7 @@ import frc.lib.util.Clock;
 import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
 import frc.lib.util.math.InterpolatorUtil;
-import frc.lib.util.math.estimator.MonkeySwerveDrivePoseEstimator;
-
+import frc.lib.util.math.estimator.SequencingSwerveDrivePoseEstimator;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -209,8 +208,9 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
-  private MonkeySwerveDrivePoseEstimator poseEstimator =
-      new MonkeySwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private SequencingSwerveDrivePoseEstimator poseEstimator =
+      new SequencingSwerveDrivePoseEstimator(
+          kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -353,7 +353,8 @@ public class Drive extends SubsystemBase {
       gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
       // Apply update
-      poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions, rawGyroRotation, modulePositions);
+      poseEstimator.updateWithTime(
+          sampleTimestamps[i], rawGyroRotation, modulePositions, rawGyroRotation, modulePositions);
 
       switch (coastRequest) {
         case BRAKE -> {

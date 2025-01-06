@@ -85,11 +85,14 @@ public class VisionIOLimelight implements VisionIO {
     totalLatencyMs = inputs.totalLatencyMs;
 
     inputs.targets = parseTargets();
+    inputs.poseObservations = parsePoseObservations();
 
     double[] hw = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "hw");
     inputs.fps = hw[0];
     inputs.cpuTemp = hw[1];
     inputs.ram = hw[2];
+
+    inputs.cameraName = limelightName;
   }
 
   @Override
@@ -173,14 +176,24 @@ public class VisionIOLimelight implements VisionIO {
 
   private PoseObservation[] parsePoseObservations() {
     double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
-
+    
     PoseObservation[] poses = {
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
-          LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
+          LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
+          LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue(limelightName),
-          new double[] {stddevs[6], stddevs[7], stddevs[11]},
-          new double[] {stddevs[0], stddevs[1], stddevs[5]})
+          new double[] {stddevs[0], stddevs[1], stddevs[5]},
+          PoseObservationType.MEGATAG_1
+      ),
+      new PoseObservation(
+        Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
+        LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
+        LimelightHelpers.getTargetCount(limelightName),
+        LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
+        new double[] {stddevs[6], stddevs[7], stddevs[11]},
+        PoseObservationType.MEGATAG_2
+      )
     };
 
     return poses;

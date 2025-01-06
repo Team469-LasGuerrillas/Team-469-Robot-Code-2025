@@ -7,9 +7,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-public class MonkeySwerveDrivePoseEstimator extends MonkeyPoseEstimator<SwerveModulePosition[]> {
-  
-  public MonkeySwerveDrivePoseEstimator(
+public class SequencingSwerveDrivePoseEstimator
+    extends PoseSequencingEstimator<SwerveModulePosition[]> {
+
+  public SequencingSwerveDrivePoseEstimator(
       SwerveDriveKinematics kinematics,
       Rotation2d gyroAngle,
       SwerveModulePosition[] modulePositions,

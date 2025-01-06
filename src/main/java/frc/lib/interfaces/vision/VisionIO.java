@@ -17,11 +17,12 @@ public interface VisionIO {
       TargettingType targetType) {}
 
   public record PoseObservation(
-      double timestamp,
-      Pose3d pinholePose,
-      Pose3d solvePnpPose,
-      double[] pinholeStdDevs,
-      double[] solvePnpStdDevs) {}
+    double timestamp,
+    double ambiguity, 
+    double tagCount,
+    Pose3d pose,
+    double[] stdDevs,
+    PoseObservationType type) {}
 
   public enum TargettingType {
     FIDUCIAL,
@@ -30,8 +31,15 @@ public interface VisionIO {
     OBJECT_DETECTION
   }
 
+  public enum PoseObservationType {
+    MEGATAG_1,
+    MEGATAG_2,
+    MULTITAG
+  }
+
   @AutoLog
   class VisionIOInputs {
+    public String cameraName;
     public boolean hasLatestUpdate = false;
     public Pose3d cameraPose;
 
