@@ -17,12 +17,12 @@ public interface VisionIO {
       TargettingType targetType) {}
 
   public record PoseObservation(
-    double timestamp,
-    double ambiguity, 
-    double tagCount,
-    Pose3d pose,
-    double[] stdDevs,
-    PoseObservationType type) {}
+      double timestamp,
+      double ambiguity,
+      double tagCount,
+      Pose3d pose,
+      double[] stdDevs,
+      PoseObservationType type) {}
 
   public enum TargettingType {
     FIDUCIAL,

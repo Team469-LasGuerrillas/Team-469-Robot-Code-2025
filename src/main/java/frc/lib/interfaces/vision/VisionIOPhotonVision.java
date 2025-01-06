@@ -125,28 +125,27 @@ public class VisionIOPhotonVision implements VisionIO {
 
         poseObservations.add(
             new PoseObservation(
-              Clock.time() - latency,
-              multitagResult.estimatedPose.ambiguity,
-              multitagResult.fiducialIDsUsed.size(),
-              robotPose, 
-              calculateSTDS(result, multitagResult), 
-              PoseObservationType.MULTITAG)
-            );
+                Clock.time() - latency,
+                multitagResult.estimatedPose.ambiguity,
+                multitagResult.fiducialIDsUsed.size(),
+                robotPose,
+                calculateSTDS(result, multitagResult),
+                PoseObservationType.MULTITAG));
       }
     }
 
     return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
   }
 
-  private double[] calculateSTDS(PhotonPipelineResult result, MultiTargetPNPResult multitagResult){
+  private double[] calculateSTDS(PhotonPipelineResult result, MultiTargetPNPResult multitagResult) {
     double totalTagDistance = 0.0;
-    for (var target : result.targets){
+    for (var target : result.targets) {
       totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
     }
 
     double averageTagDistance = totalTagDistance / result.targets.size();
     double tagCount = multitagResult.fiducialIDsUsed.size();
-    
+
     double stdDevFactor = Math.pow(averageTagDistance, 2) / tagCount;
     double linearStdDev = VisionConstants.LINEAR_STD_BASELINE * stdDevFactor;
     double angularStdDev = VisionConstants.ANGULAR_STD_BASELINE * stdDevFactor;

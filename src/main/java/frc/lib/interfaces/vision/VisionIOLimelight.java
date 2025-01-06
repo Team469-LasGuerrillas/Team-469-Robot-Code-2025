@@ -176,7 +176,7 @@ public class VisionIOLimelight implements VisionIO {
 
   private PoseObservation[] parsePoseObservations() {
     double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
-    
+
     PoseObservation[] poses = {
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
@@ -184,16 +184,14 @@ public class VisionIOLimelight implements VisionIO {
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue(limelightName),
           new double[] {stddevs[0], stddevs[1], stddevs[5]},
-          PoseObservationType.MEGATAG_1
-      ),
+          PoseObservationType.MEGATAG_1),
       new PoseObservation(
-        Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
-        LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
-        LimelightHelpers.getTargetCount(limelightName),
-        LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-        new double[] {stddevs[6], stddevs[7], stddevs[11]},
-        PoseObservationType.MEGATAG_2
-      )
+          Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
+          LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
+          LimelightHelpers.getTargetCount(limelightName),
+          LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
+          new double[] {stddevs[6], stddevs[7], stddevs[11]},
+          PoseObservationType.MEGATAG_2)
     };
 
     return poses;
