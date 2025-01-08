@@ -1,8 +1,6 @@
 package frc.frc2025.subsystems.vision;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.frc2025.subsystems.Constants.VisionConstants;
 import frc.frc2025.subsystems.drive.Drive;
@@ -54,38 +52,27 @@ public class VisionSubsystem extends SubsystemBase {
         } else {
           robotPosesAccepted.add(observation);
 
-          if (observation.tagCount() == 3
-              && (observation.type() == PoseObservationType.MEGATAG_1
-                  || observation.type() == PoseObservationType.MULTITAG)) {
-            Drive.getInstance()
-                .addVisionMeasurement(
-                    observation.pose().toPose2d(),
-                    observation.timestamp(),
-                    VecBuilder.fill(
-                        observation.stdDevs()[0],
-                        observation.stdDevs()[1],
-                        observation.stdDevs()[2]));
-          } else {
-            Drive.getInstance()
-                .addVisionMeasurement(
-                    new Pose2d(
-                        observation.pose().getTranslation().toTranslation2d(),
-                        new Rotation2d(Drive.getInstance().getPose().getRotation().getRadians())),
-                    observation.timestamp(),
-                    VecBuilder.fill(
-                        observation.stdDevs()[0],
-                        observation.stdDevs()[1],
-                        observation.stdDevs()[2]));
-          }
+          boolean updateYaw = observation.tagCount() == 3
+            && (observation.type() == PoseObservationType.MEGATAG_1
+              || observation.type() == PoseObservationType.MULTITAG);
 
-          Logger.recordOutput(
-              getCameraName() + "/RobotPosesAccepted",
-              robotPosesAccepted.toArray(new PoseObservation[robotPosesAccepted.size()]));
-
-          Logger.recordOutput(
-              getCameraName() + "/RobotPosesRejected",
-              robotPosesRejected.toArray(new PoseObservation[robotPosesRejected.size()]));
+          Drive.getInstance().addVisionMeasurement(
+            observation.pose().toPose2d(), 
+            observation.timestamp(), 
+            VecBuilder.fill(
+              observation.stdDevs()[0],
+              observation.stdDevs()[1],
+              updateYaw ? observation.stdDevs()[2] : Double.POSITIVE_INFINITY)
+          );
         }
+
+        Logger.recordOutput(
+          getCameraName() + "/RobotPosesAccepted",
+          robotPosesAccepted.toArray(new PoseObservation[robotPosesAccepted.size()]));
+
+        Logger.recordOutput(
+          getCameraName() + "/RobotPosesRejected",
+          robotPosesRejected.toArray(new PoseObservation[robotPosesRejected.size()]));
       }
     }
   }
