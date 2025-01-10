@@ -14,13 +14,15 @@ import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.lib.util.math.InterpolatorUtil;
+import frc.lib.util.math.odometry.OdometryType;
+import frc.lib.util.math.odometry.VROdometry;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
 
 public class PoseSequencingEstimator<T> {
   private final Odometry<T> primaryOdometry;
-  private final Odometry<T> secondaryOdometry;
+  private final VROdometry secondaryOdometry;
 
   private final Matrix<N3, N1> q = new Matrix<>(Nat.N3(), Nat.N1());
   private final Matrix<N3, N3> visionK = new Matrix<>(Nat.N3(), Nat.N3());
@@ -36,15 +38,19 @@ public class PoseSequencingEstimator<T> {
   private Pose2d lastPrimaryOdometryPose;
   private Pose2d lastSecondaryOdometryPose;
 
+  private OdometryType odometryType;
+
   @SuppressWarnings("PMD.UnusedxFormalParameter")
   public PoseSequencingEstimator(
       Kinematics<?, T> kinematics,
       Odometry<T> primaryOdometry,
-      Odometry<T> secondaryOdometry,
+      VROdometry secondaryOdometry,
       Matrix<N3, N1> stateStdDevs,
-      Matrix<N3, N1> visionMeasurementStdDevs) {
+      Matrix<N3, N1> visionMeasurementStdDevs,
+      OdometryType odometryType) {
     this.primaryOdometry = primaryOdometry;
     this.secondaryOdometry = secondaryOdometry;
+    this.odometryType = odometryType;
 
     currentPoseEstimate = primaryOdometry.getPoseMeters();
 
@@ -117,7 +123,7 @@ public class PoseSequencingEstimator<T> {
   public void resetPosition(Rotation2d gyroAngle, T wheelPositions, Pose2d poseMeters) {
     // Reset state estimate and error covariance
     primaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
-    secondaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
+    secondaryOdometry.resetPose(poseMeters);
     lastPrimaryOdometryPose = poseMeters;
     lastSecondaryOdometryPose = poseMeters;
     odometryBuffer.clear();
@@ -147,7 +153,7 @@ public class PoseSequencingEstimator<T> {
 
   public void resetRotation(Rotation2d rotation) {
     primaryOdometry.resetRotation(rotation);
-    secondaryOdometry.resetRotation(rotation);
+    secondaryOdometry.setRotation(rotation);
     lastPrimaryOdometryPose = new Pose2d(lastPrimaryOdometryPose.getTranslation(), rotation);
     lastSecondaryOdometryPose = new Pose2d(lastSecondaryOdometryPose.getTranslation(), rotation);
     odometryBuffer.clear();
@@ -215,23 +221,23 @@ public class PoseSequencingEstimator<T> {
       double currentTime,
       Rotation2d gyroAngle,
       T wheelPositions,
-      Rotation2d gyroAngle2,
-      T wheelPositions2,
       double secondaryTrust,
       boolean secondaryConnected) {
     var primaryOdometryEstimate = primaryOdometry.update(gyroAngle, wheelPositions);
-    var secondaryOdometryEstimate = secondaryOdometry.update(gyroAngle2, wheelPositions2);
+    var secondaryOdometryEstimate = secondaryOdometry.update();
 
     Twist2d primaryDelta = lastPrimaryOdometryPose.log(primaryOdometryEstimate);
     Twist2d secondaryDelta = lastSecondaryOdometryPose.log(secondaryOdometryEstimate);
     Twist2d interpolatedDelta;
 
-    if (secondaryConnected) {
-      interpolatedDelta = InterpolatorUtil.twist2d(primaryDelta, secondaryDelta, secondaryTrust);
+    if (odometryType == OdometryType.FUSED_ODOMETRY && secondaryConnected) {
+      interpolatedDelta = InterpolatorUtil.twist2d(primaryDelta, secondaryDelta, secondaryTrust); // Fused Odometry
+    } else if (odometryType == OdometryType.WHEEL_ODOMETRY) {
+      interpolatedDelta = primaryDelta; // Wheel Odometry
     } else {
-      interpolatedDelta = primaryDelta;
+      interpolatedDelta = secondaryDelta; // VR Odometry
     }
-
+    
     Pose2d interpolatedEstimate =
         odometryBuffer.getInternalBuffer().lastEntry().getValue().exp(interpolatedDelta);
 

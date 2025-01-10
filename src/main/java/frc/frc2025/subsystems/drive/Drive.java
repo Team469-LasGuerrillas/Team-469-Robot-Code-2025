@@ -66,8 +66,11 @@ import frc.lib.drivecontrollers.TeleopDriveController;
 import frc.lib.util.Clock;
 import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
+import frc.lib.util.hardware.QuestNavUtil;
 import frc.lib.util.math.InterpolatorUtil;
 import frc.lib.util.math.estimator.SequencingSwerveDrivePoseEstimator;
+import frc.lib.util.math.odometry.OdometryType;
+
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -210,7 +213,7 @@ public class Drive extends SubsystemBase {
       };
   private SequencingSwerveDrivePoseEstimator poseEstimator =
       new SequencingSwerveDrivePoseEstimator(
-          kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), OdometryType.FUSED_ODOMETRY);
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -357,10 +360,8 @@ public class Drive extends SubsystemBase {
           sampleTimestamps[i],
           rawGyroRotation,
           modulePositions,
-          rawGyroRotation,
-          modulePositions,
           0.9,
-          true);
+          QuestNavUtil.getInstance().isConnected());
 
       switch (coastRequest) {
         case BRAKE -> {

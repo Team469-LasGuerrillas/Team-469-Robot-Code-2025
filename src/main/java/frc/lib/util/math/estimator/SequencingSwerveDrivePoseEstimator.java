@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import frc.lib.util.math.odometry.OdometryType;
+import frc.lib.util.math.odometry.VROdometry;
 
 public class SequencingSwerveDrivePoseEstimator
     extends PoseSequencingEstimator<SwerveModulePosition[]> {
@@ -14,12 +16,14 @@ public class SequencingSwerveDrivePoseEstimator
       SwerveDriveKinematics kinematics,
       Rotation2d gyroAngle,
       SwerveModulePosition[] modulePositions,
-      Pose2d initialPoseMeters) {
+      Pose2d initialPoseMeters,
+      OdometryType odometryType) {
     super(
         kinematics,
         new SwerveDriveOdometry(kinematics, gyroAngle, modulePositions, initialPoseMeters),
-        new SwerveDriveOdometry(kinematics, gyroAngle, modulePositions, initialPoseMeters),
+        new VROdometry(initialPoseMeters),
         VecBuilder.fill(0.1, 0.1, 0.1),
-        VecBuilder.fill(0.1, 0.1, 0.1));
+        VecBuilder.fill(0.1, 0.1, 0.1),
+        odometryType);
   }
 }
