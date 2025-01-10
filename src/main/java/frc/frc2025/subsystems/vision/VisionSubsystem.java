@@ -52,27 +52,28 @@ public class VisionSubsystem extends SubsystemBase {
         } else {
           robotPosesAccepted.add(observation);
 
-          boolean updateYaw = observation.tagCount() == 3
-            && (observation.type() == PoseObservationType.MEGATAG_1
-              || observation.type() == PoseObservationType.MULTITAG);
+          boolean updateYaw =
+              observation.tagCount() == 3
+                  && (observation.type() == PoseObservationType.MEGATAG_1
+                      || observation.type() == PoseObservationType.MULTITAG);
 
-          Drive.getInstance().addVisionMeasurement(
-            observation.pose().toPose2d(), 
-            observation.timestamp(), 
-            VecBuilder.fill(
-              observation.stdDevs()[0],
-              observation.stdDevs()[1],
-              updateYaw ? observation.stdDevs()[2] : Double.POSITIVE_INFINITY)
-          );
+          Drive.getInstance()
+              .addVisionMeasurement(
+                  observation.pose().toPose2d(),
+                  observation.timestamp(),
+                  VecBuilder.fill(
+                      observation.stdDevs()[0],
+                      observation.stdDevs()[1],
+                      updateYaw ? observation.stdDevs()[2] : Double.POSITIVE_INFINITY));
         }
 
         Logger.recordOutput(
-          getCameraName() + "/RobotPosesAccepted",
-          robotPosesAccepted.toArray(new PoseObservation[robotPosesAccepted.size()]));
+            getCameraName() + "/RobotPosesAccepted",
+            robotPosesAccepted.toArray(new PoseObservation[robotPosesAccepted.size()]));
 
         Logger.recordOutput(
-          getCameraName() + "/RobotPosesRejected",
-          robotPosesRejected.toArray(new PoseObservation[robotPosesRejected.size()]));
+            getCameraName() + "/RobotPosesRejected",
+            robotPosesRejected.toArray(new PoseObservation[robotPosesRejected.size()]));
       }
     }
   }

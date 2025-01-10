@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import frc.lib.util.math.InterpolatorUtil;
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -32,7 +33,10 @@ public class PoseSequencingEstimator<T> {
 
   private Pose2d currentPoseEstimate;
 
-  @SuppressWarnings("PMD.UnusedFormalParameter")
+  private Pose2d lastPrimaryOdometryPose;
+  private Pose2d lastSecondaryOdometryPose;
+
+  @SuppressWarnings("PMD.UnusedxFormalParameter")
   public PoseSequencingEstimator(
       Kinematics<?, T> kinematics,
       Odometry<T> primaryOdometry,
@@ -114,6 +118,8 @@ public class PoseSequencingEstimator<T> {
     // Reset state estimate and error covariance
     primaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
     secondaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
+    lastPrimaryOdometryPose = poseMeters;
+    lastSecondaryOdometryPose = poseMeters;
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
@@ -122,6 +128,8 @@ public class PoseSequencingEstimator<T> {
   public void resetPose(Pose2d pose) {
     primaryOdometry.resetPose(pose);
     secondaryOdometry.resetPose(pose);
+    lastPrimaryOdometryPose = pose;
+    lastSecondaryOdometryPose = pose;
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
@@ -130,6 +138,8 @@ public class PoseSequencingEstimator<T> {
   public void resetTranslation(Translation2d translation) {
     primaryOdometry.resetTranslation(translation);
     secondaryOdometry.resetTranslation(translation);
+    lastPrimaryOdometryPose = new Pose2d(translation, lastPrimaryOdometryPose.getRotation());
+    lastSecondaryOdometryPose = new Pose2d(translation, lastSecondaryOdometryPose.getRotation());
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
@@ -138,6 +148,8 @@ public class PoseSequencingEstimator<T> {
   public void resetRotation(Rotation2d rotation) {
     primaryOdometry.resetRotation(rotation);
     secondaryOdometry.resetRotation(rotation);
+    lastPrimaryOdometryPose = new Pose2d(lastPrimaryOdometryPose.getTranslation(), rotation);
+    lastSecondaryOdometryPose = new Pose2d(lastSecondaryOdometryPose.getTranslation(), rotation);
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
@@ -204,12 +216,24 @@ public class PoseSequencingEstimator<T> {
       Rotation2d gyroAngle,
       T wheelPositions,
       Rotation2d gyroAngle2,
-      T wheelPositions2) {
+      T wheelPositions2,
+      double secondaryTrust,
+      boolean secondaryConnected) {
     var primaryOdometryEstimate = primaryOdometry.update(gyroAngle, wheelPositions);
     var secondaryOdometryEstimate = secondaryOdometry.update(gyroAngle2, wheelPositions2);
 
+    Twist2d primaryDelta = lastPrimaryOdometryPose.log(primaryOdometryEstimate);
+    Twist2d secondaryDelta = lastSecondaryOdometryPose.log(secondaryOdometryEstimate);
+    Twist2d interpolatedDelta;
+
+    if (secondaryConnected) {
+      interpolatedDelta = InterpolatorUtil.twist2d(primaryDelta, secondaryDelta, secondaryTrust);
+    } else {
+      interpolatedDelta = primaryDelta;
+    }
+
     Pose2d interpolatedEstimate =
-        primaryOdometryEstimate.interpolate(secondaryOdometryEstimate, 0.5);
+        odometryBuffer.getInternalBuffer().lastEntry().getValue().exp(interpolatedDelta);
 
     odometryBuffer.addSample(currentTime, interpolatedEstimate);
 
@@ -219,6 +243,9 @@ public class PoseSequencingEstimator<T> {
       var visionUpdate = visionUpdates.get(visionUpdates.lastKey());
       currentPoseEstimate = visionUpdate.compensate(interpolatedEstimate);
     }
+
+    lastPrimaryOdometryPose = primaryOdometryEstimate;
+    lastSecondaryOdometryPose = secondaryOdometryEstimate;
 
     return getCurrentPoseEstimate();
   }

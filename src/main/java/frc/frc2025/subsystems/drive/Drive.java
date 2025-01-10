@@ -354,7 +354,13 @@ public class Drive extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(
-          sampleTimestamps[i], rawGyroRotation, modulePositions, rawGyroRotation, modulePositions);
+          sampleTimestamps[i],
+          rawGyroRotation,
+          modulePositions,
+          rawGyroRotation,
+          modulePositions,
+          0.9,
+          true);
 
       switch (coastRequest) {
         case BRAKE -> {
