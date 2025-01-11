@@ -7,8 +7,8 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.frc2025.subsystems.Constants.DriveConstants;
 import frc.lib.util.math.SignedPower;
+import frc.robot.subsystems.Constants.DriveConstants;
 
 public class TeleopDriveController {
 

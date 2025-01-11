@@ -3,11 +3,12 @@ package frc.lib.interfaces.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import frc.frc2025.subsystems.drive.Drive;
-import frc.frc2025.util.LimelightHelpers;
-import frc.frc2025.util.LimelightHelpers.RawDetection;
-import frc.frc2025.util.LimelightHelpers.RawFiducial;
 import frc.lib.util.Clock;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.LimelightHelpers;
+import frc.robot.util.LimelightHelpers.RawDetection;
+import frc.robot.util.LimelightHelpers.RawFiducial;
+
 import java.util.HashMap;
 
 /*
