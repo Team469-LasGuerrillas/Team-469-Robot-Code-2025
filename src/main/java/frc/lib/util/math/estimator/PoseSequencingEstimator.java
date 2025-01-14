@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import frc.lib.util.Clock;
 import frc.lib.util.math.InterpolatorUtil;
 import frc.lib.util.math.odometry.OdometryType;
 import frc.lib.util.math.odometry.VROdometry;
@@ -53,6 +54,10 @@ public class PoseSequencingEstimator<T> {
     this.odometryType = odometryType;
 
     currentPoseEstimate = primaryOdometry.getPoseMeters();
+
+    lastPrimaryOdometryPose = currentPoseEstimate;
+    lastSecondaryOdometryPose = currentPoseEstimate;
+    odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
 
     for (int i = 0; i < 3; ++i) {
       q.set(i, 0, stateStdDevs.get(i, 0) * stateStdDevs.get(i, 0));
@@ -129,6 +134,8 @@ public class PoseSequencingEstimator<T> {
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
+
+    odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
   }
 
   public void resetPose(Pose2d pose) {
@@ -139,6 +146,8 @@ public class PoseSequencingEstimator<T> {
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
+
+    odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
   }
 
   public void resetTranslation(Translation2d translation) {
@@ -149,6 +158,8 @@ public class PoseSequencingEstimator<T> {
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
+
+    odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
   }
 
   public void resetRotation(Rotation2d rotation) {
@@ -159,6 +170,8 @@ public class PoseSequencingEstimator<T> {
     odometryBuffer.clear();
     visionUpdates.clear();
     currentPoseEstimate = primaryOdometry.getPoseMeters();
+
+    odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
   }
 
   public Pose2d getCurrentPoseEstimate() {
@@ -237,7 +250,7 @@ public class PoseSequencingEstimator<T> {
     } else {
       interpolatedDelta = secondaryDelta; // VR Odometry
     }
-    
+
     Pose2d interpolatedEstimate =
         odometryBuffer.getInternalBuffer().lastEntry().getValue().exp(interpolatedDelta);
 

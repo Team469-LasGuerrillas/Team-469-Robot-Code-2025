@@ -1,5 +1,7 @@
 package frc.lib.drivecontrollers;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,6 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.lib.util.math.SignedPower;
 import frc.robot.subsystems.Constants.DriveConstants;
+import frc.robot.subsystems.drive.Drive;
 
 public class TeleopDriveController {
 
@@ -27,7 +30,7 @@ public class TeleopDriveController {
   public ChassisSpeeds update() {
     Translation2d linearVelocity = calcLinearVelocity(controllerX, controllerY);
     double omega = MathUtil.applyDeadband(controllerOmega, DriveConstants.STICK_DEADBAND);
-    omega = Math.copySign(omega * omega, omega);
+    // omega = Math.copySign(omega * omega, omega);
 
     final double maxLinearVelocity = DriveConstants.TELEOP_MAX_LINEAR_VELOCITY;
     final double maxAngularVelocity = DriveConstants.TELEOP_MAX_ANGULAR_VELOCITY;
@@ -42,19 +45,19 @@ public class TeleopDriveController {
           && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
         linearVelocity = linearVelocity.rotateBy(Rotation2d.fromRadians(Math.PI));
       }
+
       return ChassisSpeeds.fromFieldRelativeSpeeds(
           linearVelocity.getX() * maxLinearVelocity,
           linearVelocity.getY() * maxLinearVelocity,
           omega * maxAngularVelocity,
-          new Rotation2d(0.0) // Implement get rotation
+          Drive.getInstance().getRotation()
           );
     }
   }
 
   public static Translation2d calcLinearVelocity(double x, double y) {
     // Apply deadband
-    double linearMagnitude =
-        MathUtil.applyDeadband(Math.hypot(x, y), DriveConstants.STICK_DEADBAND);
+    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DriveConstants.STICK_DEADBAND);
     Rotation2d linearDirection = new Rotation2d(x, y);
 
     // Square magnitude

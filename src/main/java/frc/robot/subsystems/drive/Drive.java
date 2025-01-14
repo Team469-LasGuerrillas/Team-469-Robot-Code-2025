@@ -141,7 +141,7 @@ public class Drive extends SubsystemBase {
 
   // The robot's current drivemode
   private DriveMode currentDriveMode = DriveMode.TELEOP;
-  private CoastRequest coastRequest = CoastRequest.COAST;
+  private CoastRequest coastRequest = CoastRequest.BRAKE;
 
   // Controllers for driving
   private ChassisSpeeds desiredSpeeds;
@@ -160,7 +160,7 @@ public class Drive extends SubsystemBase {
   public static final double DRIVE_BASE_RADIUS =
       Math.max(
           Math.max(
-              Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontRight.LocationY),
+              Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
               Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
           Math.max(
               Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
@@ -173,9 +173,9 @@ public class Drive extends SubsystemBase {
           DriveConstants.ROBOT_MOI,
           new ModuleConfig(
               TunerConstants.FrontLeft.WheelRadius,
-              TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
+              DriveConstants.TELEOP_MAX_LINEAR_VELOCITY,
               DriveConstants.WHEEL_COF,
-              DCMotor.getKrakenX60Foc(1)
+              DCMotor.getFalcon500(1)
                   .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
               TunerConstants.FrontLeft.SlipCurrent,
               1),
@@ -203,7 +203,7 @@ public class Drive extends SubsystemBase {
   // Swerve
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private final SwerveSetpointGenerator setpointGenerator;
-  private SwerveSetpoint previousSetpoint;
+  private SwerveSetpoint currentSetpoint;
   private Rotation2d rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
@@ -214,7 +214,7 @@ public class Drive extends SubsystemBase {
       };
   private SequencingSwerveDrivePoseEstimator poseEstimator =
       new SequencingSwerveDrivePoseEstimator(
-          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), OdometryType.FUSED_ODOMETRY);
+          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), OdometryType.WHEEL_ODOMETRY);
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -250,7 +250,7 @@ public class Drive extends SubsystemBase {
 
     // Swerve setpoint generator
     setpointGenerator = new SwerveSetpointGenerator(PP_CONFIG, getMaxAngularSpeedRadPerSec());
-    previousSetpoint =
+    currentSetpoint =
         new SwerveSetpoint(
             getChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(PP_CONFIG.numModules));
 
@@ -361,7 +361,7 @@ public class Drive extends SubsystemBase {
           sampleTimestamps[i],
           rawGyroRotation,
           modulePositions,
-          0.9,
+          0,
           QuestNavUtil.getInstance().isConnected());
 
       switch (coastRequest) {
@@ -383,6 +383,8 @@ public class Drive extends SubsystemBase {
         currentDriveMode = DriveMode.HEADING;
       }
 
+
+      desiredSpeeds = teleopSpeeds;
       switch (currentDriveMode) {
         case TELEOP -> {
           desiredSpeeds = teleopSpeeds;
@@ -416,6 +418,8 @@ public class Drive extends SubsystemBase {
     state.robotPose = new Pose3d(getPose());
     state.driveMode = currentDriveMode;
     state.addState(Clock.time());
+
+    System.out.println(desiredSpeeds);
   }
 
   public Command followPath(PathPlannerPath path) {
@@ -490,6 +494,7 @@ public class Drive extends SubsystemBase {
   /** Clears the heading goal */
   public void clearHeadingGoal() {
     headingController = null;
+    currentDriveMode = DriveMode.TELEOP;
   }
 
   /**
@@ -526,16 +531,19 @@ public class Drive extends SubsystemBase {
    */
   public SwerveModuleState[] runVelocity(ChassisSpeeds speeds) {
     // Calculate module setpoints
-    previousSetpoint = setpointGenerator.generateSetpoint(previousSetpoint, speeds, 0.02);
+    currentSetpoint = setpointGenerator.generateSetpoint(currentSetpoint, speeds, 0.02);
     SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
+    SwerveModuleState[] optimizedSetpointTorques = new SwerveModuleState[4];
 
     for (int i = 0; i < 4; i++) {
-      optimizedSetpointStates[i] = previousSetpoint.moduleStates()[i];
+      optimizedSetpointStates[i] = currentSetpoint.moduleStates()[i];
       optimizedSetpointStates[i].optimize(modules[i].getAngle());
+
+      optimizedSetpointTorques[i] = new SwerveModuleState(0.0, optimizedSetpointStates[i].angle);
     }
 
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        optimizedSetpointStates, TunerConstants.kSpeedAt12Volts);
+        optimizedSetpointStates, DriveConstants.TELEOP_MAX_LINEAR_VELOCITY);
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("Drive/SwerveStates/Setpoints", optimizedSetpointStates);
@@ -678,7 +686,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the maximum linear speed in meters per sec. */
   public double getMaxLinearSpeedMetersPerSec() {
-    return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    return DriveConstants.TELEOP_MAX_LINEAR_VELOCITY;
   }
 
   /** Returns the maximum angular speed in radians per sec. */
