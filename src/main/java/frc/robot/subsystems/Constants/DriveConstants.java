@@ -6,9 +6,9 @@ import frc.robot.generated.TunerConstants;
 
 public class DriveConstants {
   // Pathplanner constants
-  public static final double ROBOT_MASS_KG = 18;
-  public static final double ROBOT_MOI = 3;
-  public static final double WHEEL_COF = 1;
+  public static final double ROBOT_MASS_KG = 10;
+  public static final double ROBOT_MOI = 0.2;
+  public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
   public static final double MAX_LINEAR_ACCEL = 5;

@@ -419,7 +419,7 @@ public class Drive extends SubsystemBase {
     state.driveMode = currentDriveMode;
     state.addState(Clock.time());
 
-    System.out.println(desiredSpeeds);
+    System.out.println(getPose());
   }
 
   public Command followPath(PathPlannerPath path) {
@@ -660,7 +660,7 @@ public class Drive extends SubsystemBase {
   }
 
   /** Returns the current odometry pose. */
-  @AutoLogOutput(key = "Odometry/Robot")
+  @AutoLogOutput(key = "Odometry/RobotPose")
   public Pose2d getPose() {
     return poseEstimator.getCurrentPoseEstimate();
   }

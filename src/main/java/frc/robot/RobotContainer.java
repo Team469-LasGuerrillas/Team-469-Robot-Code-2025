@@ -140,7 +140,7 @@ public class RobotContainer {
                             -controller.getLeftY(), -controller.getLeftX(), 0.0, false))
                 .alongWith(
                     Commands.startEnd(
-                        () -> drive.setHeadingGoal(() -> Rotation2d.fromDegrees(-90.0)),
+                        () -> drive.setHeadingGoal(() -> Rotation2d.fromDegrees(0.0)),
                         drive::clearHeadingGoal)));
 
     // Switch to X pattern when X button is pressed
