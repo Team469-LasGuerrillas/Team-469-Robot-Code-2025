@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.lib.interfaces.vision.VisionIO.PoseObservation;
@@ -29,13 +30,12 @@ public class VisionSubsystem extends SubsystemBase {
     List<PoseObservation> robotPosesAccepted = new LinkedList<>();
     List<PoseObservation> robotPosesRejected = new LinkedList<>();
 
-    if (hasLatestUpdate() && getTargettingType() == TargettingType.FIDUCIAL) {
+    if ((hasLatestUpdate() && getTargettingType() == TargettingType.FIDUCIAL) && hasTargets()) {
       for (PoseObservation observation : inputs.poseObservations) {
         boolean rejectPose =
             observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
-                    && observation.ambiguity()
-                        > VisionConstants.MAX_AMBIGUITY) // Cannot be high ambiguity
+                    && observation.ambiguity() > VisionConstants.MAX_AMBIGUITY) // Cannot be high ambiguity
                 || Math.abs(observation.pose().getZ())
                     > VisionConstants.MAX_Z_ERROR // Must have realistic Z coordinate
 
@@ -49,11 +49,15 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
+          System.out.println("varun tandoori");
         } else {
           robotPosesAccepted.add(observation);
 
+          System.out.println("om joshi");
+
+
           boolean updateYaw =
-              observation.tagCount() == 3
+              observation.tagCount() >= 2
                   && (observation.type() == PoseObservationType.MEGATAG_1
                       || observation.type() == PoseObservationType.MULTITAG);
 
@@ -88,6 +92,14 @@ public class VisionSubsystem extends SubsystemBase {
 
   public TargettingType getTargettingType() {
     return inputs.targettingType;
+  }
+
+  public void setCamerPose(Pose3d cameraPose) {
+    io.setPoseRobotSpace(cameraPose);
+  }
+
+  public boolean hasTargets() {
+    return inputs.hasTargets;
   }
 
   // TODO: Add other functions for fetching Camera Data Later

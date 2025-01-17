@@ -57,6 +57,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drive.GyroIOInputsAutoLogged;
+import frc.lib.Dashboard;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.TeleopDriveController;
 import frc.lib.util.Clock;
@@ -87,7 +88,7 @@ public class Drive extends SubsystemBase {
     /** Driving with input from driver joysticks. */
     TELEOP,
 
-    /** Driving with input from driver joysticks but there is a heading controller. */
+    /** Driving with input from driver joysticks but there is a eading controller. */
     HEADING,
 
     /** Driving based on a pathplanner provided speeds. */
@@ -304,6 +305,8 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Dashboard.m_field.setRobotPose(getPose());
+    
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
@@ -418,8 +421,6 @@ public class Drive extends SubsystemBase {
     state.robotPose = new Pose3d(getPose());
     state.driveMode = currentDriveMode;
     state.addState(Clock.time());
-
-    System.out.println(getPose());
   }
 
   public Command followPath(PathPlannerPath path) {

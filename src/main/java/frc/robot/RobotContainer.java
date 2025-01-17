@@ -18,18 +18,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.lib.Dashboard;
+import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -43,14 +49,21 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
 
+  private final VisionSubsystem limelightLeft;
+  private final VisionSubsystem limelightRight;
+
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+  private ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drive Station 2025");
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    Dashboard.addWidgets(shuffleboardTab);
+
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -61,6 +74,9 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackLeft),
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
+
+        limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
+        limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
 
         break;
 
@@ -74,6 +90,9 @@ public class RobotContainer {
             new ModuleIOSim(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
+        limelightLeft = new VisionSubsystem(new VisionIO() {});
+        limelightRight = new VisionSubsystem(new VisionIO() {});
+
         break;
 
       default:
@@ -85,6 +104,9 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {});
         drive = Drive.getInstance();
+
+        limelightLeft = new VisionSubsystem(new VisionIO() {});
+        limelightRight = new VisionSubsystem(new VisionIO() {});
 
         break;
     }

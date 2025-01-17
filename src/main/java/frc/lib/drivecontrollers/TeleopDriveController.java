@@ -58,7 +58,13 @@ public class TeleopDriveController {
   public static Translation2d calcLinearVelocity(double x, double y) {
     // Apply deadband
     double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DriveConstants.STICK_DEADBAND);
-    Rotation2d linearDirection = new Rotation2d(x, y);
+
+    Rotation2d linearDirection;
+    if (linearMagnitude == 0) {
+      linearDirection = new Rotation2d();
+    } else {
+      linearDirection = new Rotation2d(x, y);
+    }
 
     // Square magnitude
     linearMagnitude = SignedPower.calculate(linearMagnitude, DriveConstants.STICK_EXPO);

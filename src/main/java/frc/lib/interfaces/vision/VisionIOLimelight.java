@@ -89,9 +89,11 @@ public class VisionIOLimelight implements VisionIO {
     inputs.poseObservations = parsePoseObservations();
 
     double[] hw = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "hw");
-    inputs.fps = hw[0];
-    inputs.cpuTemp = hw[1];
-    inputs.ram = hw[2];
+    if(hw.length != 0){
+      inputs.fps = hw[0];
+      inputs.cpuTemp = hw[1];
+      inputs.ram = hw[2];
+    }
 
     inputs.cameraName = limelightName;
   }
@@ -178,12 +180,17 @@ public class VisionIOLimelight implements VisionIO {
   private PoseObservation[] parsePoseObservations() {
     double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
 
+    if (stddevs.length == 0) {
+      System.out.println("i dont have a sanjith std");
+      return new PoseObservation[] {};
+    }
+    
     PoseObservation[] poses = {
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
           LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
-          LimelightHelpers.getTargetCount(limelightName),
-          LimelightHelpers.getBotPose3d_wpiBlue(limelightName),
+          1.0,
+          LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
           new double[] {stddevs[0], stddevs[1], stddevs[5]},
           PoseObservationType.MEGATAG_1),
       new PoseObservation(
