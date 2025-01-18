@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.Dashboard;
 import frc.lib.interfaces.vision.VisionIO;
-import frc.robot.commands.DriveCommands;
+import frc.robot.commandfactories.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -116,10 +117,6 @@ public class RobotContainer {
 
     // Set up SysId routines
     autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
-    autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption(
         "Drive SysId (Quasistatic Forward)",
         drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
@@ -143,27 +140,33 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-        drive.run(
-            () ->
-                drive.acceptTeleopInput(
-                    -controller.getLeftY(),
-                    -controller.getLeftX(),
-                    -controller.getRightX(),
-                    false)));
+        DriveCommands.acceptTeleopFieldOriented(controller, true));
 
     // Lock to 0° when A button is held
+    // controller
+    //     .a()
+    //     .whileTrue(
+    //         drive
+    //             .run(
+    //                 () ->
+    //                     drive.acceptTeleopInput(
+    //                         -controller.getLeftY(), -controller.getLeftX(), 0.0, false))
+    //             .alongWith(
+    //                 Commands.startEnd(
+    //                     () -> drive.setHeadingGoal(() -> Rotation2d.fromDegrees(0.0)),
+    //                     drive::clearHeadingGoal)));
+
     controller
-        .a()
+        .y()
         .whileTrue(
-            drive
-                .run(
-                    () ->
-                        drive.acceptTeleopInput(
-                            -controller.getLeftY(), -controller.getLeftX(), 0.0, false))
-                .alongWith(
-                    Commands.startEnd(
-                        () -> drive.setHeadingGoal(() -> Rotation2d.fromDegrees(0.0)),
-                        drive::clearHeadingGoal)));
+          DriveCommands.aimAssistToPose(controller, new Pose2d(2, 2, new Rotation2d()))
+          .alongWith(DriveCommands.acceptTeleopFieldOriented(controller, false)))
+        .onFalse(Commands.run(() -> drive.clearAimAssist()));
+
+    controller
+      .a()
+      .whileTrue(DriveCommands.pathfindToPose(new Pose2d(2, 2, new Rotation2d())))
+      .onFalse(Commands.run(() -> drive.clearAutoSpeeds()));
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -178,6 +181,8 @@ public class RobotContainer {
                             new Pose2d()),
                     drive)
                 .ignoringDisable(true));
+    
+    
   }
 
   /**

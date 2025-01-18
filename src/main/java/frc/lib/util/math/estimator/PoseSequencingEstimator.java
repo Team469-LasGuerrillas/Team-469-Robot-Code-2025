@@ -117,12 +117,10 @@ public class PoseSequencingEstimator<T> {
       Matrix<N3, N1> stdsToReplay = visionUpdateToReplay.getStds();
 
       visionUpdates.remove(timeStampToReplay.get());
-      System.out.println(numberOfRecursions);
 
       addVisionMeasurement(rawPoseToReplay, timeStampToReplay.get(), stdsToReplay);
     } else {
       numberOfRecursions = 0;
-      System.out.println(numberOfRecursions);
     }
   }
 

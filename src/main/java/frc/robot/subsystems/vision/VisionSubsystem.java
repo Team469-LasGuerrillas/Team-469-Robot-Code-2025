@@ -55,11 +55,11 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          System.out.println("REJECTING!!! " + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          // System.out.println("REJECTING!!! " + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
         } else {
           robotPosesAccepted.add(observation);
 
-          System.out.println("ACCEPTING!!! " + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
+          // System.out.println("ACCEPTING!!! " + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
 
           boolean updateYaw =
               observation.tagCount() >= 2

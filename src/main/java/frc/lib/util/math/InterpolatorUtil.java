@@ -8,10 +8,17 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 public class InterpolatorUtil {
   public static ChassisSpeeds chassisSpeeds(
       ChassisSpeeds base, ChassisSpeeds other, double interpolation) {
+    if (other == null){
+      System.out.println("DANJITH DAMBAHT");
+      return base;
+    } else if (base == null){
+      return new ChassisSpeeds();
+    }
+  
     interpolation = MathUtil.clamp(interpolation, 0, 1);
-
+    
     ChassisSpeeds difference = other.minus(base);
-    difference.times(interpolation);
+    difference = difference.times(interpolation);
     return base.plus(difference);
   }
 
