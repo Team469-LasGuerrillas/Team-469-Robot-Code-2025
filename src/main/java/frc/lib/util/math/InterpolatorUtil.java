@@ -1,6 +1,7 @@
 package frc.lib.util.math;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
@@ -21,5 +22,14 @@ public class InterpolatorUtil {
         MathUtil.interpolate(base.dx, other.dx, interpolation),
         MathUtil.interpolate(base.dy, other.dy, interpolation),
         MathUtil.interpolate(base.dtheta, other.dtheta, interpolation));
+  }
+
+  public static Transform2d transform2d(Transform2d base, Transform2d other, double interpolation) {
+    interpolation = MathUtil.clamp(interpolation, 0, 1);
+
+    return new Transform2d(
+        MathUtil.interpolate(base.getX(), other.getX(), interpolation),
+        MathUtil.interpolate(base.getY(), other.getY(), interpolation),
+        base.getRotation().interpolate(other.getRotation(), interpolation));
   }
 }

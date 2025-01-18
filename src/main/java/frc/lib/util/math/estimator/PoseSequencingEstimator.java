@@ -4,8 +4,10 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
@@ -17,6 +19,8 @@ import frc.lib.util.Clock;
 import frc.lib.util.math.InterpolatorUtil;
 import frc.lib.util.math.odometry.OdometryType;
 import frc.lib.util.math.odometry.VROdometry;
+import frc.robot.subsystems.Constants.VisionConstants;
+
 import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -40,6 +44,8 @@ public class PoseSequencingEstimator<T> {
   private Pose2d lastSecondaryOdometryPose;
 
   private OdometryType odometryType;
+
+  private int numberOfRecursions = 0;
 
   @SuppressWarnings("PMD.UnusedxFormalParameter")
   public PoseSequencingEstimator(
@@ -68,7 +74,7 @@ public class PoseSequencingEstimator<T> {
   public void addVisionMeasurement(Pose2d pose, double timestamp, Matrix<N3, N1> stds) {
 
     if (odometryBuffer.getInternalBuffer().isEmpty()
-        || odometryBuffer.getInternalBuffer().lastKey() - bufferDuration > timestamp) {
+        || odometryBuffer.getInternalBuffer().firstKey() > timestamp) {
       return;
     }
 
@@ -104,19 +110,25 @@ public class PoseSequencingEstimator<T> {
     var timeStampToReplay = searchForNextNewestUpdate(timestamp);
 
     if (timeStampToReplay.isPresent()) {
+      numberOfRecursions++;
+
       VisionUpdate visionUpdateToReplay = visionUpdates.get(timeStampToReplay.get());
       Pose2d rawPoseToReplay = visionUpdateToReplay.getRawVisionPose();
       Matrix<N3, N1> stdsToReplay = visionUpdateToReplay.getStds();
 
       visionUpdates.remove(timeStampToReplay.get());
+      System.out.println(numberOfRecursions);
 
       addVisionMeasurement(rawPoseToReplay, timeStampToReplay.get(), stdsToReplay);
+    } else {
+      numberOfRecursions = 0;
+      System.out.println(numberOfRecursions);
     }
   }
 
   private Optional<Double> searchForNextNewestUpdate(double timestamp) {
     // Check to make sure there is another value that occured later
-    if (visionUpdates.isEmpty() || timestamp >= visionUpdates.lastKey()) {
+    if (visionUpdates.isEmpty() || timestamp == visionUpdates.ceilingKey(timestamp)) {
       return Optional.empty();
     }
 
@@ -182,6 +194,10 @@ public class PoseSequencingEstimator<T> {
     }
   }
 
+  public Pose2d getRawPose() {
+    return primaryOdometry.getPoseMeters();
+  }
+
   public Optional<Pose2d> getPoseEstimate(double timestamp) {
     if (odometryBuffer.getInternalBuffer().isEmpty()) {
       return Optional.empty();
@@ -219,7 +235,7 @@ public class PoseSequencingEstimator<T> {
     double oldestOdometryTimestamp = odometryBuffer.getInternalBuffer().firstKey();
 
     // Step 2: If there are no vision updates before that timestamp, skip.
-    if (visionUpdates.isEmpty() || oldestOdometryTimestamp < visionUpdates.firstKey()) {
+    if (visionUpdates.isEmpty() || oldestOdometryTimestamp <= visionUpdates.firstKey()) {
       return;
     }
 
@@ -227,7 +243,7 @@ public class PoseSequencingEstimator<T> {
     double newestNeededVisionUpdateTimestamp = visionUpdates.floorKey(oldestOdometryTimestamp);
 
     // Step 4: Remove all entries strictly before the newest timestamp we need.
-    visionUpdates.headMap(newestNeededVisionUpdateTimestamp, false).clear();
+    visionUpdates.headMap(newestNeededVisionUpdateTimestamp, true).clear();
   }
 
   public Pose2d updateWithTime(
@@ -239,12 +255,12 @@ public class PoseSequencingEstimator<T> {
     var primaryOdometryEstimate = primaryOdometry.update(gyroAngle, wheelPositions);
     var secondaryOdometryEstimate = secondaryOdometry.update();
 
-    Twist2d primaryDelta = lastPrimaryOdometryPose.log(primaryOdometryEstimate);
-    Twist2d secondaryDelta = lastSecondaryOdometryPose.log(secondaryOdometryEstimate);
-    Twist2d interpolatedDelta;
+    Transform2d primaryDelta = primaryOdometryEstimate.minus(lastPrimaryOdometryPose);
+    Transform2d secondaryDelta = secondaryOdometryEstimate.minus(lastSecondaryOdometryPose);
+    Transform2d interpolatedDelta;
 
     if (odometryType == OdometryType.FUSED_ODOMETRY && secondaryConnected) {
-      interpolatedDelta = InterpolatorUtil.twist2d(primaryDelta, secondaryDelta, secondaryTrust); // Fused Odometry
+      interpolatedDelta = InterpolatorUtil.transform2d(primaryDelta, secondaryDelta, secondaryTrust); // Fused Odometry
     } else if (odometryType == OdometryType.WHEEL_ODOMETRY) {
       interpolatedDelta = primaryDelta; // Wheel Odometry
     } else {
@@ -252,7 +268,7 @@ public class PoseSequencingEstimator<T> {
     }
 
     Pose2d interpolatedEstimate =
-        odometryBuffer.getInternalBuffer().lastEntry().getValue().exp(interpolatedDelta);
+        odometryBuffer.getInternalBuffer().lastEntry().getValue().plus(interpolatedDelta);
 
     odometryBuffer.addSample(currentTime, interpolatedEstimate);
 

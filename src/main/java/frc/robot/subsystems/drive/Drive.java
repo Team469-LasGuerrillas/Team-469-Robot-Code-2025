@@ -666,6 +666,9 @@ public class Drive extends SubsystemBase {
     return poseEstimator.getCurrentPoseEstimate();
   }
 
+  public Pose2d getRaw() {
+    return poseEstimator.getRawPose();
+  }
   /** Returns the current odometry rotation. */
   public Rotation2d getRotation() {
     return getPose().getRotation();

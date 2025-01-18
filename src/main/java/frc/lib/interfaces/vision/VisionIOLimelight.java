@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
+import frc.robot.subsystems.Constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LimelightHelpers.RawDetection;
@@ -105,17 +106,18 @@ public class VisionIOLimelight implements VisionIO {
         pose.getX(),
         pose.getY(),
         pose.getZ(),
-        pose.getRotation().getX(),
-        pose.getRotation().getY(),
-        pose.getRotation().getZ());
+        Math.toDegrees(pose.getRotation().getX()),
+        Math.toDegrees(pose.getRotation().getY()),
+        Math.toDegrees(pose.getRotation().getZ())
+    );
   }
 
   @Override
   public void setRobotRotationUpdate(Rotation2d rotation, Rotation2d angularVelocity) {
     LimelightHelpers.SetRobotOrientation(
         limelightName,
-        Drive.getInstance().getRotation().getDegrees(),
-        Drive.getInstance().getRobotRelativeVelocity().dtheta,
+        rotation.getDegrees(),
+        angularVelocity.getDegrees(),
         0,
         0,
         0,
@@ -179,26 +181,26 @@ public class VisionIOLimelight implements VisionIO {
 
   private PoseObservation[] parsePoseObservations() {
     double[] stddevs = LimelightHelpers.getLimelightNTDoubleArray(limelightName, "stddevs");
+    RawFiducial[] rawFiducials = LimelightHelpers.getRawFiducials(limelightName);
 
-    if (stddevs.length == 0) {
-      System.out.println("i dont have a sanjith std");
+    if (stddevs.length == 0 || rawFiducials.length == 0) {
       return new PoseObservation[] {};
     }
     
     PoseObservation[] poses = {
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
-          LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
+          rawFiducials[0].ambiguity, // only applicable for 1 tag
           1.0,
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[0], stddevs[1], stddevs[5]},
+          new double[] {stddevs[0] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[1] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[5] * VisionConstants.LIMELIGHT_ROTATIONAL_STD_FACTOR},
           PoseObservationType.MEGATAG_1),
       new PoseObservation(
-          Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
-          LimelightHelpers.getRawFiducials(limelightName)[0].ambiguity, // only applicable for 1 tag
+          Clock.time() - Units.millisecondsToSeconds(totalLatencyMs + 0.001),
+          rawFiducials[0].ambiguity, // only applicable for 1 tag
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[6], stddevs[7], stddevs[11]},
+          new double[] {stddevs[6] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[7] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[11] * VisionConstants.LIMELIGHT_ROTATIONAL_STD_FACTOR},
           PoseObservationType.MEGATAG_2)
     };
 
