@@ -40,6 +40,9 @@ public class VisionSubsystem extends SubsystemBase {
             observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
                     && observation.ambiguity() > VisionConstants.MAX_AMBIGUITY) // Cannot be high ambiguity
+                || (observation.tagCount() == 1
+                    && observation.type() == PoseObservationType.MEGATAG_1
+                    && observation.ta() < VisionConstants.MAX_SINGLE_TA)
                 || !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 2)
                 || Math.abs(observation.pose().getZ())
                     > VisionConstants.MAX_Z_ERROR // Must have realistic Z coordinate
@@ -55,16 +58,14 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          // System.out.println("REJECTING!!! " + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          System.out.println("REJECTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
         } else {
           robotPosesAccepted.add(observation);
 
-          // System.out.println("ACCEPTING!!! " + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
+          System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
 
           boolean updateYaw =
-              observation.tagCount() >= 2
-                  && (observation.type() == PoseObservationType.MEGATAG_1
-                      || observation.type() == PoseObservationType.MULTITAG);
+              observation.tagCount() >= 2;
 
           if (updateYaw) {
             System.out.println("Updating Yaw!");

@@ -19,6 +19,7 @@ public interface VisionIO {
   public record PoseObservation(
       double timestamp,
       double ambiguity,
+      double ta,
       double tagCount,
       Pose3d pose,
       double[] stdDevs,

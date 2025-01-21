@@ -191,16 +191,18 @@ public class VisionIOLimelight implements VisionIO {
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs),
           rawFiducials[0].ambiguity, // only applicable for 1 tag
-          1.0,
+          LimelightHelpers.getTA(limelightName),
+          LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[0] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[1] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[5] * VisionConstants.LIMELIGHT_ROTATIONAL_STD_FACTOR},
+          new double[] {stddevs[0] * VisionConstants.MT_TRANSLATIONAL_FACTOR, stddevs[1] * VisionConstants.MT_TRANSLATIONAL_FACTOR, stddevs[5] * VisionConstants.MT_ROTATIONAL_FACTOR},
           PoseObservationType.MEGATAG_1),
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs + 0.001),
           rawFiducials[0].ambiguity, // only applicable for 1 tag
+          LimelightHelpers.getTA(limelightName),
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[6] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[7] * VisionConstants.LIMELIGHT_TRANSLATIONAL_STD_FACTOR, stddevs[11] * VisionConstants.LIMELIGHT_ROTATIONAL_STD_FACTOR},
+          new double[] {stddevs[6] * VisionConstants.MT2_TRANSLATIONAL_FACTOR, stddevs[7] * VisionConstants.MT2_TRANSLATIONAL_FACTOR, stddevs[11] * VisionConstants.MT2_ROTATIONAL_FACTOR},
           PoseObservationType.MEGATAG_2)
     };
 

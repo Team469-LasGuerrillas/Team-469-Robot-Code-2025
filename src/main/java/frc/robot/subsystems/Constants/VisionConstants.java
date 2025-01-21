@@ -11,18 +11,24 @@ public class VisionConstants {
   public static final double MAX_AMBIGUITY = 0.25;
   public static final double MAX_Z_ERROR = 0.25;
   public static final double MAX_YAW_RATE = 3; // rad/sec
+  public static final double MAX_SINGLE_TA = 0.22;
 
   public static final double LINEAR_STD_BASELINE = 0.3;
   public static final double ANGULAR_STD_BASELINE = 0.3;
 
-  public static final double LIMELIGHT_TRANSLATIONAL_STD_FACTOR = 3.625;
-  public static final double LIMELIGHT_ROTATIONAL_STD_FACTOR = 5;
+  public static final double MT_TRANSLATIONAL_FACTOR = 4;
+  public static final double MT_ROTATIONAL_FACTOR = 6;
+
+  public static final double MT2_TRANSLATIONAL_FACTOR = 2.5;
+  public static final double MT2_ROTATIONAL_FACTOR = Double.POSITIVE_INFINITY;
+
+
 
   public static final VisionIOLimelight LIMELIGHT_LEFT =
       VisionIOLimelight.getInstance(
         "limelight-left",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.75), Units.inchesToMeters(-7), Units.inchesToMeters(9.8)),
+          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(-7.1), Units.inchesToMeters(9.8)),
           new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(-25))
         )
       );
@@ -31,7 +37,7 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-right",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.75), Units.inchesToMeters(7), Units.inchesToMeters(9.8)),
+          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(7.1), Units.inchesToMeters(9.8)),
           new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(25))
         )
       );
