@@ -33,23 +33,23 @@ public class DriveCommands {
     }
   }
 
-  public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose) {
-    return Drive.getInstance().setAimAssist(() -> {return pose;}, () -> 0.0);
-  } 
+  // public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose) {
+  //   return Drive.getInstance().setAimAssist(() -> {return pose;}, () -> 0.0);
+  // } 
 
-  public static Command pathfindToPose(Pose2d pose) {
-    return Drive.getInstance().findPath(pose);
-  }
+  // public static Command pathfindToPose(Pose2d pose) {
+  //   return Drive.getInstance().findPath(pose);
+  // }
 
-  public static Command pathfindToReefPose(ReefPositions position) {
-    Pose2d pose = FieldLayout.reefPositionPose.get(position);
+  // public static Command pathfindToReefPose(ReefPositions position) {
+  //   Pose2d pose = FieldLayout.reefPositionPose.get(position);
 
-    return pathfindToPose(pose);
-  }
+  //   return pathfindToPose(pose);
+  // }
 
-  public static Command pathfindToClosestReefPose() {
-    ReefPositions closestReefPosition = FieldLayout.findClosestReefPose();
+  // public static Command pathfindToClosestReefPose() {
+  //   ReefPositions closestReefPosition = FieldLayout.findClosestReefPose();
 
-    return pathfindToReefPose(closestReefPosition);
-  }
+  //   return pathfindToReefPose(closestReefPosition);
+  // }
 }

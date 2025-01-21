@@ -15,8 +15,8 @@ public class VisionConstants {
   public static final double LINEAR_STD_BASELINE = 0.3;
   public static final double ANGULAR_STD_BASELINE = 0.3;
 
-  public static final double LIMELIGHT_TRANSLATIONAL_STD_FACTOR = 2;
-  public static final double LIMELIGHT_ROTATIONAL_STD_FACTOR = 2;
+  public static final double LIMELIGHT_TRANSLATIONAL_STD_FACTOR = 3.625;
+  public static final double LIMELIGHT_ROTATIONAL_STD_FACTOR = 5;
 
   public static final VisionIOLimelight LIMELIGHT_LEFT =
       VisionIOLimelight.getInstance(

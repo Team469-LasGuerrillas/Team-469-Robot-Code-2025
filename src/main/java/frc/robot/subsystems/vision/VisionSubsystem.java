@@ -47,10 +47,10 @@ public class VisionSubsystem extends SubsystemBase {
                 // Must be within the field boundaries
                 || observation.pose().getX() <= 0.0
                 || observation.pose().getX()
-                    >= 9 // TODO: USE APRIL TAG FIELD LAYOUT WITH NEW VENDORDEP
+                    >= 9 
                 || observation.pose().getY() <= 0.0
                 || observation.pose().getY()
-                    >= Units.feetToMeters(57) // TODO: USE APRIL TAG FIELD LAYOUT WITH NEW VENDORDEP
+                    >= Units.feetToMeters(57) 
                 || Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
 
         if (rejectPose) {

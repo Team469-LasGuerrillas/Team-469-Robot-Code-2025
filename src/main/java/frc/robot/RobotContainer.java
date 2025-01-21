@@ -156,17 +156,27 @@ public class RobotContainer {
     //                     () -> drive.setHeadingGoal(() -> Rotation2d.fromDegrees(0.0)),
     //                     drive::clearHeadingGoal)));
 
-    controller
-        .y()
-        .whileTrue(
-          DriveCommands.aimAssistToPose(controller, new Pose2d(2, 2, new Rotation2d()))
-          .alongWith(DriveCommands.acceptTeleopFieldOriented(controller, false)))
-        .onFalse(Commands.run(() -> drive.clearAimAssist()));
+    // controller
+    //     .y()
+    //     .whileTrue(
+    //       DriveCommands.aimAssistToPose(controller, new Pose2d(2, 2, new Rotation2d()))
+    //       .alongWith(DriveCommands.acceptTeleopFieldOriented(controller, false)))
+    //     .onFalse(Commands.run(() -> drive.clearAimAssist()));
 
-    controller
-      .a()
-      .whileTrue(DriveCommands.pathfindToPose(new Pose2d(2, 2, new Rotation2d())))
-      .onFalse(Commands.run(() -> drive.clearAutoSpeeds()));
+    // controller
+    //   .a()
+    //   .whileTrue(DriveCommands.pathfindToPose(new Pose2d(2, 2, new Rotation2d())))
+    //   .whileFalse(Commands.run(() -> drive.clearPathplanner()));
+
+    controller.y().whileTrue(Commands.startEnd(
+        () -> drive.setAimAssist(new Pose2d(2, 2, new Rotation2d()), 0.0469), 
+        () -> drive.clearMode()).alongWith(DriveCommands.acceptTeleopFieldOriented(controller, false))
+    );
+
+    controller.a().whileTrue(Commands.startEnd(
+      () -> drive.setPathfinding(new Pose2d(2, 2, new Rotation2d())), 
+      () -> drive.clearMode())
+    );
 
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

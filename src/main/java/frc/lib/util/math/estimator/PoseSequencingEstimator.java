@@ -241,7 +241,7 @@ public class PoseSequencingEstimator<T> {
     double newestNeededVisionUpdateTimestamp = visionUpdates.floorKey(oldestOdometryTimestamp);
 
     // Step 4: Remove all entries strictly before the newest timestamp we need.
-    visionUpdates.headMap(newestNeededVisionUpdateTimestamp, true).clear();
+    visionUpdates.headMap(newestNeededVisionUpdateTimestamp, false).clear();
   }
 
   public Pose2d updateWithTime(

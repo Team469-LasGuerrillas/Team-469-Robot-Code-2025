@@ -152,10 +152,11 @@ public class Drive extends SubsystemBase {
 
   private final TeleopDriveController teleopDriveController;
   private final PPHolonomicDriveController ppHolonomicDriveController;
-  private Command aimAssistController = null;
   private HeadingController headingController = null;
 
   private double aimAssistWeight;
+
+  private PathfindingCommand pathfindingCommand;
 
   // TunerConstants doesn't include these constants, so they are declared locally
   static final double ODOMETRY_FREQUENCY =
@@ -232,6 +233,9 @@ public class Drive extends SubsystemBase {
     return instance;
   }
 
+
+  private PPHolonomicDriveController pppppp;
+
   // Drive??
   private Drive(
       GyroIO gyroIO,
@@ -268,6 +272,17 @@ public class Drive extends SubsystemBase {
                 DriveConstants.PP_HEADING_P,
                 DriveConstants.PP_HEADING_I,
                 DriveConstants.PP_HEADING_D));
+
+    pppppp =
+    new PPHolonomicDriveController(
+        new PIDConstants(
+            69,
+            DriveConstants.PP_TRANSLATION_I,
+            DriveConstants.PP_TRANSLATION_D),
+        new PIDConstants(
+            DriveConstants.PP_HEADING_P,
+            DriveConstants.PP_HEADING_I,
+            DriveConstants.PP_HEADING_D));
 
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(
@@ -308,6 +323,7 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     Dashboard.m_field.setRobotPose(getPose());
+    System.out.println(getPose());
     
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
@@ -381,7 +397,7 @@ public class Drive extends SubsystemBase {
       }
 
       ChassisSpeeds teleopSpeeds = teleopDriveController.update();
-
+      Logger.recordOutput("Drive/TeleopSpeeds", teleopSpeeds);
 
       desiredSpeeds = teleopSpeeds;
       switch (currentDriveMode) {
@@ -397,15 +413,27 @@ public class Drive extends SubsystemBase {
         }
 
         case PATHPLANNER -> {
-          desiredSpeeds = autoSpeeds;
+          if (autoSpeeds == null) {
+            desiredSpeeds = teleopSpeeds;
+          } else {
+            desiredSpeeds = autoSpeeds;
+          }
           break;
         }
 
         case AIMASSIST -> {
-          desiredSpeeds = InterpolatorUtil.chassisSpeeds(teleopSpeeds, autoSpeeds, aimAssistWeight);
+          if (autoSpeeds == null) {
+            desiredSpeeds = teleopSpeeds;
+          } else {
+            desiredSpeeds = InterpolatorUtil.chassisSpeeds(teleopSpeeds, autoSpeeds, aimAssistWeight);
+          }
           break;
         }
       }
+    }
+
+    if (pathfindingCommand != null) {
+      System.out.println(pathfindingCommand.isFinished());
     }
 
     // Run the modules
@@ -418,11 +446,12 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/DesiredSpeeds", desiredSpeeds);
     Logger.recordOutput("Drive/DriveMode", currentDriveMode);
 
+    Logger.recordOutput("Drive/AutoSpeeds", autoSpeeds);
+
     state.robotPose = new Pose3d(getPose());
     state.driveMode = currentDriveMode;
     state.addState(Clock.time());
 
-    System.out.println(currentDriveMode);
   }
 
   private Command followPathInternal(PathPlannerPath path) {
@@ -450,8 +479,8 @@ public class Drive extends SubsystemBase {
         this);
   }
 
-  public Command findPath(Pose2d pose) {
-    return new PathfindingCommand(
+  private void findPathInternal(Pose2d pose) {
+    pathfindingCommand = new PathfindingCommand(
         pose,
         CONSTRAINTS,
         0.0,
@@ -460,25 +489,34 @@ public class Drive extends SubsystemBase {
         this::setAutoSpeeds,
         ppHolonomicDriveController,
         PP_CONFIG,
-        new SubsystemBase() {
-        });
+        this);
+    
+    pathfindingCommand.schedule();
   }
 
   private void setAutoSpeeds(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
     autoSpeeds = speeds;
-
-    if (aimAssistController == null) {
-      currentDriveMode = DriveMode.PATHPLANNER;
-    } else {
-      currentDriveMode = DriveMode.AIMASSIST;
-    }
   }
 
-  public void clearAutoSpeeds() {
-    autoSpeeds = null;
+  public void setPathfinding(Pose2d pose) {
+    findPathInternal(pose);
+    currentDriveMode = DriveMode.PATHPLANNER;
+  }
+
+  public void setAimAssist(Pose2d pose, double aimAssistWeight) {
+    this.aimAssistWeight = aimAssistWeight;
+    findPathInternal(pose);
+    currentDriveMode = DriveMode.AIMASSIST;
+  }
+
+  public void clearMode() {
+    if (currentDriveMode == DriveMode.PATHPLANNER || currentDriveMode == DriveMode.AIMASSIST) {
+      pathfindingCommand.cancel();
+    }
+
     currentDriveMode = DriveMode.TELEOP;
   }
-
+  
   /**
    * Takes inputs from a joystick to drive the robot
    *
@@ -493,56 +531,6 @@ public class Drive extends SubsystemBase {
       teleopDriveController.acceptDriveInput(relativeX, relativeY, omega, robotRelative);
       // System.out.println("accepting");
     }
-  }
-
-  /**
-   * Assigns a new heading goal for the drivetrain.
-   *
-   * @param goalHeadingSupplier Field relative heading
-   */
-  public void setHeadingGoal(Supplier<Rotation2d> goalHeadingSupplier) {
-    headingController = new HeadingController(goalHeadingSupplier);
-    currentDriveMode = DriveMode.HEADING;
-  }
-
-  /** Clears the heading goal */
-  public void clearHeadingGoal() {
-    headingController = null;
-    currentDriveMode = DriveMode.TELEOP;
-  }
-
-  /**
-   * Creates and runs a command to assign the auto speeds and allows teleop input
-   *
-   * @param path The path to pathfind to
-   */
-  public void setAimAssist(PathPlannerPath path, DoubleSupplier weight) {
-    autoSpeeds = null;
-    aimAssistWeight = weight.getAsDouble();
-    aimAssistController = findPathInternal(path);
-    aimAssistController.schedule();
-  }
-
-  /**
-   * Creates and runs a command to assign the auto speeds and allows teleop input
-   *
-   * @param poseSupplier The pose to pathfind to
-   */
-  public Command setAimAssist(Supplier<Pose2d> poseSupplier, DoubleSupplier weight) {
-    aimAssistWeight = weight.getAsDouble();
-    System.out.println("skibidia");
-    aimAssistController = findPath(poseSupplier.get());
-    return aimAssistController;
-  }
-
-  public void clearAimAssist() {
-    currentDriveMode = DriveMode.TELEOP;
-
-    if (aimAssistController != null) {
-      aimAssistController.cancel();
-    }
-
-    aimAssistController = null;
   }
 
   /**
