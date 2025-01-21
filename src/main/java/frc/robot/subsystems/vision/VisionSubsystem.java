@@ -58,7 +58,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          System.out.println("REJECTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          // System.out.println("REJECTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
         } else {
           robotPosesAccepted.add(observation);
 
