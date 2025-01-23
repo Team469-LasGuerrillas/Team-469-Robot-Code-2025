@@ -20,7 +20,7 @@ public class VisionConstants {
   public static final double MT_ROTATIONAL_FACTOR = 6;
 
   public static final double MT2_TRANSLATIONAL_FACTOR = 2.5;
-  public static final double MT2_ROTATIONAL_FACTOR = Double.POSITIVE_INFINITY;
+  public static final double MT2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
 
 
 

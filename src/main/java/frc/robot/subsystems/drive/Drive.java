@@ -431,10 +431,6 @@ public class Drive extends SubsystemBase {
       }
     }
 
-    if (pathfindingCommand != null) {
-      System.out.println(pathfindingCommand.isFinished());
-    }
-
     // Run the modules
     if (!DriverStation.isDisabled()) {
       runVelocity(desiredSpeeds);
@@ -495,6 +491,11 @@ public class Drive extends SubsystemBase {
 
   private void setAutoSpeeds(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
     autoSpeeds = speeds;
+  }
+
+  public void setHeadingGoal(Supplier<Rotation2d> heading) {
+    headingController = new HeadingController(heading);
+    currentDriveMode = DriveMode.HEADING;
   }
 
   public void setPathfinding(Pose2d pose) {

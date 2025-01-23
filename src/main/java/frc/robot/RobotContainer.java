@@ -142,39 +142,13 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.acceptTeleopFieldOriented(controller, true));
 
-    // Lock to 0° when A button is held
-    // controller
-    //     .a()
-    //     .whileTrue(
-    //         drive
-    //             .run(
-    //                 () ->
-    //                     drive.acceptTeleopInput(
-    //                         -controller.getLeftY(), -controller.getLeftX(), 0.0, false))
-    //             .alongWith(
-    //                 Commands.startEnd(
-    //                     () -> drive.setHeadingGoal(() -> Rotation2d.fromDegrees(0.0)),
-    //                     drive::clearHeadingGoal)));
-
-    // controller
-    //     .y()
-    //     .whileTrue(
-    //       DriveCommands.aimAssistToPose(controller, new Pose2d(2, 2, new Rotation2d()))
-    //       .alongWith(DriveCommands.acceptTeleopFieldOriented(controller, false)))
-    //     .onFalse(Commands.run(() -> drive.clearAimAssist()));
-
-    // controller
-    //   .a()
-    //   .whileTrue(DriveCommands.pathfindToPose(new Pose2d(2, 2, new Rotation2d())))
-    //   .whileFalse(Commands.run(() -> drive.clearPathplanner()));
-
-    controller.y().whileTrue(Commands.startEnd(
-        () -> drive.setAimAssist(new Pose2d(2, 2, new Rotation2d()), 0.0469), 
-        () -> drive.clearMode()).alongWith(DriveCommands.acceptTeleopFieldOriented(controller, false))
+    controller.x().whileTrue(DriveCommands.autoRotate(controller, () -> new Rotation2d()));
+ 
+    controller.y().whileTrue(DriveCommands.aimAssistToPose(controller, new Pose2d(2, 4.03, new Rotation2d()))
     );
 
     controller.a().whileTrue(Commands.startEnd(
-      () -> drive.setPathfinding(new Pose2d(2, 2, new Rotation2d())), 
+      () -> drive.setPathfinding(new Pose2d(2, 4.03, new Rotation2d())), 
       () -> drive.clearMode())
     );
 

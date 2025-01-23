@@ -1,10 +1,12 @@
 package frc.robot.commandfactories;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,23 +35,55 @@ public class DriveCommands {
     }
   }
 
-  // public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose) {
-  //   return Drive.getInstance().setAimAssist(() -> {return pose;}, () -> 0.0);
-  // } 
+  public static Command acceptTeleopRobotOriented(CommandXboxController controller, boolean isDefault) {
+    {
+      if (isDefault) {
+        return Drive.getInstance().run(
+          () ->
+              Drive.getInstance().acceptTeleopInput(
+                  -controller.getLeftY(),
+                  -controller.getLeftX(),
+                  -controller.getRightX(),
+                  true));
+      } else {
+        return Commands.run(
+          () ->
+              Drive.getInstance().acceptTeleopInput(
+                  -controller.getLeftY(),
+                  -controller.getLeftX(),
+                  -controller.getRightX(),
+                  true));
+      }
+    }
+  }
 
-  // public static Command pathfindToPose(Pose2d pose) {
-  //   return Drive.getInstance().findPath(pose);
-  // }
+  public static Command autoRotate(CommandXboxController controller, Supplier<Rotation2d> heading) {
+    return Commands.startEnd(
+      () -> Drive.getInstance().setHeadingGoal(heading),
+      () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
+  }
 
-  // public static Command pathfindToReefPose(ReefPositions position) {
-  //   Pose2d pose = FieldLayout.reefPositionPose.get(position);
+  public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose) {
+    return Commands.startEnd(
+    () -> Drive.getInstance().setAimAssist(pose, 0.0469), 
+    () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
+  } 
 
-  //   return pathfindToPose(pose);
-  // }
+  public static Command pathfindToPose(Pose2d pose) {
+    return Commands.startEnd(
+      () -> Drive.getInstance().setPathfinding(pose), 
+      () -> Drive.getInstance().clearMode());
+  }
 
-  // public static Command pathfindToClosestReefPose() {
-  //   ReefPositions closestReefPosition = FieldLayout.findClosestReefPose();
+  public static Command pathfindToReefPose(ReefPositions position) {
+    Pose2d pose = FieldLayout.reefPositionPose.get(position);
 
-  //   return pathfindToReefPose(closestReefPosition);
-  // }
+    return pathfindToPose(pose);
+  }
+
+  public static Command pathfindToClosestReefPose() {
+    ReefPositions closestReefPosition = FieldLayout.findClosestReefPose();
+
+    return pathfindToReefPose(closestReefPosition);
+  }
 }
