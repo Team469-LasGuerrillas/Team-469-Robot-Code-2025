@@ -138,7 +138,7 @@ public class PoseSequencingEstimator<T> {
   public void resetPosition(Rotation2d gyroAngle, T wheelPositions, Pose2d poseMeters) {
     // Reset state estimate and error covariance
     primaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
-    secondaryOdometry.resetPose(poseMeters);
+    secondaryOdometry.setPose(poseMeters);
     lastPrimaryOdometryPose = poseMeters;
     lastSecondaryOdometryPose = poseMeters;
     odometryBuffer.clear();
@@ -150,7 +150,7 @@ public class PoseSequencingEstimator<T> {
 
   public void resetPose(Pose2d pose) {
     primaryOdometry.resetPose(pose);
-    secondaryOdometry.resetPose(pose);
+    secondaryOdometry.setPose(pose);
     lastPrimaryOdometryPose = pose;
     lastSecondaryOdometryPose = pose;
     odometryBuffer.clear();
@@ -162,7 +162,7 @@ public class PoseSequencingEstimator<T> {
 
   public void resetTranslation(Translation2d translation) {
     primaryOdometry.resetTranslation(translation);
-    secondaryOdometry.resetTranslation(translation);
+    secondaryOdometry.setTranslation(translation);
     lastPrimaryOdometryPose = new Pose2d(translation, lastPrimaryOdometryPose.getRotation());
     lastSecondaryOdometryPose = new Pose2d(translation, lastSecondaryOdometryPose.getRotation());
     odometryBuffer.clear();

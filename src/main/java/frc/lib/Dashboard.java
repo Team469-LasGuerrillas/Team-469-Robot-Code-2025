@@ -9,7 +9,7 @@ public class Dashboard {
   public static void addWidgets(ShuffleboardTab tab) {
     tab
     .add(m_field)
-    .withPosition(0, 0)
-    .withSize(5, 5);
+    .withSize(13, 6)
+    .withPosition(0, 0);
   }
 }
