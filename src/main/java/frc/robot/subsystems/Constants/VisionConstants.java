@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.interfaces.vision.VisionIOLimelight;
+import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
   public static final double MAX_AMBIGUITY = 0.25;
@@ -41,4 +42,9 @@ public class VisionConstants {
         )
       );
 
+  public static final VisionIOPhotonVision ARDUCAM_ONE = 
+    VisionIOPhotonVision.getInstance(
+      "Arducam1", 
+      new Pose3d()
+  );
 }

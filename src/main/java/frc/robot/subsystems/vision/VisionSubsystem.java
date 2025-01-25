@@ -33,7 +33,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     List<PoseObservation> robotPosesAccepted = new LinkedList<>();
     List<PoseObservation> robotPosesRejected = new LinkedList<>();
-
+    
     if ((hasLatestUpdate() && getTargettingType() == TargettingType.FIDUCIAL) && hasTargets()) {
       for (PoseObservation observation : inputs.poseObservations) {
         boolean rejectPose =

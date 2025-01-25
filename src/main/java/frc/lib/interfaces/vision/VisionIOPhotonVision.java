@@ -1,155 +1,162 @@
-// package frc.lib.interfaces.vision;
+package frc.lib.interfaces.vision;
 
-// import edu.wpi.first.math.geometry.Pose3d;
-// import edu.wpi.first.math.geometry.Transform3d;
-// import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
-// import edu.wpi.first.math.util.Units;
-// import frc.frc2025.subsystems.Constants.VisionConstants;
-// import frc.lib.util.Clock;
-// import java.util.ArrayList;
-// import java.util.HashMap;
-// import org.photonvision.PhotonCamera;
-// import org.photonvision.targeting.MultiTargetPNPResult;
-// import org.photonvision.targeting.PhotonPipelineResult;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
+import edu.wpi.first.math.util.Units;
+import frc.lib.util.Clock;
+import frc.robot.subsystems.Constants.VisionConstants;
 
-// public class VisionIOPhotonVision implements VisionIO {
-//   static HashMap<String, VisionIOPhotonVision> instances =
-//       new HashMap<String, VisionIOPhotonVision>();
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.MultiTargetPNPResult;
+import org.photonvision.targeting.PhotonPipelineResult;
 
-//   private final PhotonCamera camera;
-//   private final String cameraName;
-//   private final TimeInterpolatableBuffer<Pose3d> robotToCam =
-//       TimeInterpolatableBuffer.createBuffer(2);
+public class VisionIOPhotonVision implements VisionIO {
+  static HashMap<String, VisionIOPhotonVision> instances =
+      new HashMap<String, VisionIOPhotonVision>();
 
-//   private final int APRIL_TAG_PIPELINE_INDEX = 0;
-//   private final int OBJECT_DETECTION_PIPELINE_INDEX = 1;
+  private final PhotonCamera camera;
+  private final String cameraName;
+  private final TimeInterpolatableBuffer<Pose3d> robotToCam =
+      TimeInterpolatableBuffer.createBuffer(2);
 
-//   private boolean hasTargets = false;
+  private final int APRIL_TAG_PIPELINE_INDEX = 0;
+  private final int OBJECT_DETECTION_PIPELINE_INDEX = 1;
 
-//   private VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
-//     camera = new PhotonCamera(cameraName);
-//     this.cameraName = cameraName;
-//     this.robotToCam.addSample(Clock.time(), robotToCam);
-//   }
+  private boolean hasTargets = false;
 
-//   public static VisionIOPhotonVision getInstance(String cameraName, Pose3d robotToCam) {
-//     if (instances.get(cameraName) == null) {
-//       instances.put(cameraName, new VisionIOPhotonVision(cameraName, robotToCam));
-//     }
-//     return instances.get(cameraName);
-//   }
+  private VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
+    camera = new PhotonCamera(cameraName);
+    this.cameraName = cameraName;
+    this.robotToCam.addSample(Clock.time(), robotToCam);
+  }
 
-//   @Override
-//   public void updateInputs(VisionIOInputs inputs) {
-//     inputs.cameraPose = robotToCam.getSample(Clock.time()).get();
-//     inputs.hasLatestUpdate = camera.isConnected();
+  public static VisionIOPhotonVision getInstance(String cameraName, Pose3d robotToCam) {
+    if (instances.get(cameraName) == null) {
+      instances.put(cameraName, new VisionIOPhotonVision(cameraName, robotToCam));
+    }
+    return instances.get(cameraName);
+  }
 
-//     inputs.hasTargets = hasTargets;
-//     inputs.targettingType = getPipeType();
+  @Override
+  public void updateInputs(VisionIOInputs inputs) {
+    inputs.cameraPose = robotToCam.getSample(Clock.time()).get();
+    inputs.hasLatestUpdate = camera.isConnected();
 
-//     inputs.targets = parseTargets();
-//     inputs.poseObservations = parsePoseObservations();
+    inputs.hasTargets = hasTargets;
+    inputs.targettingType = getPipeType();
 
-//     inputs.cameraName = cameraName;
-//   }
+    inputs.targets = parseTargets();
+    inputs.poseObservations = parsePoseObservations();
 
-//   @Override
-//   public void setPoseRobotSpace(Pose3d cameraPose) {
-//     robotToCam.addSample(Clock.time(), cameraPose);
-//   }
+    inputs.cameraName = cameraName;
+  }
 
-//   @Override
-//   public void setPipelineIndex(int index) {
-//     camera.setPipelineIndex(index);
-//   }
+  @Override
+  public void setPoseRobotSpace(Pose3d cameraPose) {
+    robotToCam.addSample(Clock.time(), cameraPose);
+  }
 
-//   private TargettingType getPipeType() {
-//     int index = camera.getPipelineIndex();
+  @Override
+  public void setPipelineIndex(int index) {
+    camera.setPipelineIndex(index);
+  }
 
-//     TargettingType type;
+  private TargettingType getPipeType() {
+    int index = camera.getPipelineIndex();
 
-//     switch (index) {
-//       case APRIL_TAG_PIPELINE_INDEX:
-//         type = TargettingType.FIDUCIAL;
-//         break;
-//       case OBJECT_DETECTION_PIPELINE_INDEX:
-//         type = TargettingType.OBJECT_DETECTION;
-//       default:
-//         type = TargettingType.FIDUCIAL;
-//         break;
-//     }
+    TargettingType type;
 
-//     return type;
-//   }
+    switch (index) {
+      case APRIL_TAG_PIPELINE_INDEX:
+        type = TargettingType.FIDUCIAL;
+        break;
+      case OBJECT_DETECTION_PIPELINE_INDEX:
+        type = TargettingType.OBJECT_DETECTION;
+      default:
+        type = TargettingType.FIDUCIAL;
+        break;
+    }
 
-//   private TrackedTarget[] parseTargets() {
-//     ArrayList<TrackedTarget> targets = new ArrayList<TrackedTarget>();
+    return type;
+  }
 
-//     for (var result : camera.getAllUnreadResults()) {
-//       if (result.hasTargets()) {
-//         hasTargets = true;
-//         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
-//         Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
+  private TrackedTarget[] parseTargets() {
+    ArrayList<TrackedTarget> targets = new ArrayList<TrackedTarget>();
 
-//         for (var target : result.targets) {
-//           targets.add(
-//               new TrackedTarget(
-//                   Clock.time() - latency,
-//                   instantaneousCameraPose.getTranslation(),
-//                   instantaneousCameraPose.getRotation().getX() - Units.degreesToRadians(target.yaw),
-//                   instantaneousCameraPose.getRotation().getY()
-//                       + Units.degreesToRadians(target.pitch),
-//                   target.area,
-//                   target.fiducialId,
-//                   getPipeType()));
-//         }
-//       }
-//     }
+    for (var result : camera.getAllUnreadResults()) {
+      if (result.hasTargets()) {
+        hasTargets = true;
+        double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
+        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
-//     return targets.toArray(new TrackedTarget[targets.size()]);
-//   }
+        for (var target : result.targets) {
+          targets.add(
+              new TrackedTarget(
+                  Clock.time() - latency,
+                  instantaneousCameraPose.getTranslation(),
+                  instantaneousCameraPose.getRotation().getX() - Units.degreesToRadians(target.yaw),
+                  instantaneousCameraPose.getRotation().getY()
+                      + Units.degreesToRadians(target.pitch),
+                  target.area,
+                  target.fiducialId,
+                  getPipeType()));
+        }
+      }
+    }
 
-//   private PoseObservation[] parsePoseObservations() {
-//     ArrayList<PoseObservation> poseObservations = new ArrayList<PoseObservation>();
+    return targets.toArray(new TrackedTarget[targets.size()]);
+  }
 
-//     for (var result : camera.getAllUnreadResults()) {
-//       if (result.multitagResult.isPresent()) {
-//         MultiTargetPNPResult multitagResult = result.multitagResult.get();
-//         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
-//         Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
+  private PoseObservation[] parsePoseObservations() {
+    ArrayList<PoseObservation> poseObservations = new ArrayList<PoseObservation>();
 
-//         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
-//         Transform3d fieldToRobot =
-//             fieldToCamera.plus(new Transform3d(new Pose3d(), instantaneousCameraPose).inverse());
-//         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
+    for (var result : camera.getAllUnreadResults()) {
+      double tagArea = 0;
+      if (result.hasTargets()) {
+       tagArea = result.getBestTarget().area; 
+      }
 
-//         poseObservations.add(
-//             new PoseObservation(
-//                 Clock.time() - latency,
-//                 multitagResult.estimatedPose.ambiguity,
-//                 multitagResult.fiducialIDsUsed.size(),
-//                 robotPose,
-//                 calculateSTDS(result, multitagResult),
-//                 PoseObservationType.MULTITAG));
-//       }
-//     }
+      if (result.multitagResult.isPresent()) {
+        MultiTargetPNPResult multitagResult = result.multitagResult.get();
+        double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
+        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
-//     return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
-//   }
+        Transform3d fieldToCamera = multitagResult.estimatedPose.best;
+        Transform3d fieldToRobot =
+            fieldToCamera.plus(new Transform3d(new Pose3d(), instantaneousCameraPose).inverse());
+        Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
 
-//   private double[] calculateSTDS(PhotonPipelineResult result, MultiTargetPNPResult multitagResult) {
-//     double totalTagDistance = 0.0;
-//     for (var target : result.targets) {
-//       totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
-//     }
+        poseObservations.add(
+            new PoseObservation(
+                Clock.time() - latency,
+                multitagResult.estimatedPose.ambiguity,
+                tagArea,
+                multitagResult.fiducialIDsUsed.size(),
+                robotPose,
+                calculateSTDS(result, multitagResult),
+                PoseObservationType.MULTITAG));
+      }
+    }
 
-//     double averageTagDistance = totalTagDistance / result.targets.size();
-//     double tagCount = multitagResult.fiducialIDsUsed.size();
+    return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
+  }
 
-//     double stdDevFactor = Math.pow(averageTagDistance, 2) / tagCount;
-//     double linearStdDev = VisionConstants.LINEAR_STD_BASELINE * stdDevFactor;
-//     double angularStdDev = VisionConstants.ANGULAR_STD_BASELINE * stdDevFactor;
+  private double[] calculateSTDS(PhotonPipelineResult result, MultiTargetPNPResult multitagResult) {
+    double totalTagDistance = 0.0;
+    for (var target : result.targets) {
+      totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
+    }
 
-//     return new double[] {linearStdDev, linearStdDev, angularStdDev};
-//   }
-// }
+    double averageTagDistance = totalTagDistance / result.targets.size();
+    double tagCount = multitagResult.fiducialIDsUsed.size();
+
+    double stdDevFactor = Math.pow(averageTagDistance, 2) / tagCount;
+    double linearStdDev = VisionConstants.LINEAR_STD_BASELINE * stdDevFactor;
+    double angularStdDev = VisionConstants.ANGULAR_STD_BASELINE * stdDevFactor;
+
+    return new double[] {linearStdDev, linearStdDev, angularStdDev};
+  }
+}
