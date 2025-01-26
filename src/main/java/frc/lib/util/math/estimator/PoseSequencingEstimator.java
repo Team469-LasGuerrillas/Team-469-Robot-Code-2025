@@ -4,7 +4,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -19,7 +18,6 @@ import frc.lib.util.Clock;
 import frc.lib.util.math.InterpolatorUtil;
 import frc.lib.util.math.odometry.OdometryType;
 import frc.lib.util.math.odometry.VROdometry;
-import frc.robot.subsystems.Constants.VisionConstants;
 
 import java.util.NavigableMap;
 import java.util.Optional;

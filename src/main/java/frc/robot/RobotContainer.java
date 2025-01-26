@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -52,6 +51,8 @@ public class RobotContainer {
 
   private final VisionSubsystem limelightLeft;
   private final VisionSubsystem limelightRight;
+  private final VisionSubsystem arducamOne;
+  private final VisionSubsystem arducamTwo;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -78,6 +79,8 @@ public class RobotContainer {
 
         limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
+        arducamOne = new VisionSubsystem(VisionConstants.ARDUCAM_ONE);
+        arducamTwo = new VisionSubsystem(VisionConstants.ARDUCAM_TWO);
 
         break;
 
@@ -93,6 +96,8 @@ public class RobotContainer {
 
         limelightLeft = new VisionSubsystem(new VisionIO() {});
         limelightRight = new VisionSubsystem(new VisionIO() {});
+        arducamOne = new VisionSubsystem(new VisionIO() {});
+        arducamTwo = new VisionSubsystem(new VisionIO() {});
 
         break;
 
@@ -108,6 +113,8 @@ public class RobotContainer {
 
         limelightLeft = new VisionSubsystem(new VisionIO() {});
         limelightRight = new VisionSubsystem(new VisionIO() {});
+        arducamOne = new VisionSubsystem(new VisionIO() {});
+        arducamTwo = new VisionSubsystem(new VisionIO() {});
 
         break;
     }

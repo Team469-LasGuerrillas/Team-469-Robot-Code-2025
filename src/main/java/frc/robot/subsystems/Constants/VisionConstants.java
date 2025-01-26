@@ -46,5 +46,11 @@ public class VisionConstants {
     VisionIOPhotonVision.getInstance(
       "Arducam1", 
       new Pose3d()
-  );
+    );
+
+  public static final VisionIOPhotonVision ARDUCAM_TWO = 
+    VisionIOPhotonVision.getInstance(
+      "Arducam2", 
+      new Pose3d()
+    );
 }

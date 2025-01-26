@@ -41,7 +41,7 @@ public class VisionSubsystem extends SubsystemBase {
                 || (observation.tagCount() == 1
                     && observation.ambiguity() > VisionConstants.MAX_AMBIGUITY) // Cannot be high ambiguity
                 || (observation.tagCount() == 1
-                    && observation.type() == PoseObservationType.MEGATAG_1
+                    && (observation.type() == PoseObservationType.MEGATAG_1 || observation.type() == PoseObservationType.MULTITAG)
                     && observation.ta() < VisionConstants.MAX_SINGLE_TA)
                 || !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 2)
                 || Math.abs(observation.pose().getZ())
