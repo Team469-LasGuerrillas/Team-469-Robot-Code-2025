@@ -1,15 +1,22 @@
 package frc.lib.interfaces.vision;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
+import frc.lib.util.math.GeomUtil;
 import frc.robot.subsystems.Constants.VisionConstants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 
@@ -27,8 +34,17 @@ public class VisionIOPhotonVision implements VisionIO {
 
   private boolean hasTargets = false;
 
+  List<PhotonPipelineResult> cameraUnreadResults;
+  
+  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+  PhotonPoseEstimator photonPoseEstimator;
+
   private VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
     camera = new PhotonCamera(cameraName);
+    photonPoseEstimator = new PhotonPoseEstimator(
+      aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, GeomUtil.toTransform3d(robotToCam));
+
     this.cameraName = cameraName;
     this.robotToCam.addSample(Clock.time(), robotToCam);
   }
@@ -44,6 +60,8 @@ public class VisionIOPhotonVision implements VisionIO {
   public void updateInputs(VisionIOInputs inputs) {
     inputs.cameraPose = robotToCam.getSample(Clock.time()).get();
     inputs.hasLatestUpdate = camera.isConnected();
+
+    updateUnreadResults();
 
     inputs.hasTargets = hasTargets;
     inputs.targettingType = getPipeType();
@@ -83,12 +101,15 @@ public class VisionIOPhotonVision implements VisionIO {
     return type;
   }
 
+  private void updateUnreadResults() {
+    cameraUnreadResults = camera.getAllUnreadResults();
+  }
+
   private TrackedTarget[] parseTargets() {
     ArrayList<TrackedTarget> targets = new ArrayList<TrackedTarget>();
 
-    for (var result : camera.getAllUnreadResults()) {
+    for (var result : cameraUnreadResults) {
       if (result.hasTargets()) {
-        hasTargets = true;
         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
         Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
@@ -106,21 +127,30 @@ public class VisionIOPhotonVision implements VisionIO {
         }
       }
     }
-
+    
     return targets.toArray(new TrackedTarget[targets.size()]);
   }
 
   private PoseObservation[] parsePoseObservations() {
     ArrayList<PoseObservation> poseObservations = new ArrayList<PoseObservation>();
-
-    for (var result : camera.getAllUnreadResults()) {
+    
+    for (var result : cameraUnreadResults) {
       double tagArea = 0;
       if (result.hasTargets()) {
-       tagArea = result.getBestTarget().area; 
+       tagArea = result.getBestTarget().area;
+      }
+
+      var visionEst = photonPoseEstimator.update(result);
+
+      if (visionEst.isPresent()) {
+        System.out.println(visionEst.get().estimatedPose);
       }
 
       if (result.multitagResult.isPresent()) {
-        MultiTargetPNPResult multitagResult = result.multitagResult.get();
+        System.out.println("HOLA COMO ESTAS AMIGOS JAJAJAJAJAJAJAJAJA");
+        hasTargets = true;
+
+        var multitagResult = result.multitagResult.get();
         double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
         Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
 
