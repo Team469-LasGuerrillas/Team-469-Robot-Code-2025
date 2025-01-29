@@ -4,10 +4,12 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
 import frc.lib.util.math.GeomUtil;
+import frc.lib.util.math.TrigEstimator;
 import frc.robot.subsystems.Constants.VisionConstants;
 
 import java.util.ArrayList;
@@ -133,44 +135,54 @@ public class VisionIOPhotonVision implements VisionIO {
 
   private PoseObservation[] parsePoseObservations() {
     ArrayList<PoseObservation> poseObservations = new ArrayList<PoseObservation>();
-    
-    for (var result : cameraUnreadResults) {
-      double tagArea = 0;
-      if (result.hasTargets()) {
-       tagArea = result.getBestTarget().area;
-      }
 
+    for (var result : cameraUnreadResults) {
       var visionEst = photonPoseEstimator.update(result);
 
       if (visionEst.isPresent()) {
-        System.out.println(visionEst.get().estimatedPose);
-      }
-
-      if (result.multitagResult.isPresent()) {
-        System.out.println("HOLA COMO ESTAS AMIGOS JAJAJAJAJAJAJAJAJA");
         hasTargets = true;
 
-        var multitagResult = result.multitagResult.get();
-        double latency = Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
-        Pose3d instantaneousCameraPose = robotToCam.getSample(Clock.time()).get();
+        var bestTarget = result.getBestTarget();
 
-        Transform3d fieldToCamera = multitagResult.estimatedPose.best;
-        Transform3d fieldToRobot =
-            fieldToCamera.plus(new Transform3d(new Pose3d(), instantaneousCameraPose).inverse());
-        Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
+        Pose3d multitagPose = visionEst.get().estimatedPose;
+        double timestamp = Clock.time() - Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
+        Pose3d tagPose = aprilTagFieldLayout.getTagPose(bestTarget.fiducialId).get();
+        double distance3d = 
+          multitagPose
+            .plus(GeomUtil.toTransform3d(robotToCam.getSample(timestamp).get())).getTranslation()
+            .getDistance(tagPose.getTranslation());
 
         poseObservations.add(
-            new PoseObservation(
-                Clock.time() - latency,
-                multitagResult.estimatedPose.ambiguity,
-                tagArea,
-                multitagResult.fiducialIDsUsed.size(),
-                robotPose,
-                calculateSTDS(result, multitagResult),
-                PoseObservationType.MULTITAG));
+          new PoseObservation(
+            timestamp,
+            bestTarget.poseAmbiguity,
+            bestTarget.area,
+            visionEst.get().targetsUsed.size(),
+            multitagPose,
+            new double[] {0.1, 0.1, 0.1},
+            PoseObservationType.MULTITAG_1)
+        );
+
+        poseObservations.add(
+          new PoseObservation(
+            timestamp,
+            0,
+            0,
+            visionEst.get().targetsUsed.size(),
+            TrigEstimator.getTrigBasedEstimatedPose(
+              distance3d, 
+              bestTarget.yaw, 
+              bestTarget.pitch, 
+              timestamp, 
+              robotToCam.getSample(timestamp).get(), 
+              bestTarget.fiducialId
+            ),
+            new double[] {0.1, 0.1, 0.1},
+            PoseObservationType.MULTITAG_2)
+        );
+
       }
     }
-
     return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
   }
 

@@ -35,7 +35,8 @@ public interface VisionIO {
   public enum PoseObservationType {
     MEGATAG_1,
     MEGATAG_2,
-    MULTITAG
+    MULTITAG_1,
+    MULTITAG_2
   }
 
   @AutoLog

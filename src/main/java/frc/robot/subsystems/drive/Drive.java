@@ -76,6 +76,7 @@ import frc.robot.subsystems.Constants.DriveConstants;
 import frc.robot.util.LocalADStarAK;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
@@ -216,9 +217,10 @@ public class Drive extends SubsystemBase {
         new SwerveModulePosition(),
         new SwerveModulePosition()
       };
+
   private SequencingSwerveDrivePoseEstimator poseEstimator =
       new SequencingSwerveDrivePoseEstimator(
-          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), OdometryType.WHEEL_ODOMETRY);
+          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), new Rotation2d(Math.PI), OdometryType.VR_ODOMETRY);
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -382,7 +384,7 @@ public class Drive extends SubsystemBase {
           rawGyroRotation,
           modulePositions,
           0,
-          QuestNavUtil.getInstance().isConnected());
+          QuestNavUtil.getInstance().connected());
 
       switch (coastRequest) {
         case BRAKE -> {
@@ -674,6 +676,10 @@ public class Drive extends SubsystemBase {
     return poseEstimator.getCurrentPoseEstimate();
   }
 
+  public Optional<Pose2d> getTimestampedPose(double timestamp) {
+    return poseEstimator.getPoseEstimate(timestamp);
+  }
+
   public Pose2d getRaw() {
     return poseEstimator.getRawPose();
   }
@@ -681,7 +687,6 @@ public class Drive extends SubsystemBase {
   public Rotation2d getRotation() {
     return getPose().getRotation();
   }
-
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);

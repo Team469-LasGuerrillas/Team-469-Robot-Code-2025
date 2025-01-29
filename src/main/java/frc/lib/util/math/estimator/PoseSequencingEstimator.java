@@ -136,7 +136,7 @@ public class PoseSequencingEstimator<T> {
   public void resetPosition(Rotation2d gyroAngle, T wheelPositions, Pose2d poseMeters) {
     // Reset state estimate and error covariance
     primaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
-    secondaryOdometry.setPose(poseMeters);
+    secondaryOdometry.setRotation(poseMeters.getRotation());
     lastPrimaryOdometryPose = poseMeters;
     lastSecondaryOdometryPose = poseMeters;
     odometryBuffer.clear();
@@ -146,21 +146,8 @@ public class PoseSequencingEstimator<T> {
     odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
   }
 
-  public void resetPose(Pose2d pose) {
-    primaryOdometry.resetPose(pose);
-    secondaryOdometry.setPose(pose);
-    lastPrimaryOdometryPose = pose;
-    lastSecondaryOdometryPose = pose;
-    odometryBuffer.clear();
-    visionUpdates.clear();
-    currentPoseEstimate = primaryOdometry.getPoseMeters();
-
-    odometryBuffer.addSample(Clock.time(), currentPoseEstimate);
-  }
-
   public void resetTranslation(Translation2d translation) {
     primaryOdometry.resetTranslation(translation);
-    secondaryOdometry.setTranslation(translation);
     lastPrimaryOdometryPose = new Pose2d(translation, lastPrimaryOdometryPose.getRotation());
     lastSecondaryOdometryPose = new Pose2d(translation, lastSecondaryOdometryPose.getRotation());
     odometryBuffer.clear();
@@ -257,10 +244,11 @@ public class PoseSequencingEstimator<T> {
 
     if (odometryType == OdometryType.FUSED_ODOMETRY && secondaryConnected) {
       interpolatedDelta = InterpolatorUtil.transform2d(primaryDelta, secondaryDelta, secondaryTrust); // Fused Odometry
-    } else if (odometryType == OdometryType.WHEEL_ODOMETRY) {
-      interpolatedDelta = primaryDelta; // Wheel Odometry
-    } else {
+    } else if (odometryType == OdometryType.VR_ODOMETRY && secondaryConnected) {
+      System.out.println(secondaryOdometryEstimate);
       interpolatedDelta = secondaryDelta; // VR Odometry
+    } else {
+      interpolatedDelta = primaryDelta; // Wheel Odometry
     }
 
     Pose2d interpolatedEstimate =
