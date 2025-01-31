@@ -9,7 +9,6 @@ public class InterpolatorUtil {
   public static ChassisSpeeds chassisSpeeds(
       ChassisSpeeds base, ChassisSpeeds other, double interpolation) {
     if (other == null){
-      System.out.println("DANJITH DAMBAHT");
       return base;
     } else if (base == null){
       return new ChassisSpeeds();

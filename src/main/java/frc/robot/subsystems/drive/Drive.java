@@ -220,7 +220,7 @@ public class Drive extends SubsystemBase {
 
   private SequencingSwerveDrivePoseEstimator poseEstimator =
       new SequencingSwerveDrivePoseEstimator(
-          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), new Rotation2d(Math.PI), OdometryType.VR_ODOMETRY);
+          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), Rotation2d.fromDegrees(180), OdometryType.VR_ODOMETRY);
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -238,7 +238,6 @@ public class Drive extends SubsystemBase {
 
   private PPHolonomicDriveController pppppp;
 
-  // Drive??
   private Drive(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -320,12 +319,14 @@ public class Drive extends SubsystemBase {
 
     // Configure controllers
     teleopDriveController = new TeleopDriveController();
+
+    setPose(new Pose2d(2, 2, new Rotation2d()));
   }
 
   @Override
   public void periodic() {
     Dashboard.m_field.setRobotPose(getPose());
-    
+
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
@@ -531,7 +532,6 @@ public class Drive extends SubsystemBase {
       double relativeX, double relativeY, double omega, boolean robotRelative) {
     if (DriverStation.isTeleopEnabled()) {
       teleopDriveController.acceptDriveInput(relativeX, relativeY, omega, robotRelative);
-      // System.out.println("accepting");
     }
   }
 

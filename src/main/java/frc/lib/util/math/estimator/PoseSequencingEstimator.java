@@ -235,8 +235,8 @@ public class PoseSequencingEstimator<T> {
       T wheelPositions,
       double secondaryTrust,
       boolean secondaryConnected) {
-    var primaryOdometryEstimate = primaryOdometry.update(gyroAngle, wheelPositions);
-    var secondaryOdometryEstimate = secondaryOdometry.update();
+    Pose2d primaryOdometryEstimate = primaryOdometry.update(gyroAngle, wheelPositions);
+    Pose2d secondaryOdometryEstimate = secondaryOdometry.update();
 
     Transform2d primaryDelta = primaryOdometryEstimate.minus(lastPrimaryOdometryPose);
     Transform2d secondaryDelta = secondaryOdometryEstimate.minus(lastSecondaryOdometryPose);
@@ -245,12 +245,13 @@ public class PoseSequencingEstimator<T> {
     if (odometryType == OdometryType.FUSED_ODOMETRY && secondaryConnected) {
       interpolatedDelta = InterpolatorUtil.transform2d(primaryDelta, secondaryDelta, secondaryTrust); // Fused Odometry
     } else if (odometryType == OdometryType.VR_ODOMETRY && secondaryConnected) {
-      System.out.println(secondaryOdometryEstimate);
       interpolatedDelta = secondaryDelta; // VR Odometry
     } else {
       interpolatedDelta = primaryDelta; // Wheel Odometry
     }
-
+    
+    System.out.println(secondaryDelta.getRotation());
+    
     Pose2d interpolatedEstimate =
         odometryBuffer.getInternalBuffer().lastEntry().getValue().plus(interpolatedDelta);
 

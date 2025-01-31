@@ -39,9 +39,8 @@ public class QuestNavUtil {
     return instance;
   }
 
-  // Gets the Quest's measured position.
   public Pose2d getPose() {
-    return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), resetPosition.getRotation());
+    return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
   }
 
   // Gets the battery percent of the Quest.
@@ -65,14 +64,14 @@ public class QuestNavUtil {
     return questTimestamp.get();
   }
 
-  // Zero the relativerobot heading
-  public void initHeading(float questRobotRelativeRotationDegrees) {
-    yaw_offset = questRobotRelativeRotationDegrees;
+  public void initHeading(float questRobotRelativeHeadingDegrees) {
+    yaw_offset = questRobotRelativeHeadingDegrees;
   }
 
+  // Zero the relativerobot heading
   public void zeroHeading(float rotationDegrees) {
     float[] eulerAngles = questEulerAngles.get();
-    yaw_offset = eulerAngles[1] + rotationDegrees;
+    yaw_offset = eulerAngles[1];
   }
 
   // Zero the absolute 3D position of the robot (similar to long-pressing the quest logo)
@@ -104,6 +103,7 @@ public class QuestNavUtil {
   private Translation2d getQuestNavTranslation() {
     float[] questnavPosition = questPosition.get();
     return new Translation2d(questnavPosition[2], -questnavPosition[0]);
+    // questnavPosition[0] and questNavPosition[2] ?
   }
 
   private Pose2d getQuestNavPose() {

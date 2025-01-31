@@ -49,10 +49,10 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
 
-  private final VisionSubsystem limelightLeft;
-  private final VisionSubsystem limelightRight;
-  private final VisionSubsystem arducamOne;
-  private final VisionSubsystem arducamTwo;
+  // private final VisionSubsystem limelightLeft;
+  // private final VisionSubsystem limelightRight;
+  // private final VisionSubsystem arducamOne;
+  // private final VisionSubsystem arducamTwo;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -77,10 +77,10 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
-        limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
-        arducamOne = new VisionSubsystem(VisionConstants.ARDUCAM_ONE);
-        arducamTwo = new VisionSubsystem(VisionConstants.ARDUCAM_TWO);
+        // limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
+        // limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
+        // arducamOne = new VisionSubsystem(VisionConstants.ARDUCAM_ONE);
+        // arducamTwo = new VisionSubsystem(VisionConstants.ARDUCAM_TWO);
 
         break;
 
@@ -94,10 +94,10 @@ public class RobotContainer {
             new ModuleIOSim(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        limelightLeft = new VisionSubsystem(new VisionIO() {});
-        limelightRight = new VisionSubsystem(new VisionIO() {});
-        arducamOne = new VisionSubsystem(new VisionIO() {});
-        arducamTwo = new VisionSubsystem(new VisionIO() {});
+        // limelightLeft = new VisionSubsystem(new VisionIO() {});
+        // limelightRight = new VisionSubsystem(new VisionIO() {});
+        // arducamOne = new VisionSubsystem(new VisionIO() {});
+        // arducamTwo = new VisionSubsystem(new VisionIO() {});
 
         break;
 
@@ -111,10 +111,10 @@ public class RobotContainer {
             new ModuleIO() {});
         drive = Drive.getInstance();
 
-        limelightLeft = new VisionSubsystem(new VisionIO() {});
-        limelightRight = new VisionSubsystem(new VisionIO() {});
-        arducamOne = new VisionSubsystem(new VisionIO() {});
-        arducamTwo = new VisionSubsystem(new VisionIO() {});
+        // limelightLeft = new VisionSubsystem(new VisionIO() {});
+        // limelightRight = new VisionSubsystem(new VisionIO() {});
+        // arducamOne = new VisionSubsystem(new VisionIO() {});
+        // arducamTwo = new VisionSubsystem(new VisionIO() {});
 
         break;
     }

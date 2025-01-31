@@ -1,10 +1,7 @@
 package frc.lib.util.math.odometry;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import frc.lib.util.hardware.QuestNavUtil;
 
 public class VROdometry {
@@ -22,21 +19,11 @@ public class VROdometry {
     questNav.initHeading((float) initRotation.getDegrees());
   }
 
-  public void setPose(Pose2d pose) {
-    QuestNavUtil.getInstance().zeroPosition();
-    m_poseMeters = getPose();
-  }
-
   public void setRotation(Rotation2d rotation) {
     questNav.zeroHeading((float) (rotation.getDegrees()));
-    m_poseMeters = getPose();
   }
 
   public Pose2d update() {
-    return getPose();
-  }
-
-  private Pose2d getPose() {
     return questNav.getPose();
   }
 }
