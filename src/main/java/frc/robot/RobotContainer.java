@@ -61,8 +61,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    Dashboard.addWidgets(shuffleboardTab);
-
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -115,6 +113,9 @@ public class RobotContainer {
 
         break;
     }
+
+    // Add Dashboard Widgets
+    Dashboard.addWidgets(shuffleboardTab);
 
     // Configure the button bindings
     configureButtonBindings();

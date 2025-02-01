@@ -16,7 +16,7 @@ public class Dashboard {
   public static void addWidgets(ShuffleboardTab tab) {
     tab
     .add(m_field)
-    .withSize(13, 6)
+    .withSize(6, 6)
     .withPosition(0, 0);
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(

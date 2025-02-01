@@ -23,7 +23,6 @@ public class VROdometry {
 
   public Pose2d update() {
     currentPose = questNav.getPose().rotateBy(questSpaceRotationOffset.unaryMinus());
-    System.out.println("WCPCORGI: " + currentPose);
     return currentPose;
   }
 }
