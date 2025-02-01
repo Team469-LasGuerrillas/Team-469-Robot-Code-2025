@@ -25,7 +25,10 @@ public class Dashboard {
         : stream
     );
 
-    tab.add("Auton Chooser", autoChooser);
+    tab
+    .add("Auton Chooser", autoChooser)
+    .withSize(3, 1)
+    .withPosition(7, 0);
   }
 
   public static Command getAutonomousCommand() {

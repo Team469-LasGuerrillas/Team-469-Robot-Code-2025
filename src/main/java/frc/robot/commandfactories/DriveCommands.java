@@ -60,9 +60,15 @@ public class DriveCommands {
       () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
   }
 
+  public static Command pidToPoint(CommandXboxController controller, Supplier<Pose2d> pose) {
+    return Commands.startEnd(
+      () -> Drive.getInstance().setPIDToPointGoal(pose),
+      () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
+  }
+
   public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose) {
     return Commands.startEnd(
-    () -> Drive.getInstance().setAimAssist(pose, 0.0469), 
+    () -> Drive.getInstance().setAimAssist(pose, 0.469), 
     () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
   } 
 

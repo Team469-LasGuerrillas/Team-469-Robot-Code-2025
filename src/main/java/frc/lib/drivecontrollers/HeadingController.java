@@ -21,10 +21,13 @@ public class HeadingController {
             DriveConstants.HEADING_P,
             DriveConstants.HEADING_I,
             DriveConstants.HEADING_D,
-            new TrapezoidProfile.Constraints(0.0, 0.0),
+            new TrapezoidProfile.Constraints(
+              DriveConstants.TELEOP_MAX_ANGULAR_VELOCITY, 
+              DriveConstants.MAX_ANGULAR_ACCEL
+            ),
             0.02);
     controller.enableContinuousInput(-Math.PI, Math.PI);
-    controller.setTolerance(Units.degreesToRadians(0));
+    controller.setTolerance(Units.degreesToRadians(DriveConstants.HEADING_TOLERANCE_DEGREES));
     this.goalHeadingSupplier = goalHeadingSupplier;
 
     controller.reset(
@@ -33,16 +36,20 @@ public class HeadingController {
 
   public double update() {
     double maxAngularAcceleration = DriveConstants.MAX_ANGULAR_ACCEL;
-    double maxAngularVelocity = DriveConstants.TELEOP_MAX_LINEAR_VELOCITY;
+    double maxAngularVelocity = DriveConstants.TELEOP_MAX_ANGULAR_VELOCITY;
 
     controller.setConstraints(
         new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularAcceleration));
 
-    double output =
-        controller.calculate(
-            Drive.getInstance().getRotation().getRadians(), goalHeadingSupplier.get().getRadians());
+    double output;
 
-    // Logger.recordOutput("Drive/HeadingController/HeadingError", controller.getPositionError());
+    if (controller.getPositionError() > Units.degreesToRadians(DriveConstants.HEADING_TOLERANCE_DEGREES)) {
+      output = controller.calculate(Drive.getInstance().getRotation().getRadians(), goalHeadingSupplier.get().getRadians());
+    }
+    else {
+      output = 0;
+    }
+      
     return output;
   }
 
