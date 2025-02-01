@@ -50,7 +50,7 @@ public class VisionSubsystem extends SubsystemBase {
                 // Must be within the field boundaries
                 || observation.pose().getX() <= 0.0
                 || observation.pose().getX()
-                    >= 9 
+                    >= Units.feetToMeters(26)  
                 || observation.pose().getY() <= 0.0
                 || observation.pose().getY()
                     >= Units.feetToMeters(57) 

@@ -220,7 +220,7 @@ public class Drive extends SubsystemBase {
 
   private SequencingSwerveDrivePoseEstimator poseEstimator =
       new SequencingSwerveDrivePoseEstimator(
-          kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), Rotation2d.fromDegrees(180), OdometryType.VR_ODOMETRY);
+          kinematics, rawGyroRotation, lastModulePositions, new Pose3d(), OdometryType.VR_ODOMETRY);
 
   public static void createInstance(
       GyroIO gyroIO,

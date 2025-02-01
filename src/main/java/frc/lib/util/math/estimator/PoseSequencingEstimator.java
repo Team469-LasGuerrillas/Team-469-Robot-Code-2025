@@ -250,8 +250,6 @@ public class PoseSequencingEstimator<T> {
       interpolatedDelta = primaryDelta; // Wheel Odometry
     }
     
-    System.out.println(secondaryDelta.getRotation());
-    
     Pose2d interpolatedEstimate =
         odometryBuffer.getInternalBuffer().lastEntry().getValue().plus(interpolatedDelta);
 

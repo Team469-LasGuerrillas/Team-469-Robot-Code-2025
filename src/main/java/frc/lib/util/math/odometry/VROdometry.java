@@ -1,29 +1,29 @@
 package frc.lib.util.math.odometry;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.util.hardware.QuestNavUtil;
 
 public class VROdometry {
-  private Pose2d m_poseMeters;
-  private Pose2d robotToQuest;
-  private QuestNavUtil questNav = QuestNavUtil.getInstance();
+  QuestNavUtil questNav = QuestNavUtil.getInstance();
 
-  public VROdometry(Pose2d initialPoseMeters, Pose2d robotToQuest, Rotation2d initHeading) {
-    m_poseMeters = initialPoseMeters;
-    this.robotToQuest = robotToQuest;
-    initHeading(initHeading);
+  Rotation2d questSpaceRotationOffset = new Rotation2d();
+  Pose2d currentPose = new Pose2d();
+
+  public VROdometry(Pose3d questPoseRobotSpace) {
+    setRotation(new Rotation2d());
   }
 
-  public void initHeading(Rotation2d initRotation) {
-    questNav.initHeading((float) initRotation.getDegrees());
-  }
+  public void setRotation(Rotation2d rotationWPIBlue) {
+    Rotation2d rotationQuestSpace = questNav.getPose().getRotation();
 
-  public void setRotation(Rotation2d rotation) {
-    questNav.zeroHeading((float) (rotation.getDegrees()));
+    questSpaceRotationOffset = rotationQuestSpace.plus(rotationWPIBlue);
   }
 
   public Pose2d update() {
-    return questNav.getPose();
+    currentPose = questNav.getPose().rotateBy(questSpaceRotationOffset.unaryMinus());
+    System.out.println("WCPCORGI: " + currentPose);
+    return currentPose;
   }
 }

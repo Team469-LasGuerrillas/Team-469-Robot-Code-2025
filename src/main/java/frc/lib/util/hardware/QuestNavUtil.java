@@ -1,5 +1,7 @@
 package frc.lib.util.hardware;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,6 +15,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class QuestNavUtil {
+  private static QuestNavUtil instance;
+
   // Configure Network Tables topics (questnav/...) to communicate with the Quest HMD
   NetworkTableInstance nt4Instance = NetworkTableInstance.getDefault();
   NetworkTable nt4Table = nt4Instance.getTable("questnav");
@@ -30,8 +34,6 @@ public class QuestNavUtil {
   private float yaw_offset = 0.0f;
   private Pose2d resetPosition = new Pose2d();
 
-  private static QuestNavUtil instance;
-
   public static QuestNavUtil getInstance() {
     if (instance == null) {
       instance = new QuestNavUtil();
@@ -39,6 +41,7 @@ public class QuestNavUtil {
     return instance;
   }
 
+  // Gets the Quest's measured position.
   public Pose2d getPose() {
     return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
   }
@@ -64,15 +67,11 @@ public class QuestNavUtil {
     return questTimestamp.get();
   }
 
-  public void initHeading(float questRobotRelativeHeadingDegrees) {
-    yaw_offset = questRobotRelativeHeadingDegrees;
-  }
-
-  // Zero the relativerobot heading
-  public void zeroHeading(float rotationDegrees) {
-    float[] eulerAngles = questEulerAngles.get();
-    yaw_offset = eulerAngles[1];
-  }
+  // // Zero the relativerobot heading
+  // public void zeroHeading() {
+  //   float[] eulerAngles = questEulerAngles.get();
+  //   yaw_offset = eulerAngles[1];
+  // }
 
   // Zero the absolute 3D position of the robot (similar to long-pressing the quest logo)
   public void zeroPosition() {
@@ -102,12 +101,11 @@ public class QuestNavUtil {
 
   private Translation2d getQuestNavTranslation() {
     float[] questnavPosition = questPosition.get();
-    return new Translation2d(questnavPosition[2], -questnavPosition[0]);
-    // questnavPosition[0] and questNavPosition[2] ?
+    return new Translation2d(questnavPosition[0], questnavPosition[2]);
   }
 
   private Pose2d getQuestNavPose() {
     var oculousPositionCompensated = getQuestNavTranslation().minus(new Translation2d(0, 0.1651)); // 6.5
-    return new Pose2d(oculousPositionCompensated, Rotation2d.fromDegrees(getOculusYaw()));
+    return new Pose2d(oculousPositionCompensated, Rotation2d.fromDegrees(getOculusYaw()).unaryMinus());
   }
 }
