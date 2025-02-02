@@ -16,8 +16,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.lib.util.hardware.QuestNavUtil;
-import frc.lib.util.math.odometry.VROdometry;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.commandfactories.DriveCommands;
+import frc.robot.subsystems.drive.Drive;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -140,6 +142,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    Drive.getInstance().setTeleopMode();
   }
 
   /** This function is called periodically during operator control. */

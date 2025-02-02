@@ -15,7 +15,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -48,7 +47,7 @@ public class RobotContainer {
   private final Drive drive;
 
   private final VisionSubsystem limelightLeft;
-  // private final VisionSubsystem limelightRight;
+  private final VisionSubsystem limelightRight;
   // private final VisionSubsystem arducamOne;
   // private final VisionSubsystem arducamTwo;
 
@@ -71,7 +70,7 @@ public class RobotContainer {
         drive = Drive.getInstance();
 
         limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
-        // limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
+        limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
         // arducamOne = new VisionSubsystem(VisionConstants.ARDUCAM_ONE);
         // arducamTwo = new VisionSubsystem(VisionConstants.ARDUCAM_TWO);
 
@@ -88,7 +87,7 @@ public class RobotContainer {
         drive = Drive.getInstance();
 
         limelightLeft = new VisionSubsystem(new VisionIO() {});
-        // limelightRight = new VisionSubsystem(new VisionIO() {});
+        limelightRight = new VisionSubsystem(new VisionIO() {});
         // arducamOne = new VisionSubsystem(new VisionIO() {});
         // arducamTwo = new VisionSubsystem(new VisionIO() {});
 
@@ -105,7 +104,7 @@ public class RobotContainer {
         drive = Drive.getInstance();
 
         limelightLeft = new VisionSubsystem(new VisionIO() {});
-        // limelightRight = new VisionSubsystem(new VisionIO() {});
+        limelightRight = new VisionSubsystem(new VisionIO() {});
         // arducamOne = new VisionSubsystem(new VisionIO() {});
         // arducamTwo = new VisionSubsystem(new VisionIO() {});
 
@@ -135,10 +134,16 @@ public class RobotContainer {
     // controller.y().whileTrue(DriveCommands.aimAssistToPose(controller, new Pose2d(2, 4.03, new Rotation2d()))
     // );
 
-    controller.y().whileTrue(
-      DriveCommands.pidToPoint(controller, () -> new Pose2d(2, 4.025, new Rotation2d()))
+    // controller.y().whileTrue(
+    //   DriveCommands.pidToClosestReefPose()
+    // );
+
+    controller.rightBumper().whileTrue(
+      DriveCommands.aimAssistToClosestReefPose(controller, 0.469)
     );
 
+    controller.y().whileTrue(DriveCommands.pidToClosestReefPose());
+    
     controller.a().whileTrue(Commands.startEnd(
       () -> drive.setPathfinding(new Pose2d(2, 4.05, new Rotation2d())), 
       () -> drive.clearMode())

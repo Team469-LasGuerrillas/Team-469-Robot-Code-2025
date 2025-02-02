@@ -41,16 +41,14 @@ public class HeadingController {
     controller.setConstraints(
         new TrapezoidProfile.Constraints(maxAngularVelocity, maxAngularAcceleration));
 
-    double output;
+    double output = controller.calculate(Drive.getInstance().getRotation().getRadians(), goalHeadingSupplier.get().getRadians());
 
     if (controller.getPositionError() > Units.degreesToRadians(DriveConstants.HEADING_TOLERANCE_DEGREES)) {
-      output = controller.calculate(Drive.getInstance().getRotation().getRadians(), goalHeadingSupplier.get().getRadians());
+      return output; 
     }
     else {
-      output = 0;
+      return 0;
     }
-      
-    return output;
   }
 
   public boolean atGoal() {

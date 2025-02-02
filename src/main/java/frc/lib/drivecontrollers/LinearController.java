@@ -63,8 +63,6 @@ public class LinearController {
   }
 
   public ChassisSpeeds update() {
-    System.out.println("X Error: " + xController.getPositionError() + " Y Error: " + yController.getPositionError() + " HOLA!!!");
-
     double xOutput =
       xController.calculate(
         Drive.getInstance().getPose().getX(), goalPoseSupplier.get().getX());
@@ -73,15 +71,14 @@ public class LinearController {
       yController.calculate(
         Drive.getInstance().getPose().getY(), goalPoseSupplier.get().getY());
     
+    ChassisSpeeds outputLinearSpeeds = new ChassisSpeeds(xOutput, yOutput, 0);
     if (xController.getPositionError() > DriveConstants.LINEAR_TOLERANCE_METERS 
         || Math.abs(yController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS) {
-            outputLinearSpeeds = new ChassisSpeeds(xOutput, yOutput, 0);
-        }
-    else {
-      outputLinearSpeeds = new ChassisSpeeds();
+          return outputLinearSpeeds;
     }
-
-    return outputLinearSpeeds;
+    else {
+      return new ChassisSpeeds();
+    }
   }
 
   public boolean atXGoal() {

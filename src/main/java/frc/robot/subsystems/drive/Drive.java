@@ -55,11 +55,8 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.drive.GyroIOInputsAutoLogged;
 import frc.lib.Dashboard;
 import frc.lib.drivecontrollers.FieldRobotSpeedsConversion;
 import frc.lib.drivecontrollers.HeadingController;
@@ -103,7 +100,9 @@ public class Drive extends SubsystemBase {
     /** Driving by combining input from driver joysticks and pathplanner */
     AIMASSIST,
 
-    PID_TO_POINT
+    PID_TO_POINT,
+
+    AUTON
   }
 
   public enum CoastRequest {
@@ -294,9 +293,9 @@ public class Drive extends SubsystemBase {
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(
         this::getPose,
-        this::setPose,
+        (pose) -> {},
         this::getChassisSpeeds,
-        this::setAutoSpeeds,
+        this::setAutoSpeedsInAuton,
         ppHolonomicDriveController,
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
@@ -434,6 +433,15 @@ public class Drive extends SubsystemBase {
           }
           break;
         }
+          
+        case AUTON -> {
+          if (autoSpeeds == null) {
+            desiredSpeeds = new ChassisSpeeds();
+          } else {
+            desiredSpeeds = autoSpeeds;
+          }
+          break;
+        }
 
         case AIMASSIST -> {
           ChassisSpeeds aimAssistSpeeds = FieldRobotSpeedsConversion.fieldToRobotSpeeds(linearController.update(), getRotation());
@@ -503,7 +511,16 @@ public class Drive extends SubsystemBase {
   }
 
   private void setAutoSpeeds(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
+    autoSpeeds = speeds;    
+  }
+
+  private void setAutoSpeedsInAuton(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
     autoSpeeds = speeds;
+    currentDriveMode = DriveMode.AUTON;
+  }
+
+  public void setTeleopMode() {
+    currentDriveMode = DriveMode.TELEOP;
   }
 
   public void setHeadingGoal(Supplier<Rotation2d> heading) {
@@ -710,6 +727,10 @@ public class Drive extends SubsystemBase {
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+
+    if (Math.abs(getPose().getRotation().getDegrees() - pose.getRotation().getDegrees()) > 1) {
+      setPose(pose);
+    }
   }
 
   /** Returns if the vr is connected */

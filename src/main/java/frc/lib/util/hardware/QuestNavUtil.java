@@ -1,7 +1,5 @@
 package frc.lib.util.hardware;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;

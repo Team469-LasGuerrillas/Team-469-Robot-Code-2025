@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.drive.Drive;
 
 public class FieldLayout {
@@ -12,9 +13,9 @@ public class FieldLayout {
   };
 
   public static HashMap<ReefPositions, Pose2d> reefPositionPose = new HashMap<>() {{ 
-    put(ReefPositions.A, new Pose2d());
-    put(ReefPositions.B, new Pose2d());
-    put(ReefPositions.C, new Pose2d());
+    put(ReefPositions.A, new Pose2d(2, 2, new Rotation2d()));
+    put(ReefPositions.B, new Pose2d(2, 4, new Rotation2d()));
+    put(ReefPositions.C, new Pose2d(2, 6, new Rotation2d()));
     put(ReefPositions.D, new Pose2d());
     put(ReefPositions.E, new Pose2d());
     put(ReefPositions.F, new Pose2d());
@@ -28,7 +29,7 @@ public class FieldLayout {
 
   public static ReefPositions findClosestReefPose() {
     Pose2d currentPose = Drive.getInstance().getPose();
-    double shortestDistance = Double.POSITIVE_INFINITY;
+    double shortestDistance = 999999999999999.0;
     ReefPositions closestReefPosition = ReefPositions.A;
 
     for (Map.Entry<ReefPositions, Pose2d> entry : FieldLayout.reefPositionPose.entrySet()) {
@@ -40,6 +41,7 @@ public class FieldLayout {
       }
     }
 
+    System.out.println("Closest Reef Pose: " + closestReefPosition);
     return closestReefPosition;
   }
 }
