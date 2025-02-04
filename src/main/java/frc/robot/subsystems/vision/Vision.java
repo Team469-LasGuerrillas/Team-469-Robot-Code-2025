@@ -17,11 +17,11 @@ import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
-public class VisionSubsystem extends SubsystemBase {
+public class Vision extends SubsystemBase {
   private final VisionIO io;
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
-  public VisionSubsystem(VisionIO io) {
+  public Vision(VisionIO io) {
     this.io = io;
   }
 

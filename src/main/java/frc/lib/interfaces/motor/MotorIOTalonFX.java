@@ -67,7 +67,7 @@ public class MotorIOTalonFX implements MotorIO {
   }
 
   @Override
-  public void readInputs(MotorIOInputs inputs) {
+  public void updateInputs(MotorIOInputs inputs) {
     BaseStatusSignal.refreshAll(signals);
 
     inputs.unitPosition = rotorToUnits(positionSignal.getValueAsDouble());
@@ -75,6 +75,8 @@ public class MotorIOTalonFX implements MotorIO {
     inputs.appliedVolts = voltageSignal.getValueAsDouble();
     inputs.currentStatorAmps = currentStatorSignal.getValueAsDouble();
     inputs.currentSupplyAmps = currentSupplySignal.getValueAsDouble();
+
+    inputs.canbusId = config.canId;
   }
 
   @Override

@@ -19,7 +19,7 @@ public interface MotorIO {
     public int canbusId;
   }
 
-  public default void readInputs(MotorIOInputs inputs) {}
+  public default void updateInputs(MotorIOInputs inputs) {}
 
   // Open-Loop Voltage
   public default void setOpenLoopVoltage(double volts) {}
