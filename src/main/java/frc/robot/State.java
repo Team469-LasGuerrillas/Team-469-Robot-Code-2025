@@ -1,14 +1,11 @@
 package frc.robot;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
-public class State {
-    private List<RobotState> activeStates = Arrays.asList(RobotState.DEFAULT);
+public class State extends Command{
 
     public enum RobotState {
         CORAL_GROUND_INTAKE_IN,
@@ -28,6 +25,6 @@ public class State {
         ALGAE_END_EFFECTOR_SCORE,
         HUMAN_PLAYER_INTAKE_IN,
         HUMAN_PLAYER_INTAKE_OUT,
-        DEFAULT
+        DEFAULT_CORAL,
     }
 }

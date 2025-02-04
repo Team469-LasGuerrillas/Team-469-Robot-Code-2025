@@ -46,5 +46,5 @@ public interface MotorIO {
   public default void setCurrentPosition(double units) {}
 
   // Soft Limits
-  public default void setSoftLimits(boolean forward, boolean reverse) {}
+  public default void setSoftLimits(boolean fwd, boolean rev, double fwdLimit, double revLimit) {}
 }

@@ -123,9 +123,11 @@ public class MotorIOTalonFX implements MotorIO {
   }
 
   @Override
-  public void setSoftLimits(boolean fwd, boolean rev) {
+  public void setSoftLimits(boolean fwd, boolean rev, double fwdLimit, double revLimit) {
     config.fxConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = fwd;
     config.fxConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = rev;
+    config.fxConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = fwdLimit;
+    config.fxConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = revLimit;
     CTREUtil.applyConfiguration(talon, config.fxConfig);
   }
 }
