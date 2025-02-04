@@ -1,7 +1,5 @@
 package frc.lib.util.hardware;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,7 +41,7 @@ public class QuestNavUtil {
 
   // Gets the Quest's measured position.
   public Pose2d getPose() {
-    return new Pose2d(getQuestNavPose().minus(resetPosition).getTranslation(), Rotation2d.fromDegrees(getOculusYaw()));
+    return new Pose2d(getQuestNavPose().getTranslation(), Rotation2d.fromDegrees(-getOculusYaw()));
   }
 
   // Gets the battery percent of the Quest.
@@ -101,11 +99,11 @@ public class QuestNavUtil {
 
   private Translation2d getQuestNavTranslation() {
     float[] questnavPosition = questPosition.get();
-    return new Translation2d(questnavPosition[0], questnavPosition[2]);
+    return new Translation2d(-questnavPosition[2], questnavPosition[0]);
   }
 
   private Pose2d getQuestNavPose() {
     var oculousPositionCompensated = getQuestNavTranslation().minus(new Translation2d(0, 0.1651)); // 6.5
-    return new Pose2d(oculousPositionCompensated, Rotation2d.fromDegrees(getOculusYaw()).unaryMinus());
+    return new Pose2d(oculousPositionCompensated, Rotation2d.fromDegrees(getOculusYaw()));
   }
 }

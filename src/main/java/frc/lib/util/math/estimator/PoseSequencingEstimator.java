@@ -15,9 +15,11 @@ import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.lib.util.Clock;
+import frc.lib.util.hardware.QuestNavUtil;
 import frc.lib.util.math.InterpolatorUtil;
 import frc.lib.util.math.odometry.OdometryType;
 import frc.lib.util.math.odometry.VROdometry;
+import frc.robot.subsystems.Constants.DriveConstants;
 
 import java.util.NavigableMap;
 import java.util.Optional;
@@ -67,6 +69,10 @@ public class PoseSequencingEstimator<T> {
       q.set(i, 0, stateStdDevs.get(i, 0) * stateStdDevs.get(i, 0));
     }
     setVisionMeasurementStdDevs(visionMeasurementStdDevs);
+  }
+
+  public boolean isSecondaryConnected() {
+    return QuestNavUtil.getInstance().connected();
   }
 
   public void addVisionMeasurement(Pose2d pose, double timestamp, Matrix<N3, N1> stds) {
@@ -136,7 +142,7 @@ public class PoseSequencingEstimator<T> {
   public void resetPosition(Rotation2d gyroAngle, T wheelPositions, Pose2d poseMeters) {
     // Reset state estimate and error covariance
     primaryOdometry.resetPosition(gyroAngle, wheelPositions, poseMeters);
-    secondaryOdometry.setRotation(poseMeters.getRotation());
+    secondaryOdometry.setRotationFieldSpace(poseMeters.getRotation());
     lastPrimaryOdometryPose = poseMeters;
     lastSecondaryOdometryPose = poseMeters;
     odometryBuffer.clear();
@@ -159,7 +165,7 @@ public class PoseSequencingEstimator<T> {
 
   public void resetRotation(Rotation2d rotation) {
     primaryOdometry.resetRotation(rotation);
-    secondaryOdometry.setRotation(rotation);
+    secondaryOdometry.setRotationFieldSpace(rotation);
     lastPrimaryOdometryPose = new Pose2d(lastPrimaryOdometryPose.getTranslation(), rotation);
     lastSecondaryOdometryPose = new Pose2d(lastSecondaryOdometryPose.getTranslation(), rotation);
     odometryBuffer.clear();
@@ -244,10 +250,13 @@ public class PoseSequencingEstimator<T> {
 
     if (odometryType == OdometryType.FUSED_ODOMETRY && secondaryConnected) {
       interpolatedDelta = InterpolatorUtil.transform2d(primaryDelta, secondaryDelta, secondaryTrust); // Fused Odometry
+      setOdometryStdDevs(DriveConstants.FUSED_STD_DEVS);
     } else if (odometryType == OdometryType.VR_ODOMETRY && secondaryConnected) {
       interpolatedDelta = secondaryDelta; // VR Odometry
+      setOdometryStdDevs(DriveConstants.VR_STD_DEVS);
     } else {
       interpolatedDelta = primaryDelta; // Wheel Odometry
+      setOdometryStdDevs(DriveConstants.WHEEL_STD_DEVS);
     }
     
     Pose2d interpolatedEstimate =
@@ -282,6 +291,17 @@ public class PoseSequencingEstimator<T> {
       } else {
         visionK.set(row, row, q.get(row, 0) / (q.get(row, 0) + Math.sqrt(q.get(row, 0) * r[row])));
       }
+    }
+  }
+
+  /**
+   * Sets the stds of the odometry, used when changing between wheels and vr headset.
+   * 
+   * @param odometryMeasurementStdDevs The stds of the odometry
+   */
+  public final void setOdometryStdDevs(Matrix<N3, N1> odometryMeasurementStdDevs) {
+    for (int i = 0; i < 3; ++i) {
+      q.set(i, 0, odometryMeasurementStdDevs.get(i, 0) * odometryMeasurementStdDevs.get(i, 0));
     }
   }
 

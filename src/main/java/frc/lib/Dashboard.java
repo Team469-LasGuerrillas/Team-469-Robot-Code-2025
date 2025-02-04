@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class Dashboard {
@@ -25,7 +26,10 @@ public class Dashboard {
         : stream
     );
 
-    tab.add("Auton Chooser", autoChooser);
+    tab
+    .add("Auton Chooser", autoChooser)
+    .withSize(7, 6)
+    .withPosition(6, 0);
   }
 
   public static Command getAutonomousCommand() {

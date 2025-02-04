@@ -66,11 +66,7 @@ public class Vision extends SubsystemBase {
 
           boolean updateYaw =
               observation.tagCount() >= 2;
-
-          if (updateYaw) {
-            System.out.println("Updating Yaw!");
-          }
-
+            
           Drive.getInstance()
               .addVisionMeasurement(
                   observation.pose().toPose2d(),

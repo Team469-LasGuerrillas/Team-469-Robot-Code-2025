@@ -38,6 +38,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.Interpolator;
@@ -54,13 +55,12 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystems.drive.GyroIOInputsAutoLogged;
 import frc.lib.Dashboard;
+import frc.lib.drivecontrollers.FieldRobotSpeedsConversion;
 import frc.lib.drivecontrollers.HeadingController;
+import frc.lib.drivecontrollers.LinearController;
 import frc.lib.drivecontrollers.TeleopDriveController;
 import frc.lib.util.Clock;
 import frc.lib.util.MonkeyState;
@@ -98,7 +98,11 @@ public class Drive extends SubsystemBase {
     PATHPLANNER,
 
     /** Driving by combining input from driver joysticks and pathplanner */
-    AIMASSIST
+    AIMASSIST,
+
+    PID_TO_POINT,
+
+    AUTON
   }
 
   public enum CoastRequest {
@@ -154,6 +158,7 @@ public class Drive extends SubsystemBase {
   private final TeleopDriveController teleopDriveController;
   private final PPHolonomicDriveController ppHolonomicDriveController;
   private HeadingController headingController = null;
+  private LinearController linearController = null;
 
   private double aimAssistWeight;
 
@@ -220,7 +225,7 @@ public class Drive extends SubsystemBase {
 
   private SequencingSwerveDrivePoseEstimator poseEstimator =
       new SequencingSwerveDrivePoseEstimator(
-          kinematics, rawGyroRotation, lastModulePositions, new Pose3d(), OdometryType.VR_ODOMETRY);
+          kinematics, rawGyroRotation, lastModulePositions, new Pose3d(-0.254, 0, 0, new Rotation3d(Math.PI, 0 , 0)), OdometryType.VR_ODOMETRY);
 
   public static void createInstance(
       GyroIO gyroIO,
@@ -288,9 +293,9 @@ public class Drive extends SubsystemBase {
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(
         this::getPose,
-        this::setPose,
+        (pose) -> {},
         this::getChassisSpeeds,
-        this::setAutoSpeeds,
+        this::setAutoSpeedsInAuton,
         ppHolonomicDriveController,
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
@@ -414,6 +419,12 @@ public class Drive extends SubsystemBase {
           break;
         }
 
+        case PID_TO_POINT -> {
+          desiredSpeeds = FieldRobotSpeedsConversion.fieldToRobotSpeeds(linearController.update(), getRotation());
+          desiredSpeeds.omegaRadiansPerSecond = headingController.update();
+          break;
+        }
+
         case PATHPLANNER -> {
           if (autoSpeeds == null) {
             desiredSpeeds = teleopSpeeds;
@@ -422,13 +433,20 @@ public class Drive extends SubsystemBase {
           }
           break;
         }
+          
+        case AUTON -> {
+          if (autoSpeeds == null) {
+            desiredSpeeds = new ChassisSpeeds();
+          } else {
+            desiredSpeeds = autoSpeeds;
+          }
+          break;
+        }
 
         case AIMASSIST -> {
-          if (autoSpeeds == null) {
-            desiredSpeeds = teleopSpeeds;
-          } else {
-            desiredSpeeds = InterpolatorUtil.chassisSpeeds(teleopSpeeds, autoSpeeds, aimAssistWeight);
-          }
+          ChassisSpeeds aimAssistSpeeds = FieldRobotSpeedsConversion.fieldToRobotSpeeds(linearController.update(), getRotation());
+          aimAssistSpeeds.omegaRadiansPerSecond = headingController.update();
+          desiredSpeeds = InterpolatorUtil.chassisSpeeds(teleopSpeeds, aimAssistSpeeds, aimAssistWeight);
           break;
         }
       }
@@ -493,12 +511,27 @@ public class Drive extends SubsystemBase {
   }
 
   private void setAutoSpeeds(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
+    autoSpeeds = speeds;    
+  }
+
+  private void setAutoSpeedsInAuton(ChassisSpeeds speeds, DriveFeedforwards feedforwards) {
     autoSpeeds = speeds;
+    currentDriveMode = DriveMode.AUTON;
+  }
+
+  public void setTeleopMode() {
+    currentDriveMode = DriveMode.TELEOP;
   }
 
   public void setHeadingGoal(Supplier<Rotation2d> heading) {
     headingController = new HeadingController(heading);
     currentDriveMode = DriveMode.HEADING;
+  }
+
+  public void setPIDToPointGoal(Supplier<Pose2d> pose) {
+    linearController = new LinearController(pose);
+    headingController = new HeadingController(() -> pose.get().getRotation());
+    currentDriveMode = DriveMode.PID_TO_POINT;
   }
 
   public void setPathfinding(Pose2d pose) {
@@ -508,14 +541,18 @@ public class Drive extends SubsystemBase {
 
   public void setAimAssist(Pose2d pose, double aimAssistWeight) {
     this.aimAssistWeight = aimAssistWeight;
-    findPathInternal(pose);
+    linearController = new LinearController(() -> pose);
+    headingController = new HeadingController(() -> pose.getRotation());
     currentDriveMode = DriveMode.AIMASSIST;
   }
 
   public void clearMode() {
-    if (currentDriveMode == DriveMode.PATHPLANNER || currentDriveMode == DriveMode.AIMASSIST) {
+    if (currentDriveMode == DriveMode.PATHPLANNER) {
       pathfindingCommand.cancel();
     }
+
+    headingController = null;
+    linearController = null;
 
     currentDriveMode = DriveMode.TELEOP;
   }
@@ -690,7 +727,18 @@ public class Drive extends SubsystemBase {
   /** Resets the current odometry pose. */
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+
+    if (Math.abs(getPose().getRotation().getDegrees() - pose.getRotation().getDegrees()) > 1) {
+      setPose(pose);
+    }
   }
+
+  /** Returns if the vr is connected */
+  @AutoLogOutput (key = "Odometry/VrConnected")
+  public boolean getSecondaryConnected() {
+    return poseEstimator.isSecondaryConnected();
+  }
+
 
   /** Adds a new timestamped vision measurement. */
   public void addVisionMeasurement(

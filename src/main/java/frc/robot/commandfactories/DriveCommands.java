@@ -60,11 +60,29 @@ public class DriveCommands {
       () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
   }
 
-  public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose) {
+  public static Command pidToPoint(Supplier<Pose2d> pose) {
     return Commands.startEnd(
-    () -> Drive.getInstance().setAimAssist(pose, 0.0469), 
+      () -> Drive.getInstance().setPIDToPointGoal(pose),
+      () -> Drive.getInstance().clearMode());
+  }
+
+  public static Command aimAssistToPose(CommandXboxController controller, Pose2d pose, double weight) {
+    return Commands.startEnd(
+    () -> Drive.getInstance().setAimAssist(pose, weight), 
     () -> Drive.getInstance().clearMode()).alongWith(acceptTeleopFieldOriented(controller, false));
   } 
+
+  public static Command aimAssistToReefPose(CommandXboxController controller, ReefPositions position, double weight) {
+    Pose2d pose = FieldLayout.reefPositionPose.get(position);
+
+    return aimAssistToPose(controller, pose, weight);
+  }
+
+  public static Command aimAssistToClosestReefPose(CommandXboxController controller, double weight) {
+    return Commands.deferredProxy(
+      () -> aimAssistToReefPose(controller, FieldLayout.findClosestReefPose(), weight)
+    );
+  }
 
   public static Command pathfindToPose(Pose2d pose) {
     return Commands.startEnd(
@@ -82,5 +100,17 @@ public class DriveCommands {
     ReefPositions closestReefPosition = FieldLayout.findClosestReefPose();
 
     return pathfindToReefPose(closestReefPosition);
+  }
+
+  public static Command pidToReefPose(ReefPositions position) {
+    Pose2d pose = FieldLayout.reefPositionPose.get(position);
+
+    return pidToPoint(() -> pose);
+  }
+
+  public static Command pidToClosestReefPose() {
+    return Commands.deferredProxy(
+      () -> pidToReefPose(FieldLayout.findClosestReefPose())
+    );
   }
 }

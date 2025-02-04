@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -23,7 +22,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.lib.Dashboard;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.DriveCommands;
@@ -37,7 +35,6 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,8 +46,8 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
 
-  // private final VisionSubsystem limelightLeft;
-  // private final VisionSubsystem limelightRight;
+  private final VisionSubsystem limelightLeft;
+  private final VisionSubsystem limelightRight;
   // private final VisionSubsystem arducamOne;
   // private final VisionSubsystem arducamTwo;
 
@@ -72,8 +69,8 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        // limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
-        // limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
+        limelightLeft = new VisionSubsystem(VisionConstants.LIMELIGHT_LEFT);
+        limelightRight = new VisionSubsystem(VisionConstants.LIMELIGHT_RIGHT);
         // arducamOne = new VisionSubsystem(VisionConstants.ARDUCAM_ONE);
         // arducamTwo = new VisionSubsystem(VisionConstants.ARDUCAM_TWO);
 
@@ -89,8 +86,8 @@ public class RobotContainer {
             new ModuleIOSim(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        // limelightLeft = new VisionSubsystem(new VisionIO() {});
-        // limelightRight = new VisionSubsystem(new VisionIO() {});
+        limelightLeft = new VisionSubsystem(new VisionIO() {});
+        limelightRight = new VisionSubsystem(new VisionIO() {});
         // arducamOne = new VisionSubsystem(new VisionIO() {});
         // arducamTwo = new VisionSubsystem(new VisionIO() {});
 
@@ -106,8 +103,8 @@ public class RobotContainer {
             new ModuleIO() {});
         drive = Drive.getInstance();
 
-        // limelightLeft = new VisionSubsystem(new VisionIO() {});
-        // limelightRight = new VisionSubsystem(new VisionIO() {});
+        limelightLeft = new VisionSubsystem(new VisionIO() {});
+        limelightRight = new VisionSubsystem(new VisionIO() {});
         // arducamOne = new VisionSubsystem(new VisionIO() {});
         // arducamTwo = new VisionSubsystem(new VisionIO() {});
 
@@ -135,11 +132,21 @@ public class RobotContainer {
 
     controller.x().whileTrue(DriveCommands.autoRotate(controller, () -> new Rotation2d()));
  
-    controller.y().whileTrue(DriveCommands.aimAssistToPose(controller, new Pose2d(2, 4.03, new Rotation2d()))
+    // controller.y().whileTrue(DriveCommands.aimAssistToPose(controller, new Pose2d(2, 4.03, new Rotation2d()))
+    // );
+
+    // controller.y().whileTrue(
+    //   DriveCommands.pidToClosestReefPose()
+    // );
+
+    controller.rightBumper().whileTrue(
+      DriveCommands.aimAssistToClosestReefPose(controller, 0.469)
     );
 
+    controller.y().whileTrue(DriveCommands.pidToClosestReefPose());
+    
     controller.a().whileTrue(Commands.startEnd(
-      () -> drive.setPathfinding(new Pose2d(2, 4.03, new Rotation2d())), 
+      () -> drive.setPathfinding(new Pose2d(2, 4.05, new Rotation2d())), 
       () -> drive.clearMode())
     );
 
