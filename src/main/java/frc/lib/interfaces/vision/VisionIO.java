@@ -23,6 +23,7 @@ public interface VisionIO {
       double tagCount,
       Pose3d pose,
       double[] stdDevs,
+      int fiducialId,
       PoseObservationType type) {}
 
   public enum TargettingType {

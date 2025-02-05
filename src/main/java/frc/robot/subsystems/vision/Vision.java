@@ -13,13 +13,21 @@ import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.Constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.lib.interfaces.vision.VisionIOInputsAutoLogged;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
   private final VisionIO io;
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
+  
+  // Camera Update / OnlyReefUpdates Boolean
+  public static String onlyReefUpdateCamera = "";
+  public static boolean onlyReefUpdateGlobal = false;
 
   public Vision(VisionIO io) {
     this.io = io;
@@ -56,13 +64,33 @@ public class Vision extends SubsystemBase {
                     >= Units.feetToMeters(57) 
                 || Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
 
+        boolean onlyReefUpdateLocal = 
+          observation.ta() > VisionConstants.ENABLE_REEF_UPDATES_TA
+          && observation.tagCount() == 1
+          && isReefId(observation.fiducialId());
+        
+        if (onlyReefUpdateLocal) {
+          onlyReefUpdateGlobal = true;
+          onlyReefUpdateCamera = getCameraName();
+        }
+
+        if (onlyReefUpdateGlobal && !onlyReefUpdateCamera.equals(getCameraName())) {
+          rejectPose = true;
+        }
+
+        if (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName())) {
+          onlyReefUpdateGlobal = false;
+        }
+
+        // If onlyReefUpdate == true 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          // System.out.println("REJECTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          // System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          System.out.println("Drive Translation: " + Drive.getInstance().getPose().getTranslation() + " PV Arducam: " + observation.pose().getTranslation());
         } else {
           robotPosesAccepted.add(observation);
 
-          // System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
+          System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
 
           boolean updateYaw =
               observation.tagCount() >= 2;
@@ -112,5 +140,11 @@ public class Vision extends SubsystemBase {
     io.setRobotRotationUpdate(Drive.getInstance().getRotation(), new Rotation2d(Drive.getInstance().getRobotRelativeVelocity().dtheta));
   }
 
-  // TODO: Add other functions for fetching Camera Data Later
+  public boolean isReefId(int id) {
+    if((id >= 17 && id <= 22) || (id >= 6 && id <= 11)) {
+      return true;
+    }
+    return false;
+  }
+
 }

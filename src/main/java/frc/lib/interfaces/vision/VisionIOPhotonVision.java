@@ -3,6 +3,7 @@ package frc.lib.interfaces.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
@@ -45,7 +46,10 @@ public class VisionIOPhotonVision implements VisionIO {
   private VisionIOPhotonVision(String cameraName, Pose3d robotToCam) {
     camera = new PhotonCamera(cameraName);
     photonPoseEstimator = new PhotonPoseEstimator(
-      aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, GeomUtil.toTransform3d(robotToCam));
+      aprilTagFieldLayout, 
+      PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
+      GeomUtil.toTransform3d(robotToCam)
+    );
 
     this.cameraName = cameraName;
     this.robotToCam.addSample(Clock.time(), robotToCam);
@@ -151,7 +155,7 @@ public class VisionIOPhotonVision implements VisionIO {
           multitagPose
             .plus(GeomUtil.toTransform3d(robotToCam.getSample(timestamp).get())).getTranslation()
             .getDistance(tagPose.getTranslation());
-
+          
         poseObservations.add(
           new PoseObservation(
             timestamp,
@@ -160,26 +164,28 @@ public class VisionIOPhotonVision implements VisionIO {
             visionEst.get().targetsUsed.size(),
             multitagPose,
             new double[] {0.1, 0.1, 0.1},
+            bestTarget.getFiducialId(),
             PoseObservationType.MULTITAG_1)
         );
 
-        poseObservations.add(
-          new PoseObservation(
-            timestamp,
-            0,
-            0,
-            visionEst.get().targetsUsed.size(),
-            TrigEstimator.getTrigBasedEstimatedPose(
-              distance3d, 
-              bestTarget.yaw, 
-              bestTarget.pitch, 
-              timestamp, 
-              robotToCam.getSample(timestamp).get(), 
-              bestTarget.fiducialId
-            ),
-            new double[] {0.1, 0.1, 0.1},
-            PoseObservationType.MULTITAG_2)
-        );
+        // poseObservations.add(
+        //   new PoseObservation(
+        //     timestamp,
+        //     0,
+        //     0,
+        //     visionEst.get().targetsUsed.size(),
+        //     TrigEstimator.getTrigBasedEstimatedPose(
+        //       distance3d, 
+        //       bestTarget.yaw, 
+        //       bestTarget.pitch, 
+        //       timestamp, 
+        //       robotToCam.getSample(timestamp).get(), 
+        //       bestTarget.fiducialId
+        //     ),
+        //     new double[] {0.1, 0.1, 0.1},
+        //     bestTarget.getFiducialId(),
+        //     PoseObservationType.MULTITAG_2)
+        // );
 
       }
     }

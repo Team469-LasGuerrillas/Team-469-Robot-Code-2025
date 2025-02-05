@@ -15,7 +15,7 @@ import frc.robot.subsystems.drive.Drive;
 public class TrigEstimator {
     private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    public static Pose3d getTrigBasedEstimatedPose( double distance3d, double tx, double ty, double timestamp, Pose3d robotToCam, int tagId) {
+    public static Pose3d getTrigBasedEstimatedPose(double distance3d, double tx, double ty, double timestamp, Pose3d robotToCam, int tagId) {
         Optional<Pose2d> timestampedRobotPose = Drive.getInstance().getTimestampedPose(timestamp);
         Rotation2d timestampedRobotRotation = timestampedRobotPose.get().getRotation();
 
@@ -26,7 +26,7 @@ public class TrigEstimator {
                 .plus(robotToCam.getRotation().toRotation2d())
                 .plus(Rotation2d.fromDegrees(-tx));
         
-        Pose2d tagPose2d = aprilTagFieldLayout.getTagPose(18).get().toPose2d();
+        Pose2d tagPose2d = aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
 
         Translation2d fieldToCameraTranslation = 
             new Pose2d(tagPose2d.getTranslation(), cameraToTagRotation.plus(Rotation2d.kPi))

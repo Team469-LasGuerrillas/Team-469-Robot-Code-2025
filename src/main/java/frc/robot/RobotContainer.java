@@ -48,8 +48,8 @@ public class RobotContainer {
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
-  // private final VisionSubsystem arducamOne;
-  // private final VisionSubsystem arducamTwo;
+  private final Vision arducamOne;
+  private final Vision arducamTwo;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -71,8 +71,8 @@ public class RobotContainer {
 
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
-        // arducamOne = new VisionSubsystem(VisionConstants.ARDUCAM_ONE);
-        // arducamTwo = new VisionSubsystem(VisionConstants.ARDUCAM_TWO);
+        arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
+        arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
 
         break;
 
@@ -88,8 +88,8 @@ public class RobotContainer {
 
         limelightLeft = new Vision(new VisionIO() {});
         limelightRight = new Vision(new VisionIO() {});
-        // arducamOne = new VisionSubsystem(new VisionIO() {});
-        // arducamTwo = new VisionSubsystem(new VisionIO() {});
+        arducamOne = new Vision(new VisionIO() {});
+        arducamTwo = new Vision(new VisionIO() {});
 
         break;
 
@@ -105,8 +105,8 @@ public class RobotContainer {
 
         limelightLeft = new Vision(new VisionIO() {});
         limelightRight = new Vision(new VisionIO() {});
-        // arducamOne = new VisionSubsystem(new VisionIO() {});
-        // arducamTwo = new VisionSubsystem(new VisionIO() {});
+        arducamOne = new Vision(new VisionIO() {});
+        arducamTwo = new Vision(new VisionIO() {});
 
         break;
     }

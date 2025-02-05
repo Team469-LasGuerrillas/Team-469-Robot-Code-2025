@@ -9,7 +9,7 @@ import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
   public static final double MAX_AMBIGUITY = 0.25;
-  public static final double MAX_Z_ERROR = 0.25;
+  public static final double MAX_Z_ERROR = 0.75; // 0.25
   public static final double MAX_YAW_RATE = 3; // rad/sec
   public static final double MAX_SINGLE_TA = 0.4;
 
@@ -22,7 +22,7 @@ public class VisionConstants {
   public static final double MT2_TRANSLATIONAL_FACTOR = 2.5;
   public static final double MT2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
 
-
+  public static final double ENABLE_REEF_UPDATES_TA = 0.4;
 
   public static final VisionIOLimelight LIMELIGHT_LEFT =
       VisionIOLimelight.getInstance(
@@ -45,12 +45,12 @@ public class VisionConstants {
   public static final VisionIOPhotonVision ARDUCAM_ONE = 
     VisionIOPhotonVision.getInstance(
       "Arducam1", 
-      new Pose3d()
+      new Pose3d(Units.inchesToMeters(7.65), Units.inchesToMeters(2), Units.inchesToMeters(8.625), new Rotation3d(0, Units.degreesToRadians(180 - 32), Math.PI - Units.degreesToRadians(2)))
     );
 
   public static final VisionIOPhotonVision ARDUCAM_TWO = 
     VisionIOPhotonVision.getInstance(
       "Arducam2", 
-      new Pose3d()
+      new Pose3d(Units.inchesToMeters(7.65), Units.inchesToMeters(2), Units.inchesToMeters(8.625), new Rotation3d(0, Units.degreesToRadians(180 - 32), Math.PI - Units.degreesToRadians(2)))
     );
 }

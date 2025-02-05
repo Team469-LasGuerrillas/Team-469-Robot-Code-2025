@@ -194,6 +194,7 @@ public class VisionIOLimelight implements VisionIO {
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
           new double[] {stddevs[0] * VisionConstants.MT_TRANSLATIONAL_FACTOR, stddevs[1] * VisionConstants.MT_TRANSLATIONAL_FACTOR, stddevs[5] * VisionConstants.MT_ROTATIONAL_FACTOR},
+          rawFiducials[0].id,
           PoseObservationType.MEGATAG_1),
       new PoseObservation(
           Clock.time() - Units.millisecondsToSeconds(totalLatencyMs + 0.001),
@@ -202,6 +203,7 @@ public class VisionIOLimelight implements VisionIO {
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
           new double[] {stddevs[6] * VisionConstants.MT2_TRANSLATIONAL_FACTOR, stddevs[7] * VisionConstants.MT2_TRANSLATIONAL_FACTOR, stddevs[11] * VisionConstants.MT2_ROTATIONAL_FACTOR},
+          rawFiducials[0].id,
           PoseObservationType.MEGATAG_2)
     };
 
