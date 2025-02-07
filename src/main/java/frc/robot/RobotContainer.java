@@ -47,7 +47,7 @@ public class RobotContainer {
   private final Drive drive;
 
   private final Vision limelightLeft;
-  private final Vision limelightRight;
+  // private final Vision limelightRight;
   private final Vision arducamOne;
   private final Vision arducamTwo;
 
@@ -70,7 +70,7 @@ public class RobotContainer {
         drive = Drive.getInstance();
 
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
-        limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
+        // limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
         arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
         arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
 
@@ -87,7 +87,7 @@ public class RobotContainer {
         drive = Drive.getInstance();
 
         limelightLeft = new Vision(new VisionIO() {});
-        limelightRight = new Vision(new VisionIO() {});
+        // limelightRight = new Vision(new VisionIO() {});
         arducamOne = new Vision(new VisionIO() {});
         arducamTwo = new Vision(new VisionIO() {});
 
@@ -104,7 +104,7 @@ public class RobotContainer {
         drive = Drive.getInstance();
 
         limelightLeft = new Vision(new VisionIO() {});
-        limelightRight = new Vision(new VisionIO() {});
+        // limelightRight = new Vision(new VisionIO() {});
         arducamOne = new Vision(new VisionIO() {});
         arducamTwo = new Vision(new VisionIO() {});
 

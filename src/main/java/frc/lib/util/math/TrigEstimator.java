@@ -24,7 +24,7 @@ public class TrigEstimator {
         Rotation2d cameraToTagRotation = 
             timestampedRobotPose.get().getRotation()
                 .plus(robotToCam.getRotation().toRotation2d())
-                .plus(Rotation2d.fromDegrees(-tx));
+                .plus(Rotation2d.fromDegrees(tx));
         
         Pose2d tagPose2d = aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
 

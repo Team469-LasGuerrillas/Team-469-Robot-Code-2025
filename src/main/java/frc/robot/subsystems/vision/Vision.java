@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.Dashboard;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.lib.interfaces.vision.VisionIO.PoseObservation;
 import frc.lib.interfaces.vision.VisionIO.PoseObservationType;
@@ -82,11 +83,12 @@ public class Vision extends SubsystemBase {
           onlyReefUpdateGlobal = false;
         }
 
+        Dashboard.m_field.setRobotPose(observation.pose().toPose2d());
+        System.out.println("Drive: " + Drive.getInstance().getPose().getTranslation() + " PV: " + observation.pose());
         // If onlyReefUpdate == true 
         if (rejectPose) {
           robotPosesRejected.add(observation);
           // System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
-          System.out.println("Drive Translation: " + Drive.getInstance().getPose().getTranslation() + " PV Arducam: " + observation.pose().getTranslation());
         } else {
           robotPosesAccepted.add(observation);
 

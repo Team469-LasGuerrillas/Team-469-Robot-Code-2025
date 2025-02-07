@@ -45,12 +45,17 @@ public class VisionConstants {
   public static final VisionIOPhotonVision ARDUCAM_ONE = 
     VisionIOPhotonVision.getInstance(
       "Arducam1", 
-      new Pose3d(Units.inchesToMeters(7.65), Units.inchesToMeters(2), Units.inchesToMeters(8.625), new Rotation3d(0, Units.degreesToRadians(180 - 32), Math.PI - Units.degreesToRadians(2)))
+      new Pose3d(
+        new Translation3d(Units.inchesToMeters(7.946071), Units.inchesToMeters(0.929091), Units.inchesToMeters(9.084813 - 0.125)), 
+        new Rotation3d(Math.PI, Units.degreesToRadians(32), Math.PI))
     );
 
   public static final VisionIOPhotonVision ARDUCAM_TWO = 
     VisionIOPhotonVision.getInstance(
       "Arducam2", 
-      new Pose3d(Units.inchesToMeters(7.65), Units.inchesToMeters(2), Units.inchesToMeters(8.625), new Rotation3d(0, Units.degreesToRadians(180 - 32), Math.PI - Units.degreesToRadians(2)))
+      new Pose3d(
+        // new Translation3d(Units.inchesToMeters(7.946071), Units.inchesToMeters(0.929091), Units.inchesToMeters(9.084813 - 0.125)), 
+        new Translation3d(),
+        new Rotation3d(Math.PI, Units.degreesToRadians(32), Math.PI))
     );
 }

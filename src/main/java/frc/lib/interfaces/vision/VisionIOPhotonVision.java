@@ -12,6 +12,7 @@ import frc.lib.util.Clock;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.TrigEstimator;
 import frc.robot.subsystems.Constants.VisionConstants;
+import frc.robot.subsystems.drive.Drive;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,6 +140,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
   private PoseObservation[] parsePoseObservations() {
     ArrayList<PoseObservation> poseObservations = new ArrayList<PoseObservation>();
+    photonPoseEstimator.setReferencePose(Drive.getInstance().getPose());
 
     for (var result : cameraUnreadResults) {
       var visionEst = photonPoseEstimator.update(result);
