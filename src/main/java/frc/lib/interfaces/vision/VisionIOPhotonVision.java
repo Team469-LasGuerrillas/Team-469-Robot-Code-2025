@@ -155,8 +155,6 @@ public class VisionIOPhotonVision implements VisionIO {
           multitagPose
             .plus(GeomUtil.toTransform3d(robotToCam.getSample(timestamp).get())).getTranslation()
             .getDistance(tagPose.getTranslation());
-      
-        double[] stdDevs = calculateSTDS(result, tagCount);
 
         poseObservations.add(
           new PoseObservation(
@@ -165,7 +163,7 @@ public class VisionIOPhotonVision implements VisionIO {
             bestTarget.area,
             visionEst.get().targetsUsed.size(),
             multitagPose,
-            stdDevs,
+            calculateSTDS(result, tagCount, PoseObservationType.MULTITAG_1),
             bestTarget.getFiducialId(),
             PoseObservationType.MULTITAG_1)
         );
@@ -184,7 +182,7 @@ public class VisionIOPhotonVision implements VisionIO {
               robotToCam.getSample(timestamp).get(), 
               bestTarget.fiducialId
             ),
-            stdDevs,
+            calculateSTDS(result, tagCount, PoseObservationType.MULTITAG_2),
             bestTarget.getFiducialId(),
             PoseObservationType.MULTITAG_2)
         );
@@ -194,7 +192,7 @@ public class VisionIOPhotonVision implements VisionIO {
     return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
   }
 
-  private double[] calculateSTDS(PhotonPipelineResult result, double tagCount) {
+  private double[] calculateSTDS(PhotonPipelineResult result, double tagCount, PoseObservationType type) {
     double totalTagDistance = 0.0;
     for (var target : result.targets) {
       totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
@@ -202,9 +200,17 @@ public class VisionIOPhotonVision implements VisionIO {
 
     double averageTagDistance = totalTagDistance / result.targets.size();
 
+    double translationalStdBaseline = VisionConstants.MULTITAG_TRANSLATIONAL_FACTOR;;
+    double rotationalStdBaseline = VisionConstants.MULTITAG_ROTATIONAL_FACTOR;
+
+    if (type == PoseObservationType.MULTITAG_2) {
+      translationalStdBaseline = VisionConstants.MULTITAG2_TRANSLATIONAL_FACTOR;
+      rotationalStdBaseline = VisionConstants.MULITAG2_ROTATIONAL_FACTOR;
+    }
+
     double stdDevFactor = Math.pow(averageTagDistance, 2) / tagCount;
-    double linearStdDev = VisionConstants.LINEAR_STD_BASELINE * stdDevFactor;
-    double angularStdDev = VisionConstants.ANGULAR_STD_BASELINE * stdDevFactor;
+    double linearStdDev = translationalStdBaseline * stdDevFactor;
+    double angularStdDev = rotationalStdBaseline * stdDevFactor;
 
     return new double[] {linearStdDev, linearStdDev, angularStdDev};
   }

@@ -7,6 +7,8 @@
 
 package frc.lib.util.math;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,9 +17,35 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.lib.util.FieldLayout;
+import frc.robot.subsystems.Constants.VisionConstants;
+import frc.robot.subsystems.drive.Drive;
 
 /** Geometry utilities for working with translations, rotations, transforms, and poses. */
 public class GeomUtil {
+  public static boolean isLookingAtReef() {
+    Pose2d robotPose = Drive.getInstance().getPose();
+    Pose2d reefPose = FieldLayout.REEF_CENTER;
+
+    Rotation2d rotationToReef =
+      new Rotation2d(reefPose.getX() - robotPose.getX(), reefPose.getY() - robotPose.getY());
+
+    return ToleranceUtil.epsilonEqualsRadialDegrees(rotationToReef.getDegrees(), robotPose.getRotation().getDegrees(), VisionConstants.LOOKING_AT_REEF_THRESHOLD_DEGREES);
+  }
+
+  public static boolean isWithinReefRadius() {
+    Pose2d robotPose = Drive.getInstance().getPose();
+    Pose2d reefPose = FieldLayout.REEF_CENTER;
+
+    double distance = robotPose.getTranslation().getDistance(reefPose.getTranslation());
+
+    if (distance < VisionConstants.NEAR_REEF_RADIUS) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Creates a pure translating transform
    *

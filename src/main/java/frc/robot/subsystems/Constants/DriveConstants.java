@@ -34,7 +34,7 @@ public class DriveConstants {
   public static final double HEADING_TOLERANCE_DEGREES = 3;
 
   // Linear Controller
-  public static final double LINEAR_P = 4.0;
+  public static final double LINEAR_P = 2.0;
   public static final double LINEAR_I = 0.0;
   public static final double LINEAR_D = 0.0;
 

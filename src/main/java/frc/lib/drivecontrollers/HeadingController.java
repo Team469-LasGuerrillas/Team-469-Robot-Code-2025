@@ -43,7 +43,7 @@ public class HeadingController {
 
     double output = controller.calculate(Drive.getInstance().getRotation().getRadians(), goalHeadingSupplier.get().getRadians());
 
-    if (controller.getPositionError() > Units.degreesToRadians(DriveConstants.HEADING_TOLERANCE_DEGREES)) {
+    if (Math.abs(controller.getPositionError()) > Units.degreesToRadians(DriveConstants.HEADING_TOLERANCE_DEGREES)) {
       return output; 
     }
     else {

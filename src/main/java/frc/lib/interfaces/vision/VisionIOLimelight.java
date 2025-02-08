@@ -123,6 +123,11 @@ public class VisionIOLimelight implements VisionIO {
         0);
   }
 
+  @Override
+  public void setTagFiltersOverride(int[] tags) {
+    LimelightHelpers.SetFiducialIDFiltersOverride(limelightName, tags);
+  }
+  
   private TargettingType getPipeType() {
     String pipeString = LimelightHelpers.getCurrentPipelineType(limelightName);
 
@@ -193,7 +198,7 @@ public class VisionIOLimelight implements VisionIO {
           LimelightHelpers.getTA(limelightName),
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[0] * VisionConstants.MT_TRANSLATIONAL_FACTOR, stddevs[1] * VisionConstants.MT_TRANSLATIONAL_FACTOR, stddevs[5] * VisionConstants.MT_ROTATIONAL_FACTOR},
+          new double[] {stddevs[0] * VisionConstants.MEGATAG_TRANSLATIONAL_FACTOR, stddevs[1] * VisionConstants.MEGATAG_TRANSLATIONAL_FACTOR, stddevs[5] * VisionConstants.MEGATAG_ROTATIONAL_FACTOR},
           rawFiducials[0].id,
           PoseObservationType.MEGATAG_1),
       new PoseObservation(
@@ -202,7 +207,7 @@ public class VisionIOLimelight implements VisionIO {
           LimelightHelpers.getTA(limelightName),
           LimelightHelpers.getTargetCount(limelightName),
           LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[6] * VisionConstants.MT2_TRANSLATIONAL_FACTOR, stddevs[7] * VisionConstants.MT2_TRANSLATIONAL_FACTOR, stddevs[11] * VisionConstants.MT2_ROTATIONAL_FACTOR},
+          new double[] {stddevs[6] * VisionConstants.MEGATAG2_TRANSLATIONAL_FACTOR, stddevs[7] * VisionConstants.MEGATAG2_TRANSLATIONAL_FACTOR, stddevs[11] * VisionConstants.MEGATAG2_ROTATIONAL_FACTOR},
           rawFiducials[0].id,
           PoseObservationType.MEGATAG_2)
     };

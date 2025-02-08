@@ -69,4 +69,6 @@ public interface VisionIO {
   public default void setRobotRotationUpdate(Rotation2d rotation, Rotation2d angularVelocity) {}
 
   public default void setPipelineIndex(int index) {}
+
+  public default void setTagFiltersOverride(int[] tags) {}
 }

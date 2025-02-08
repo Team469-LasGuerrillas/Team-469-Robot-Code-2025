@@ -8,24 +8,32 @@ import frc.lib.interfaces.vision.VisionIOLimelight;
 import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
-  public static final double MAX_AMBIGUITY = 0.25;
+  public static final double MAX_AMBIGUITY = 1;
   public static final double MAX_Z_ERROR = 0.5; // 0.25
   public static final double MAX_YAW_RATE = 3; // rad/sec
-  public static final double MAX_SINGLE_TA = 0.4;
+  public static final double MAX_MEGATAG_SINGLE_TA = 0.4;
+  public static final double MAX_MULITAG_SINGLE_TA = 0.2;
 
-  public static final double LINEAR_STD_BASELINE = 0.3;
-  public static final double ANGULAR_STD_BASELINE = 0.3;
+  public static final double MULTITAG_TRANSLATIONAL_FACTOR = 0.01;
+  public static final double MULTITAG_ROTATIONAL_FACTOR = 1;
 
-  public static final double MT_TRANSLATIONAL_FACTOR = 4;
-  public static final double MT_ROTATIONAL_FACTOR = 6;
+  public static final double MULTITAG2_TRANSLATIONAL_FACTOR = 0.00469;
+  public static final double MULITAG2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
 
-  public static final double MT2_TRANSLATIONAL_FACTOR = 2.5;
-  public static final double MT2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
+  public static final double MEGATAG_TRANSLATIONAL_FACTOR = 3;
+  public static final double MEGATAG_ROTATIONAL_FACTOR = 6;
+
+  public static final double MEGATAG2_TRANSLATIONAL_FACTOR = 2;
+  public static final double MEGATAG2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
 
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
-
   public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 1;
-  
+  public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 70;
+  public static final double NEAR_REEF_RADIUS = 2.5;
+
+  public static final int[] REEF_TAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+  public static final int[] ALL_TAG_IDS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+
   public static final VisionIOLimelight LIMELIGHT_LEFT =
       VisionIOLimelight.getInstance(
         "limelight-left",

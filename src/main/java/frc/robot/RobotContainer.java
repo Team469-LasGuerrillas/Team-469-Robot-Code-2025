@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Rotation;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -24,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Dashboard;
 import frc.lib.interfaces.vision.VisionIO;
+import frc.lib.util.FieldLayout;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Constants.VisionConstants;
@@ -58,6 +61,12 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    for (var entry : FieldLayout.reefPositionPose.entrySet()) {
+      System.out.println("Key: " + entry.getKey() + " Valueueeueue: " + entry.getValue());
+    }
+
+    System.out.println(FieldLayout.REEF_CENTER);
+
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -135,15 +144,15 @@ public class RobotContainer {
     // controller.y().whileTrue(DriveCommands.aimAssistToPose(controller, new Pose2d(2, 4.03, new Rotation2d()))
     // );
 
-    // controller.y().whileTrue(
-    //   DriveCommands.pidToClosestReefPose()
-    // );
+    controller.y().whileTrue(
+      DriveCommands.pidToClosestReefPose()
+    );
 
     controller.rightBumper().whileTrue(
       DriveCommands.aimAssistToClosestReefPose(controller, 0.469)
     );
 
-    controller.y().whileTrue(DriveCommands.pidToClosestReefPose());
+    // controller.y().whileTrue(DriveCommands.autoRotate(controller, () -> Rotation2d.fromDegrees(45)));
     
     controller.a().whileTrue(Commands.startEnd(
       () -> drive.setPathfinding(new Pose2d(2, 4.05, new Rotation2d())), 

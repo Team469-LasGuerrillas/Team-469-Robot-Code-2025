@@ -1,5 +1,7 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,6 +13,7 @@ import frc.lib.interfaces.vision.VisionIO.PoseObservation;
 import frc.lib.interfaces.vision.VisionIO.PoseObservationType;
 import frc.lib.interfaces.vision.VisionIO.TargettingType;
 import frc.lib.util.Clock;
+import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.Constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -32,6 +35,7 @@ public class Vision extends SubsystemBase {
 
   public Vision(VisionIO io) {
     this.io = io;
+    io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
   }
 
   @Override
@@ -50,9 +54,9 @@ public class Vision extends SubsystemBase {
                 || (observation.tagCount() == 1
                     && observation.ambiguity() > VisionConstants.MAX_AMBIGUITY) // Cannot be high ambiguity
                 || (observation.tagCount() == 1
-                    && (observation.type() == PoseObservationType.MEGATAG_1 || observation.type() == PoseObservationType.MULTITAG_1)
-                    && observation.ta() < VisionConstants.MAX_SINGLE_TA)
-                || !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 1)
+                    && ((observation.type() == PoseObservationType.MEGATAG_1 && observation.ta() < VisionConstants.MAX_MEGATAG_SINGLE_TA)
+                    || (observation.type() == PoseObservationType.MULTITAG_1 && observation.ta() < VisionConstants.MAX_MULITAG_SINGLE_TA)))
+                || (observation.tagCount() == 1 && !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 1))
                 || Math.abs(observation.pose().getZ())
                     > VisionConstants.MAX_Z_ERROR // Must have realistic Z coordinate
 
@@ -66,21 +70,29 @@ public class Vision extends SubsystemBase {
                 || Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
 
         boolean onlyReefUpdateLocal = 
-          observation.ta() > VisionConstants.ENABLE_REEF_UPDATES_TA
-          && observation.tagCount() == 1
-          && isReefId(observation.fiducialId());
+          // observation.ta() > VisionConstants.ENABLE_REEF_UPDATES_TA
+          // && isReefId(observation.fiducialId());
+
+          GeomUtil.isLookingAtReef() && GeomUtil.isWithinReefRadius();
+
           // TODO: && IF WE CURRENTLY HAVE A CORAL
         
         if (onlyReefUpdateLocal) {
           onlyReefUpdateGlobal = true;
           onlyReefUpdateCamera = getCameraName();
           lastGoodReefUpdateTime = Clock.time();
-          System.out.println("Only Accepting Camera " + getCameraName());
+          // System.out.println("Only Accepting Camera " + getCameraName());
         }
 
-        if (onlyReefUpdateGlobal && !onlyReefUpdateCamera.equals(getCameraName())) {
-          rejectPose = true;
-          System.out.println("Auto Rejecting Camera " + getCameraName());
+        if (onlyReefUpdateGlobal) {
+          io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
+
+          if (!onlyReefUpdateCamera.equals(getCameraName()) && (observation.type() != PoseObservationType.MEGATAG_1 || observation.type() != PoseObservationType.MEGATAG_2)) {
+            rejectPose = true;
+          }
+          // System.out.println("Auto Rejecting Camera " + getCameraName());
+        } else {
+          io.setTagFiltersOverride(VisionConstants.ALL_TAG_IDS);
         }
 
         if (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName()) 
@@ -90,17 +102,19 @@ public class Vision extends SubsystemBase {
 
         Dashboard.m_visionField.setRobotPose(observation.pose().toPose2d());
 
+        Logger.recordOutput(getCameraName(),
+        !rejectPose);
+
         if (rejectPose) {
           robotPosesRejected.add(observation);
           System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
         } else {
           robotPosesAccepted.add(observation);
-
           System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
-
+          
           boolean updateYaw =
               observation.tagCount() >= 2;
-            
+
           Drive.getInstance()
               .addVisionMeasurement(
                   observation.pose().toPose2d(),
@@ -108,7 +122,7 @@ public class Vision extends SubsystemBase {
                   VecBuilder.fill(
                       observation.stdDevs()[0],
                       observation.stdDevs()[1],
-                      updateYaw ? observation.stdDevs()[2] : VisionConstants.MT2_ROTATIONAL_FACTOR));
+                      updateYaw ? observation.stdDevs()[2] : VisionConstants.MEGATAG2_ROTATIONAL_FACTOR));
         }
 
         Logger.recordOutput(
