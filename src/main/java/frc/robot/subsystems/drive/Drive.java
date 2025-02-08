@@ -330,7 +330,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Dashboard.m_field.setRobotPose(getPose());
+    Dashboard.m_field.setRobotPose(getPose());
 
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);

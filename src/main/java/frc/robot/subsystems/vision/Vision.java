@@ -83,12 +83,11 @@ public class Vision extends SubsystemBase {
           onlyReefUpdateGlobal = false;
         }
 
-        Dashboard.m_field.setRobotPose(observation.pose().toPose2d());
-        System.out.println("Drive: " + Drive.getInstance().getPose().getTranslation() + " PV: " + observation.pose());
-        // If onlyReefUpdate == true 
+        Dashboard.m_visionField.setRobotPose(observation.pose().toPose2d());
+
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          // System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
         } else {
           robotPosesAccepted.add(observation);
 

@@ -10,15 +10,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class Dashboard {
   public static final Field2d m_field = new Field2d();
+  public static final Field2d m_visionField = new Field2d();
+
   private static SendableChooser<Command> autoChooser;
 
   private static boolean isCompetition = false;
 
   public static void addWidgets(ShuffleboardTab tab) {
     tab
-    .add(m_field)
-    .withSize(6, 6)
+    .add("Good Odometry", m_field)
+    .withSize(7, 6)
     .withPosition(0, 0);
+
+    tab
+    .add("Vision Odometry", m_visionField)
+    .withSize(7, 6)
+    .withPosition(7, 0);
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
@@ -28,8 +35,8 @@ public class Dashboard {
 
     tab
     .add("Auton Chooser", autoChooser)
-    .withSize(7, 6)
-    .withPosition(6, 0);
+    .withSize(1, 6)
+    .withPosition(14, 0);
   }
 
   public static Command getAutonomousCommand() {

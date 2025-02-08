@@ -157,37 +157,37 @@ public class VisionIOPhotonVision implements VisionIO {
           multitagPose
             .plus(GeomUtil.toTransform3d(robotToCam.getSample(timestamp).get())).getTranslation()
             .getDistance(tagPose.getTranslation());
-          
-        poseObservations.add(
-          new PoseObservation(
-            timestamp,
-            bestTarget.poseAmbiguity,
-            bestTarget.area,
-            visionEst.get().targetsUsed.size(),
-            multitagPose,
-            new double[] {0.1, 0.1, 0.1},
-            bestTarget.getFiducialId(),
-            PoseObservationType.MULTITAG_1)
-        );
 
         // poseObservations.add(
         //   new PoseObservation(
         //     timestamp,
-        //     0,
-        //     0,
+        //     bestTarget.poseAmbiguity,
+        //     bestTarget.area,
         //     visionEst.get().targetsUsed.size(),
-        //     TrigEstimator.getTrigBasedEstimatedPose(
-        //       distance3d, 
-        //       bestTarget.yaw, 
-        //       bestTarget.pitch, 
-        //       timestamp, 
-        //       robotToCam.getSample(timestamp).get(), 
-        //       bestTarget.fiducialId
-        //     ),
+        //     multitagPose,
         //     new double[] {0.1, 0.1, 0.1},
         //     bestTarget.getFiducialId(),
-        //     PoseObservationType.MULTITAG_2)
+        //     PoseObservationType.MULTITAG_1)
         // );
+
+        poseObservations.add(
+          new PoseObservation(
+            timestamp,
+            0,
+            0,
+            visionEst.get().targetsUsed.size(),
+            TrigEstimator.getTrigBasedEstimatedPose(
+              distance3d, 
+              bestTarget.yaw, 
+              bestTarget.pitch, 
+              timestamp, 
+              robotToCam.getSample(timestamp).get(), 
+              bestTarget.fiducialId
+            ),
+            new double[] {0.1, 0.1, 0.1},
+            bestTarget.getFiducialId(),
+            PoseObservationType.MULTITAG_2)
+        );
 
       }
     }
