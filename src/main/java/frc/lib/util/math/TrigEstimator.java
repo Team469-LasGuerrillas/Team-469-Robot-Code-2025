@@ -23,7 +23,7 @@ public class TrigEstimator {
         Rotation2d timestampedRobotRotation = timestampedRobotPose.get().getRotation();
         Pose2d tagPose2d = aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
         
-        double distance2d = distance3d * Math.cos(-robotToCam.getRotation().getY() - ty);
+        double distance2d = distance3d * Math.cos(robotToCam.getRotation().getY() + ty);
         
         Rotation2d camToTagRotation =
         timestampedRobotPose
