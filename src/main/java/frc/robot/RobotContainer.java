@@ -46,8 +46,8 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
 
-  // private final Vision limelightLeft;
-  // private final Vision limelightRight;
+  private final Vision limelightLeft;
+  private final Vision limelightRight;
   private final Vision arducamOne;
   private final Vision arducamTwo;
 
@@ -69,8 +69,8 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        // limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
-        // limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
+        limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
+        limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
         arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
         arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
 
@@ -86,8 +86,8 @@ public class RobotContainer {
             new ModuleIOSim(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        // limelightLeft = new Vision(new VisionIO() {});
-        // limelightRight = new Vision(new VisionIO() {});
+        limelightLeft = new Vision(new VisionIO() {});
+        limelightRight = new Vision(new VisionIO() {});
         arducamOne = new Vision(new VisionIO() {});
         arducamTwo = new Vision(new VisionIO() {});
 
@@ -103,8 +103,8 @@ public class RobotContainer {
             new ModuleIO() {});
         drive = Drive.getInstance();
 
-        // limelightLeft = new Vision(new VisionIO() {});
-        // limelightRight = new Vision(new VisionIO() {});
+        limelightLeft = new Vision(new VisionIO() {});
+        limelightRight = new Vision(new VisionIO() {});
         arducamOne = new Vision(new VisionIO() {});
         arducamTwo = new Vision(new VisionIO() {});
 

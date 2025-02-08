@@ -9,7 +9,7 @@ import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
   public static final double MAX_AMBIGUITY = 0.25;
-  public static final double MAX_Z_ERROR = 0.75; // 0.25
+  public static final double MAX_Z_ERROR = 0.5; // 0.25
   public static final double MAX_YAW_RATE = 3; // rad/sec
   public static final double MAX_SINGLE_TA = 0.4;
 
@@ -24,6 +24,8 @@ public class VisionConstants {
 
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
 
+  public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 1;
+  
   public static final VisionIOLimelight LIMELIGHT_LEFT =
       VisionIOLimelight.getInstance(
         "limelight-left",

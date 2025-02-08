@@ -3,9 +3,6 @@ package frc.lib.interfaces.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
@@ -153,22 +150,25 @@ public class VisionIOPhotonVision implements VisionIO {
         Pose3d multitagPose = visionEst.get().estimatedPose;
         double timestamp = Clock.time() - Units.millisecondsToSeconds(result.metadata.getLatencyMillis());
         Pose3d tagPose = aprilTagFieldLayout.getTagPose(bestTarget.fiducialId).get();
+        double tagCount = visionEst.get().targetsUsed.size();
         double distance3d = 
           multitagPose
             .plus(GeomUtil.toTransform3d(robotToCam.getSample(timestamp).get())).getTranslation()
             .getDistance(tagPose.getTranslation());
+      
+        double[] stdDevs = calculateSTDS(result, tagCount);
 
-        // poseObservations.add(
-        //   new PoseObservation(
-        //     timestamp,
-        //     bestTarget.poseAmbiguity,
-        //     bestTarget.area,
-        //     visionEst.get().targetsUsed.size(),
-        //     multitagPose,
-        //     new double[] {0.1, 0.1, 0.1},
-        //     bestTarget.getFiducialId(),
-        //     PoseObservationType.MULTITAG_1)
-        // );
+        poseObservations.add(
+          new PoseObservation(
+            timestamp,
+            bestTarget.poseAmbiguity,
+            bestTarget.area,
+            visionEst.get().targetsUsed.size(),
+            multitagPose,
+            stdDevs,
+            bestTarget.getFiducialId(),
+            PoseObservationType.MULTITAG_1)
+        );
 
         poseObservations.add(
           new PoseObservation(
@@ -184,7 +184,7 @@ public class VisionIOPhotonVision implements VisionIO {
               robotToCam.getSample(timestamp).get(), 
               bestTarget.fiducialId
             ),
-            new double[] {0.1, 0.1, 0.1},
+            stdDevs,
             bestTarget.getFiducialId(),
             PoseObservationType.MULTITAG_2)
         );
@@ -194,14 +194,13 @@ public class VisionIOPhotonVision implements VisionIO {
     return poseObservations.toArray(new PoseObservation[poseObservations.size()]);
   }
 
-  private double[] calculateSTDS(PhotonPipelineResult result, MultiTargetPNPResult multitagResult) {
+  private double[] calculateSTDS(PhotonPipelineResult result, double tagCount) {
     double totalTagDistance = 0.0;
     for (var target : result.targets) {
       totalTagDistance += target.bestCameraToTarget.getTranslation().getNorm();
     }
 
     double averageTagDistance = totalTagDistance / result.targets.size();
-    double tagCount = multitagResult.fiducialIDsUsed.size();
 
     double stdDevFactor = Math.pow(averageTagDistance, 2) / tagCount;
     double linearStdDev = VisionConstants.LINEAR_STD_BASELINE * stdDevFactor;

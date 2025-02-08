@@ -10,15 +10,14 @@ import frc.lib.interfaces.vision.VisionIO;
 import frc.lib.interfaces.vision.VisionIO.PoseObservation;
 import frc.lib.interfaces.vision.VisionIO.PoseObservationType;
 import frc.lib.interfaces.vision.VisionIO.TargettingType;
+import frc.lib.util.Clock;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.Constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.lib.interfaces.vision.VisionIOInputsAutoLogged;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -29,6 +28,7 @@ public class Vision extends SubsystemBase {
   // Camera Update / OnlyReefUpdates Boolean
   public static String onlyReefUpdateCamera = "";
   public static boolean onlyReefUpdateGlobal = false;
+  public static double lastGoodReefUpdateTime = 0;
 
   public Vision(VisionIO io) {
     this.io = io;
@@ -52,7 +52,7 @@ public class Vision extends SubsystemBase {
                 || (observation.tagCount() == 1
                     && (observation.type() == PoseObservationType.MEGATAG_1 || observation.type() == PoseObservationType.MULTITAG_1)
                     && observation.ta() < VisionConstants.MAX_SINGLE_TA)
-                || !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 2)
+                || !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 1)
                 || Math.abs(observation.pose().getZ())
                     > VisionConstants.MAX_Z_ERROR // Must have realistic Z coordinate
 
@@ -69,17 +69,22 @@ public class Vision extends SubsystemBase {
           observation.ta() > VisionConstants.ENABLE_REEF_UPDATES_TA
           && observation.tagCount() == 1
           && isReefId(observation.fiducialId());
+          // TODO: && IF WE CURRENTLY HAVE A CORAL
         
         if (onlyReefUpdateLocal) {
           onlyReefUpdateGlobal = true;
           onlyReefUpdateCamera = getCameraName();
+          lastGoodReefUpdateTime = Clock.time();
+          System.out.println("Only Accepting Camera " + getCameraName());
         }
 
         if (onlyReefUpdateGlobal && !onlyReefUpdateCamera.equals(getCameraName())) {
           rejectPose = true;
+          System.out.println("Auto Rejecting Camera " + getCameraName());
         }
 
-        if (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName())) {
+        if (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName()) 
+            || Clock.time() - lastGoodReefUpdateTime > VisionConstants.LAST_GOOD_UPDATE_TIME_THRESHOLD) {
           onlyReefUpdateGlobal = false;
         }
 
@@ -87,7 +92,7 @@ public class Vision extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ());
+          System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
         } else {
           robotPosesAccepted.add(observation);
 
