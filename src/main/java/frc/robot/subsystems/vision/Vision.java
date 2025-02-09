@@ -37,7 +37,7 @@ public class Vision extends SubsystemBase {
     this.io = io;
     io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
   }
-
+  
   @Override
   public void periodic() {
     setRobotYaw();
@@ -47,6 +47,13 @@ public class Vision extends SubsystemBase {
     List<PoseObservation> robotPosesAccepted = new LinkedList<>();
     List<PoseObservation> robotPosesRejected = new LinkedList<>();
     
+    boolean isOldReefOnlyTime = Clock.time() - lastGoodReefUpdateTime > VisionConstants.LAST_GOOD_UPDATE_TIME_THRESHOLD;
+
+    if (isOldReefOnlyTime) {
+      onlyReefUpdateGlobal = false;
+      io.setTagFiltersOverride(VisionConstants.ALL_TAG_IDS);
+    }
+
     if ((hasLatestUpdate() && getTargettingType() == TargettingType.FIDUCIAL) && hasTargets()) {
       for (PoseObservation observation : inputs.poseObservations) {
         boolean rejectPose =
@@ -70,10 +77,10 @@ public class Vision extends SubsystemBase {
                 || Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
 
         boolean onlyReefUpdateLocal = 
-          // observation.ta() > VisionConstants.ENABLE_REEF_UPDATES_TA
-          // && isReefId(observation.fiducialId());
-
-          GeomUtil.isLookingAtReef() && GeomUtil.isWithinReefRadius();
+          GeomUtil.isLookingAtReef() 
+          && GeomUtil.isWithinReefRadius() 
+          && (observation.type() == PoseObservationType.MEGATAG_1 
+              || observation.type() == PoseObservationType.MEGATAG_2);
 
           // TODO: && IF WE CURRENTLY HAVE A CORAL
         
@@ -81,39 +88,38 @@ public class Vision extends SubsystemBase {
           onlyReefUpdateGlobal = true;
           onlyReefUpdateCamera = getCameraName();
           lastGoodReefUpdateTime = Clock.time();
-          // System.out.println("Only Accepting Camera " + getCameraName());
         }
 
         if (onlyReefUpdateGlobal) {
           io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
 
-          if (!onlyReefUpdateCamera.equals(getCameraName()) && (observation.type() != PoseObservationType.MEGATAG_1 || observation.type() != PoseObservationType.MEGATAG_2)) {
+          if (observation.type() == PoseObservationType.MULTITAG_1 || observation.type() != PoseObservationType.MULTITAG_2) {
             rejectPose = true;
           }
-          // System.out.println("Auto Rejecting Camera " + getCameraName());
-        } else {
-          io.setTagFiltersOverride(VisionConstants.ALL_TAG_IDS);
-        }
-
-        if (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName()) 
-            || Clock.time() - lastGoodReefUpdateTime > VisionConstants.LAST_GOOD_UPDATE_TIME_THRESHOLD) {
+        } 
+        else if (!onlyReefUpdateGlobal || (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName()))) {
           onlyReefUpdateGlobal = false;
+          io.setTagFiltersOverride(VisionConstants.ALL_TAG_IDS);
         }
 
         Dashboard.m_visionField.setRobotPose(observation.pose().toPose2d());
 
-        Logger.recordOutput(getCameraName(),
-        !rejectPose);
+        Logger.recordOutput(getCameraName(), !rejectPose);
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
+          // System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
+          System.out.println("REJECTING!!! Tag Type: " + observation.type());
         } else {
           robotPosesAccepted.add(observation);
-          System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
+          // System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
           
           boolean updateYaw =
               observation.tagCount() >= 2;
+            
+          if (updateYaw) {
+            System.out.println("Updating Yaw with " + getCameraName() + "STD: " + observation.stdDevs()[2]);
+          }
 
           Drive.getInstance()
               .addVisionMeasurement(

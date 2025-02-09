@@ -197,8 +197,8 @@ public class VisionIOLimelight implements VisionIO {
           rawFiducials[0].ambiguity, // only applicable for 1 tag
           LimelightHelpers.getTA(limelightName),
           LimelightHelpers.getTargetCount(limelightName),
-          LimelightHelpers.getBotPose3d_wpiBlue_MegaTag2(limelightName),
-          new double[] {stddevs[0] * VisionConstants.MEGATAG_TRANSLATIONAL_FACTOR, stddevs[1] * VisionConstants.MEGATAG_TRANSLATIONAL_FACTOR, stddevs[5] * VisionConstants.MEGATAG_ROTATIONAL_FACTOR},
+          LimelightHelpers.getBotPose3d_wpiBlue(limelightName),
+          new double[] {stddevs[0] * VisionConstants.MEGATAG_TRANSLATIONAL_FACTOR, stddevs[1] * VisionConstants.MEGATAG_TRANSLATIONAL_FACTOR, VisionConstants.MEGATAG_ROTATIONAL_STD},
           rawFiducials[0].id,
           PoseObservationType.MEGATAG_1),
       new PoseObservation(
