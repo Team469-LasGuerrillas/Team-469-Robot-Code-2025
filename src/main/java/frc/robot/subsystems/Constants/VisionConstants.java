@@ -21,7 +21,7 @@ public class VisionConstants {
   public static final double MULITAG2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
 
   public static final double MEGATAG_TRANSLATIONAL_FACTOR = 3;
-  public static final double MEGATAG_ROTATIONAL_STD = 1 ;
+  public static final double MEGATAG_ROTATIONAL_STD = 0.0469;
 
   public static final double MEGATAG2_TRANSLATIONAL_FACTOR = 2;
   public static final double MEGATAG2_ROTATIONAL_FACTOR = 999999999999999999999999999999999999999999.9;
