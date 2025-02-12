@@ -63,7 +63,7 @@ public class Vision extends SubsystemBase {
                 || (observation.tagCount() == 1
                     && ((observation.type() == PoseObservationType.MEGATAG_1 && observation.ta() < VisionConstants.MAX_MEGATAG_SINGLE_TA)
                     || (observation.type() == PoseObservationType.MULTITAG_1 && observation.ta() < VisionConstants.MAX_MULITAG_SINGLE_TA)))
-                || ((observation.type() == PoseObservationType.MULTITAG_2 || observation.type() == PoseObservationType.MEGATAG_2) && !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), 1))
+                || ((observation.type() == PoseObservationType.MULTITAG_2 || observation.type() == PoseObservationType.MEGATAG_2) && !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), VisionConstants.MAX_ROTATION_ERROR_DEGREES))
                 || Math.abs(observation.pose().getZ())
                     > VisionConstants.MAX_Z_ERROR // Must have realistic Z coordinate
 

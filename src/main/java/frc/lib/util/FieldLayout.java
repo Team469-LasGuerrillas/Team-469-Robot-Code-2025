@@ -17,8 +17,8 @@ public class FieldLayout {
     AL, AR, BL, BR, CL, CR, DL, DR, EL, ER, FL, FR
   };
 
-  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.4, Units.inchesToMeters(6.5), new Rotation2d());
-  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.4, Units.inchesToMeters(-6.5), new Rotation2d());
+  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.25, Units.inchesToMeters(6.5), new Rotation2d());
+  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.25, Units.inchesToMeters(-6.5), new Rotation2d());
 
   public static Pose2d REEF_CENTER = new Pose2d(4.5, AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldWidth() / 2, new Rotation2d());
 
