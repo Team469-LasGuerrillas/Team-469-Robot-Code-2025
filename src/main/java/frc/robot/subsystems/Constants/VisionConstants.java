@@ -8,7 +8,7 @@ import frc.lib.interfaces.vision.VisionIOLimelight;
 import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
-  public static final double MAX_AMBIGUITY = 1;
+  public static final double MAX_AMBIGUITY = 0.4;
   public static final double MAX_Z_ERROR = 0.5; // 0.25
   public static final double MAX_ROTATION_ERROR_DEGREES = 2;
   public static final double MAX_YAW_RATE = 3; // rad/sec

@@ -102,7 +102,7 @@ public class VisionIOLimelight implements VisionIO {
   public void setPoseRobotSpace(Pose3d pose) {
     LimelightHelpers.setCameraPose_RobotSpace(
         limelightName,
-        -pose.getX(),
+        pose.getX(),
         pose.getY(),
         pose.getZ(),
         Math.toDegrees(pose.getRotation().getX()),
