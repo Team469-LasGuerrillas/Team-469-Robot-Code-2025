@@ -8,7 +8,7 @@ import frc.lib.interfaces.vision.VisionIOLimelight;
 import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
-  public static final double MAX_AMBIGUITY = 0.4;
+  public static final double MAX_AMBIGUITY = 0.9;
   public static final double MAX_Z_ERROR = 0.5; // 0.25
   public static final double MAX_ROTATION_ERROR_DEGREES = 2;
   public static final double MAX_YAW_RATE = 3; // rad/sec
@@ -39,8 +39,8 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-left",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(-7.1), Units.inchesToMeters(9.8)),
-          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(-25))
+          new Translation3d(Units.inchesToMeters(8.625), Units.inchesToMeters(-7.1), Units.inchesToMeters(9.8)),
+          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(35), Units.degreesToRadians(-25))
         )
       );
   
@@ -48,8 +48,8 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-right",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(7.1), Units.inchesToMeters(9.8)),
-          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(25))
+          new Translation3d(Units.inchesToMeters(8.625), Units.inchesToMeters(7.1), Units.inchesToMeters(9.8)),
+          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(35), Units.degreesToRadians(25))
         )
       );
 

@@ -56,26 +56,42 @@ public class Vision extends SubsystemBase {
 
     if ((hasLatestUpdate() && getTargettingType() == TargettingType.FIDUCIAL) && hasTargets()) {
       for (PoseObservation observation : inputs.poseObservations) {
-        boolean rejectPose =
-            observation.tagCount() == 0 // Must have at least one tag
-                || (observation.tagCount() == 1
-                    && observation.ambiguity() > VisionConstants.MAX_AMBIGUITY) // Cannot be high ambiguity
-                || (observation.tagCount() == 1
-                    && ((observation.type() == PoseObservationType.MEGATAG_1 && observation.ta() < VisionConstants.MAX_MEGATAG_SINGLE_TA)
-                    || (observation.type() == PoseObservationType.MULTITAG_1 && observation.ta() < VisionConstants.MAX_MULITAG_SINGLE_TA)))
-                || ((observation.type() == PoseObservationType.MULTITAG_2 || observation.type() == PoseObservationType.MEGATAG_2) && !ToleranceUtil.epsilonEquals(observation.pose().getRotation().toRotation2d().getDegrees(), Drive.getInstance().getRotation().getDegrees(), VisionConstants.MAX_ROTATION_ERROR_DEGREES))
-                || Math.abs(observation.pose().getZ())
-                    > VisionConstants.MAX_Z_ERROR // Must have realistic Z coordinate
+        boolean hasNoTags = observation.tagCount() == 0;
+        
+        boolean hasBadAmbiguityOneTag = (observation.tagCount() == 1
+          & observation.ambiguity() > VisionConstants.MAX_AMBIGUITY);
+        
+        boolean hasBadTaOneTag = (observation.tagCount() == 1
+        && ((observation.type() == PoseObservationType.MEGATAG_1 && observation.ta() < VisionConstants.MAX_MEGATAG_SINGLE_TA)
+        || (observation.type() == PoseObservationType.MULTITAG_1 && observation.ta() < VisionConstants.MAX_MULITAG_SINGLE_TA)));
+        
+        boolean hasBadRotation = 
+        observation.tagCount() == 1 &&
+        !ToleranceUtil.epsilonEquals(
+          observation.pose().getRotation().toRotation2d().getDegrees(), 
+          Drive.getInstance().getRotation().getDegrees(), 
+          VisionConstants.MAX_ROTATION_ERROR_DEGREES);
+        
+        boolean hasBadZError = Math.abs(observation.pose().getZ()) > VisionConstants.MAX_Z_ERROR;
 
-                // Must be within the field boundaries
-                || observation.pose().getX() <= 0.0
-                || observation.pose().getX()
-                    >= Units.feetToMeters(26)  
-                || observation.pose().getY() <= 0.0
-                || observation.pose().getY()
-                    >= Units.feetToMeters(57) 
-                || Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
+        boolean isOutsideField = observation.pose().getX() <= 0.0
+        || observation.pose().getX()
+            >= Units.feetToMeters(26)  
+        || observation.pose().getY() <= 0.0
+        || observation.pose().getY()
+            >= Units.feetToMeters(57);
 
+        boolean hasFastAngularVel = Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
+
+        boolean rejectPose = 
+          hasNoTags ||
+          hasBadAmbiguityOneTag ||
+          hasBadTaOneTag ||
+          hasBadRotation ||
+          hasBadZError ||
+          isOutsideField ||
+          hasFastAngularVel;
+        
         boolean onlyReefUpdateLocal = 
           GeomUtil.isLookingAtReef() 
           && GeomUtil.isWithinReefRadius() 
@@ -93,7 +109,7 @@ public class Vision extends SubsystemBase {
         if (onlyReefUpdateGlobal) {
           io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
 
-          if (observation.type() == PoseObservationType.MULTITAG_1 || observation.type() != PoseObservationType.MULTITAG_2) {
+          if (observation.type() == PoseObservationType.MULTITAG_1 || observation.type() == PoseObservationType.MULTITAG_2) {
             rejectPose = true;
           }
         } else if (!onlyReefUpdateGlobal || (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName()))) {

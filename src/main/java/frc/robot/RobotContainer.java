@@ -61,12 +61,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    for (var entry : FieldLayout.reefPositionPose.entrySet()) {
-      System.out.println("Key: " + entry.getKey() + " Valueueeueue: " + entry.getValue());
-    }
-
-    System.out.println(FieldLayout.REEF_CENTER);
-
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
