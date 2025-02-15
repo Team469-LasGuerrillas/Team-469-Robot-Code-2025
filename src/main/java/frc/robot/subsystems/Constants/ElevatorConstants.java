@@ -9,7 +9,6 @@ import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
     /* ELEVATOR MOTOR */
-
     TalonFXConfiguration elevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withCurrentLimits(
@@ -20,7 +19,8 @@ public class ElevatorConstants {
     MotorConfigs elevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(469)
-        .withCanBus("469");
+        .withCanBus("469")
+        .withFxConfig(elevatorTalonFXConfiguration);
 
     MotorIOTalonFX elevatorMotor = new MotorIOTalonFX(elevatorMotorConfigs);
 }

@@ -23,9 +23,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Dashboard;
+import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -33,6 +35,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.endEffectors.AlgaeEndEffector;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -45,6 +48,7 @@ import frc.robot.subsystems.vision.Vision;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final AlgaeEndEffector algaeEndEffector;
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
@@ -69,27 +73,14 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
+        algaeEndEffector = AlgaeEndEffector.createInstance(
+          AlgaeEndEffectorConstants.algaeIntakeMotor,
+          AlgaeEndEffectorConstants.algaeWristMotor);
+
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
         arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
         arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
-
-        break;
-
-      case SIM:
-        // Sim robot, instantiate physics sim IO implementations
-        Drive.createInstance(
-            new GyroIO() {},
-            new ModuleIOSim(TunerConstants.FrontLeft),
-            new ModuleIOSim(TunerConstants.FrontRight),
-            new ModuleIOSim(TunerConstants.BackLeft),
-            new ModuleIOSim(TunerConstants.BackRight));
-        drive = Drive.getInstance();
-
-        limelightLeft = new Vision(new VisionIO() {});
-        limelightRight = new Vision(new VisionIO() {});
-        arducamOne = new Vision(new VisionIO() {});
-        arducamTwo = new Vision(new VisionIO() {});
 
         break;
 
@@ -102,6 +93,11 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {});
         drive = Drive.getInstance();
+
+        algaeEndEffector = AlgaeEndEffector.createInstance(
+          new MotorIO() {},
+          new MotorIO() {}
+        );
 
         limelightLeft = new Vision(new VisionIO() {});
         limelightRight = new Vision(new VisionIO() {});

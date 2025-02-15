@@ -7,8 +7,6 @@
 
 package frc.lib.util.math;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;

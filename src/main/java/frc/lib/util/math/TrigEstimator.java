@@ -1,7 +1,5 @@
 package frc.lib.util.math;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import java.util.Optional;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;

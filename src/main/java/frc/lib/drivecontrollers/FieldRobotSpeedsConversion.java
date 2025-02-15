@@ -7,7 +7,6 @@ public class FieldRobotSpeedsConversion {
   public static ChassisSpeeds fieldToRobotSpeeds(ChassisSpeeds fieldSpeeds, Rotation2d robotRotation) {
     double x = fieldSpeeds.vxMetersPerSecond;
     double y = fieldSpeeds.vyMetersPerSecond;
-    double theta = fieldSpeeds.omegaRadiansPerSecond;
 
     double drivingDistance = Math.hypot(x, y);
     double angle = Math.atan2(y, x) - robotRotation.getRadians();

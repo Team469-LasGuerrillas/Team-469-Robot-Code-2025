@@ -4,11 +4,9 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
