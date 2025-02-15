@@ -13,11 +13,11 @@ public class AlgaeEndEffectorCommands {
     }
 
     public static Command algaeIntakeOut() {
-        return Commands.run(() -> algaeEndEffector.setVoltage(AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLAGE), algaeEndEffector);
+        return Commands.run(() -> algaeEndEffector.setVoltage(AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE), algaeEndEffector);
     }
 
-    public static Command stopAlgaeIntake() {
-        return Commands.run(() -> algaeEndEffector.setVoltage(0), algaeEndEffector);
+    public static Command algaeIntakeStop() {
+        return Commands.run(() -> algaeEndEffector.setVoltage(AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE), algaeEndEffector);
     }
 
     public static Command algaeWristDefault() {

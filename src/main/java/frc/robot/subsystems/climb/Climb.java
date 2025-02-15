@@ -8,6 +8,8 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 
 public class Climb extends SubsystemBase {    
+    private static Climb instance;
+
     private final MotorIO climbMotor;
     private final MotorIOInputsAutoLogged climbInputs = new MotorIOInputsAutoLogged();
 
@@ -15,13 +17,24 @@ public class Climb extends SubsystemBase {
     public Climb(MotorIO climbMotor) {
         this.climbMotor = climbMotor;
     }
+    public static Climb createInstance(MotorIO climbMotor) {
+        instance = new Climb(climbMotor);
+        return instance;
+    }
+
+    public static Climb getInstance() {
+        if (instance == null) {
+            instance = new Climb(new MotorIO() {});
+        }
+        return instance;
+    }
 
     @Override
     public void periodic() {
         climbMotor.updateInputs(climbInputs);
         Logger.processInputs("Climb", climbInputs);
     }
-    public void setPosition(double position) {
-        climbMotor.setMagicalPositionSetpoint(position, 6);
+    public void setVoltage(double voltage) {
+        climbMotor.setOpenLoopVoltage(voltage);
     }
 }

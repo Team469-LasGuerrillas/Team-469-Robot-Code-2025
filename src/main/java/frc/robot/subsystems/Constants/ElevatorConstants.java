@@ -9,18 +9,18 @@ import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
     /* ELEVATOR MOTOR */
-    TalonFXConfiguration elevatorTalonFXConfiguration =
+    private static TalonFXConfiguration elevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
             .withStatorCurrentLimit(20));
 
-    MotorConfigs elevatorMotorConfigs = 
+    private static MotorConfigs elevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(469)
         .withCanBus("469")
         .withFxConfig(elevatorTalonFXConfiguration);
 
-    MotorIOTalonFX elevatorMotor = new MotorIOTalonFX(elevatorMotorConfigs);
+    public static MotorIOTalonFX elevatorMotor = new MotorIOTalonFX(elevatorMotorConfigs);
 }

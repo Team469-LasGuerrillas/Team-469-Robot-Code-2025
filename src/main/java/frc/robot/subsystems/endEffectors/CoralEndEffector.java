@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 
-public class CoralEndEffector extends SubsystemBase {    
+public class CoralEndEffector extends SubsystemBase {
+    private static CoralEndEffector instance;  
+
     private final MotorIO coralIntakeMotor;
     private final MotorIOInputsAutoLogged coralIntakeInputs = new MotorIOInputsAutoLogged();
 
@@ -16,7 +18,19 @@ public class CoralEndEffector extends SubsystemBase {
 
     public CoralEndEffector(MotorIO coralIntakeMotor, MotorIO coralWristMotor) {
         this.coralIntakeMotor = coralIntakeMotor;
-        this.coralWristMotor = coralWristMotor;
+        this.coralWristMotor = coralWristMotor;}
+
+        public static CoralEndEffector createInstance(MotorIO coralIntakeMotor, MotorIO coralWristMotor) {
+            instance = new CoralEndEffector(coralIntakeMotor, coralWristMotor);
+            return instance;
+        }
+    
+        public static CoralEndEffector getInstance() {
+            if (instance == null) {
+                instance = new CoralEndEffector(new MotorIO() {}, new MotorIO() {});
+            }
+            return instance;
+        
     }
 
     @Override

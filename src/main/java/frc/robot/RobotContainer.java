@@ -27,7 +27,13 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
+import frc.robot.subsystems.constants.ClimbConstants;
+import frc.robot.subsystems.constants.CoralEndEffectorConstants;
+import frc.robot.subsystems.constants.ElevatorConstants;
+import frc.robot.subsystems.constants.GroundIntakeConstants;
+import frc.robot.subsystems.constants.HumanPlayerIntakeConstants;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -35,7 +41,11 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.AlgaeEndEffector;
+import frc.robot.subsystems.endEffectors.CoralEndEffector;
+import frc.robot.subsystems.intake.GroundIntake;
+import frc.robot.subsystems.intake.HumanPlayerIntake;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -49,6 +59,12 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final AlgaeEndEffector algaeEndEffector;
+  private final CoralEndEffector coralEndEffector;
+  private final HumanPlayerIntake humanPlayerIntake;
+  private final GroundIntake groundIntake;
+  private final Climb climb;
+  private final Elevator elevator;
+
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
@@ -77,6 +93,24 @@ public class RobotContainer {
           AlgaeEndEffectorConstants.algaeIntakeMotor,
           AlgaeEndEffectorConstants.algaeWristMotor);
 
+        coralEndEffector = CoralEndEffector.createInstance(
+          CoralEndEffectorConstants.coralIntakeMotor,
+          CoralEndEffectorConstants.coralWristMotor);
+
+        groundIntake = GroundIntake.createInstance(
+          GroundIntakeConstants.groundIntakeMotor,
+          GroundIntakeConstants.groundWristMotor);
+
+        humanPlayerIntake = HumanPlayerIntake.createInstance(
+          HumanPlayerIntakeConstants.hpIntakeMotor);
+
+        climb = Climb.createInstance(
+          ClimbConstants.climbMotor);
+
+        elevator = Elevator.createInstance(
+          ElevatorConstants.elevatorMotor);
+
+
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
         arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
@@ -92,12 +126,23 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {},
             new ModuleIO() {});
+
         drive = Drive.getInstance();
 
-        algaeEndEffector = AlgaeEndEffector.createInstance(
-          new MotorIO() {},
-          new MotorIO() {}
-        );
+        algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+
+        coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+
+        groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
+
+        humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
+
+        climb = Climb.createInstance(new MotorIO() {});
+
+        elevator = Elevator.createInstance(new MotorIO() {});
+      
+
+
 
         limelightLeft = new Vision(new VisionIO() {});
         limelightRight = new Vision(new VisionIO() {});
