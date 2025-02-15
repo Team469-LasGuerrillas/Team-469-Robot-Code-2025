@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
-import frc.robot.subsystems.Constants.VisionConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LimelightHelpers.RawDetection;
 import frc.robot.util.LimelightHelpers.RawFiducial;

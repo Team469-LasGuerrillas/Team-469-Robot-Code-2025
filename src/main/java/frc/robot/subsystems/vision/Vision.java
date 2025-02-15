@@ -1,7 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,7 +13,7 @@ import frc.lib.interfaces.vision.VisionIO.TargettingType;
 import frc.lib.util.Clock;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
-import frc.robot.subsystems.Constants.VisionConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.lib.interfaces.vision.VisionIOInputsAutoLogged;
 

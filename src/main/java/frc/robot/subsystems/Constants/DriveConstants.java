@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Constants;
+package frc.robot.subsystems.constants;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Constants;
+package frc.robot.subsystems.constants;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;

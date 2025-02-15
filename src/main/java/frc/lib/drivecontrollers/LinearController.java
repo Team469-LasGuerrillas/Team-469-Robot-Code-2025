@@ -10,7 +10,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 import frc.lib.util.math.ToleranceUtil;
-import frc.robot.subsystems.Constants.DriveConstants;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 
 public class LinearController {

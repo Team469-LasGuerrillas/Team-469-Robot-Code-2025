@@ -18,7 +18,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.lib.util.FieldLayout;
-import frc.robot.subsystems.Constants.VisionConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 
 /** Geometry utilities for working with translations, rotations, transforms, and poses. */

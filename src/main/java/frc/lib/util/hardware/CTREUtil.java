@@ -6,7 +6,11 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.lib.interfaces.motor.MotorConfigs;
+
 import java.util.function.Supplier;
 
 public class CTREUtil {
@@ -24,6 +28,15 @@ public class CTREUtil {
           "Error calling " + function + " on ctre device id " + deviceId + ": " + statusCode, true);
     }
     return statusCode;
+  }
+
+  public static StatusCode applyFusedCancoderToTalon(MotorConfigs mConfig, TalonFX motor, CANcoder cancoder) {
+    mConfig.fxConfig.Feedback.FeedbackRemoteSensorID = cancoder.getDeviceID();
+    mConfig.fxConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    mConfig.fxConfig.Feedback.SensorToMechanismRatio = mConfig.sensorToMechanismRatio;
+    mConfig.fxConfig.Feedback.RotorToSensorRatio = mConfig.rotorToSensorRatio;
+
+    return tryUntilOK(() -> motor.getConfigurator().refresh(mConfig.fxConfig), cancoder.getDeviceID());
   }
 
   public static StatusCode applyConfiguration(TalonFX motor, TalonFXConfiguration config) {

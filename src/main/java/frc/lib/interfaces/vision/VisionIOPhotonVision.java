@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.Clock;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.TrigEstimator;
-import frc.robot.subsystems.Constants.VisionConstants;
+import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 
 import java.util.ArrayList;

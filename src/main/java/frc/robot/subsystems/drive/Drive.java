@@ -72,14 +72,13 @@ import frc.lib.util.math.odometry.OdometryType;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Constants.DriveConstants;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.util.LocalADStarAK;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
