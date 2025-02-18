@@ -23,6 +23,9 @@ public class ElevatorConstants {
     public static final double ALGAE_STAGE_HEIGHT_FACTOR = 765;
 
     /* CORAL ELEVATOR MOTOR */
+    public static final double CORAL_STAGE_UP = 0;
+    public static final double CORAL_STAGE_DOWN = 0;
+
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withCurrentLimits(
@@ -84,6 +87,9 @@ public class ElevatorConstants {
 
 
     /* ALGAE ELEVATOR MOTOR */
+    public static final double ALGAE_STAGE_UP = 0;
+    public static final double ALGAE_STAGE_DOWN = 0;
+
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withCurrentLimits(
