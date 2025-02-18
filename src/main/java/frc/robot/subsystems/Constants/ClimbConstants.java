@@ -23,7 +23,9 @@ public class ClimbConstants {
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(469)
         .withCanBus("469")
-        .withFxConfig(climbMotorFxConfig);
+        .withFxConfig(climbMotorFxConfig)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
 
     public static MotorIOTalonFX climbMotor = new MotorIOTalonFX(climbMotorConfigs);
 }

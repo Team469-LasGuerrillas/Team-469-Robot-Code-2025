@@ -35,7 +35,9 @@ public class GroundIntakeConstants {
     private static MotorConfigs groundWristMotorConfigs = new MotorConfigs()
         .withCanId(469)
         .withCanBus("469")
-        .withFxConfig(groundWristMotorFxConfig);
+        .withFxConfig(groundWristMotorFxConfig)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
     
     public static MotorIOTalonFX groundWristMotor = new MotorIOTalonFX(groundWristMotorConfigs);
 
@@ -54,7 +56,9 @@ public class GroundIntakeConstants {
     private static MotorConfigs groundIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
         .withCanBus("469")
-        .withFxConfig(groundIntakeMotorFxConfig);
+        .withFxConfig(groundIntakeMotorFxConfig)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
     
    public static MotorIOTalonFX groundIntakeMotor = new MotorIOTalonFX(groundIntakeMotorConfigs);    
 }

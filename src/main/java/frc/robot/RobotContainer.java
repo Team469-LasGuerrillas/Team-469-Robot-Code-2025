@@ -108,7 +108,9 @@ public class RobotContainer {
           ClimbConstants.climbMotor);
 
         elevator = Elevator.createInstance(
-          ElevatorConstants.elevatorMotor);
+          ElevatorConstants.coralElevatorMotor, 
+          ElevatorConstants.coralElevatorFollowerMotor, 
+          ElevatorConstants.algaeElevatorMotor);
 
 
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
@@ -139,7 +141,7 @@ public class RobotContainer {
 
         climb = Climb.createInstance(new MotorIO() {});
 
-        elevator = Elevator.createInstance(new MotorIO() {});
+        elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
       
 
 

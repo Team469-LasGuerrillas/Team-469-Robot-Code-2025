@@ -23,7 +23,9 @@ public class HumanPlayerIntakeConstants {
     private static MotorConfigs hpIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
         .withCanBus("469")
-        .withFxConfig(hpIntakeTalonFXConfig);
+        .withFxConfig(hpIntakeTalonFXConfig)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
 
     public static MotorIOTalonFX hpIntakeMotor = new MotorIOTalonFX(hpIntakeMotorConfigs);
 }

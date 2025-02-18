@@ -25,7 +25,9 @@ public class AlgaeEndEffectorConstants {
     private static MotorConfigs algaeIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
         .withCanBus("469")
-        .withFxConfig(algaeIntakeMotorFxConfig);
+        .withFxConfig(algaeIntakeMotorFxConfig)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
     
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
@@ -57,7 +59,9 @@ public class AlgaeEndEffectorConstants {
     private static MotorConfigs algaeWristMotorConfigs = new MotorConfigs()    
         .withCanId(469)
         .withCanBus("469")
-        .withFxConfig(algaeWristMotorFxConfig);
+        .withFxConfig(algaeWristMotorFxConfig)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
 
     public static MotorIOTalonFX algaeWristMotor = new MotorIOTalonFX(algaeWristMotorConfigs);
 }
