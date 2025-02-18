@@ -112,7 +112,6 @@ public class RobotContainer {
           ElevatorConstants.coralElevatorFollowerMotor, 
           ElevatorConstants.algaeElevatorMotor);
 
-
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
         arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
@@ -142,9 +141,6 @@ public class RobotContainer {
         climb = Climb.createInstance(new MotorIO() {});
 
         elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
-      
-
-
 
         limelightLeft = new Vision(new VisionIO() {});
         limelightRight = new Vision(new VisionIO() {});

@@ -84,6 +84,12 @@ public class DriveCommands {
     );
   }
 
+  public static Command aimAssistToCoral(CommandXboxController controller, double weight) {
+    return Commands.deferredProxy(
+      () -> aimAssistToPose(controller, null, weight)
+    );
+  }
+
   public static Command pathfindToPose(Pose2d pose) {
     return Commands.startEnd(
       () -> Drive.getInstance().setPathfinding(pose), 
