@@ -74,10 +74,10 @@ public class Vision extends SubsystemBase {
 
         boolean isOutsideField = observation.pose().getX() <= 0.0
         || observation.pose().getX()
-            >= Units.feetToMeters(26)  
+            >= Units.feetToMeters(57)  
         || observation.pose().getY() <= 0.0
         || observation.pose().getY()
-            >= Units.feetToMeters(57);
+            >= Units.feetToMeters(26);
 
         boolean hasFastAngularVel = Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
 
