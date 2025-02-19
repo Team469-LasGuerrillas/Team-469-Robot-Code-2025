@@ -58,12 +58,12 @@ import frc.robot.subsystems.vision.Vision;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final AlgaeEndEffector algaeEndEffector;
-  private final CoralEndEffector coralEndEffector;
-  private final HumanPlayerIntake humanPlayerIntake;
-  private final GroundIntake groundIntake;
-  private final Climb climb;
-  private final Elevator elevator;
+  // private final AlgaeEndEffector algaeEndEffector;
+  // private final CoralEndEffector coralEndEffector;
+  // private final HumanPlayerIntake humanPlayerIntake;
+  // private final GroundIntake groundIntake;
+  // private final Climb climb;
+  // private final Elevator elevator;
 
 
   private final Vision limelightLeft;
@@ -89,28 +89,28 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-        algaeEndEffector = AlgaeEndEffector.createInstance(
-          AlgaeEndEffectorConstants.algaeIntakeMotor,
-          AlgaeEndEffectorConstants.algaeWristMotor);
+        // algaeEndEffector = AlgaeEndEffector.createInstance(
+        //   AlgaeEndEffectorConstants.algaeIntakeMotor,
+        //   AlgaeEndEffectorConstants.algaeWristMotor);
 
-        coralEndEffector = CoralEndEffector.createInstance(
-          CoralEndEffectorConstants.coralIntakeMotor,
-          CoralEndEffectorConstants.coralWristMotor);
+        // coralEndEffector = CoralEndEffector.createInstance(
+        //   CoralEndEffectorConstants.coralIntakeMotor,
+        //   CoralEndEffectorConstants.coralWristMotor);
 
-        groundIntake = GroundIntake.createInstance(
-          GroundIntakeConstants.groundIntakeMotor,
-          GroundIntakeConstants.groundWristMotor);
+        // groundIntake = GroundIntake.createInstance(
+        //   GroundIntakeConstants.groundIntakeMotor,
+        //   GroundIntakeConstants.groundWristMotor);
 
-        humanPlayerIntake = HumanPlayerIntake.createInstance(
-          HumanPlayerIntakeConstants.hpIntakeMotor);
+        // humanPlayerIntake = HumanPlayerIntake.createInstance(
+        //   HumanPlayerIntakeConstants.hpIntakeMotor);
 
-        climb = Climb.createInstance(
-          ClimbConstants.climbMotor);
+        // climb = Climb.createInstance(
+        //   ClimbConstants.climbMotor);
 
-        elevator = Elevator.createInstance(
-          ElevatorConstants.coralElevatorMotor, 
-          ElevatorConstants.coralElevatorFollowerMotor, 
-          ElevatorConstants.algaeElevatorMotor);
+        // elevator = Elevator.createInstance(
+        //   ElevatorConstants.coralElevatorMotor, 
+        //   ElevatorConstants.coralElevatorFollowerMotor, 
+        //   ElevatorConstants.algaeElevatorMotor);
 
         limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
@@ -130,17 +130,17 @@ public class RobotContainer {
 
         drive = Drive.getInstance();
 
-        algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+        // algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
 
-        coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+        // coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
 
-        groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
+        // groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
 
-        humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
+        // humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
 
-        climb = Climb.createInstance(new MotorIO() {});
+        // climb = Climb.createInstance(new MotorIO() {});
 
-        elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
+        // elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
 
         limelightLeft = new Vision(new VisionIO() {});
         limelightRight = new Vision(new VisionIO() {});
