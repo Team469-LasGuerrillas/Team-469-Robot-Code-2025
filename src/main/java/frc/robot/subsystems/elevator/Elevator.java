@@ -51,48 +51,35 @@ public class Elevator extends SubsystemBase {
         Logger.processInputs("algaeElevator", algaeElevatorInputs);
     }
 
-    public void setCoralHeightFromGround(double heightInInchesFromGround) {
-        double currentCoralHeightFromZero = coralElevatorInputs.unitPosition * ElevatorConstants.CORAL_STAGE_HEIGHT_FACTOR;
-        double coralStageHeight = 
-        heightInInchesFromGround
-        -  currentCoralHeightFromZero
-        - ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES;
+    public void setTargetPosFromZero(double targetCoralPosFromGround, double targetAlgaePosFromGround) {
+        double algaeTargetHeight = targetAlgaePosFromGround - ElevatorConstants.GROUND_TO_ZERO_INCHES;
+        double coralTargetHeight = targetCoralPosFromGround - ElevatorConstants.GROUND_TO_ZERO_INCHES;
 
-        double rotations = coralStageHeight / ElevatorConstants.CORAL_STAGE_HEIGHT_FACTOR;
+        if (targetCoralPosFromGround - ElevatorConstants.GROUND_TO_ZERO_INCHES > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES) {
+            double currentCoralPosFromCoralZero = coralElevatorInputs.unitPosition;
+            algaeTargetHeight = algaeTargetHeight - currentCoralPosFromCoralZero - ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES;
+        }
 
-        coralElevatorMotor.setMagicalPositionSetpoint(rotations, 0);     
+        if (isPossibleTarget(targetCoralPosFromGround, targetAlgaePosFromGround)) {
+            coralElevatorMotor.setMagicalPositionSetpoint(coralTargetHeight, 0);
+            algaeElevatorMotor.setMagicalPositionSetpoint(algaeTargetHeight, 0);
+        }
     }
 
-    public void setAlgaeHeightFromGround(double heightInInchesFromGround) {
-        double currentAlgaeHeightFromZero = algaeElevatorInputs.unitPosition * ElevatorConstants.ALGAE_STAGE_HEIGHT_FACTOR;
-        double currentCoralHeightFromZero = coralElevatorInputs.unitPosition * ElevatorConstants.CORAL_STAGE_HEIGHT_FACTOR;
+    public void setAlgaePosFromZero(double targetAlgaePosFromGround) {
+        double targetCoralPosFromGround = targetAlgaePosFromGround + ElevatorConstants.CARRIAGE_HEIGHT;
+        setTargetPosFromZero(targetCoralPosFromGround, targetAlgaePosFromGround);
+    }
 
-        double algaeStageHeight;
-        double coralZeroToAlgaeZero = ElevatorConstants.CORAL_CARRIAGE_TO_ALGAE_ZERO;
+    public void setCoralPosFromZero(double targetCoralPosFromGround) {
+        double targetAlgaePosFromGround = targetCoralPosFromGround - ElevatorConstants.CARRIAGE_HEIGHT;
+        setTargetPosFromZero(targetCoralPosFromGround, targetAlgaePosFromGround);
+    }
 
-        if (currentCoralHeightFromZero < ElevatorConstants.ALGAE_RELATIVE_TO_CORAL_HEIGHT) {
-            algaeStageHeight = 
-            heightInInchesFromGround
-            - currentAlgaeHeightFromZero
-            - ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES;
-        }
-        else {
-            coralZeroToAlgaeZero = currentCoralHeightFromZero - coralZeroToAlgaeZero;
-
-            algaeStageHeight = 
-            heightInInchesFromGround
-            - coralZeroToAlgaeZero
-            - currentAlgaeHeightFromZero
-            - ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES;
-        }
-
-        if (currentAlgaeHeightFromZero + algaeStageHeight > 0 
-        && coralZeroToAlgaeZero
-         + currentAlgaeHeightFromZero
-          + ElevatorConstants.ALGAE_CARRIAGE_HEIGHT
-           + algaeStageHeight < currentCoralHeightFromZero) {
-            double rotations = algaeStageHeight / ElevatorConstants.CORAL_STAGE_HEIGHT_FACTOR;
-            algaeElevatorMotor.setMagicalPositionSetpoint(rotations, 0);
-        }
+    private boolean isPossibleTarget(double targetCoralPosFromGround, double targetAlgaePosFromGround) {
+        if (targetCoralPosFromGround - targetAlgaePosFromGround <= ElevatorConstants.CARRIAGE_HEIGHT 
+        || targetCoralPosFromGround - targetAlgaePosFromGround >= ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES)
+            return false;
+        return true;
     }
 }

@@ -11,16 +11,9 @@ import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
 
-    public static final double GROUND_TO_CORAL_REST_POS_INCHES = 4;
-    public static final double CORAL_STAGE_HEIGHT_FACTOR = 3.5;
-    public static final double ALGAE_RELATIVE_TO_CORAL_HEIGHT = 6;
-    public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 3;
-    public static final double CORAL_CARRIAGE_TO_FIRST_STAGE_HEIGHT = 4;
-    public static final double ALGAE_HEIGHT_IN_INCHES_FROM_FIRST_STAGE =5;
-    public static final double ELEVATOR_FROM_GROUND = 3487;
-    public static final double CORAL_CARRIAGE_TO_ALGAE_ZERO = 469;
-    public static final double ALGAE_CARRIAGE_HEIGHT = 2;
-    public static final double ALGAE_STAGE_HEIGHT_FACTOR = 765;
+    public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES = 6;
+    public static final double CARRIAGE_HEIGHT = 2;
+    public static final double GROUND_TO_ZERO_INCHES = 4;
 
     /* CORAL ELEVATOR MOTOR */
     public static final double CORAL_RESTING_POS = 0;
@@ -38,7 +31,7 @@ public class ElevatorConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20))
+            .withStatorCurrentLimit(10))
               .withSlot0(
             new Slot0Configs()
             .withKS(0)
@@ -69,7 +62,7 @@ public class ElevatorConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20))
+            .withStatorCurrentLimit(10))
             .withSlot0(
                 new Slot0Configs()
                 .withKS(0)
