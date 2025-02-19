@@ -13,6 +13,7 @@ public class AlgaeEndEffectorConstants {
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
     public static final double ALGAE_INTAKE_OUT_VOLTAGE = -12;
+    public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -24;
     public static final double ALGAE_INTAKE_DEFAULT_VOLTAGE = 0;
 
     private static TalonFXConfiguration algaeIntakeMotorFxConfig = 

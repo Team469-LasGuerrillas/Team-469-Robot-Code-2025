@@ -23,8 +23,15 @@ public class ElevatorConstants {
     public static final double ALGAE_STAGE_HEIGHT_FACTOR = 765;
 
     /* CORAL ELEVATOR MOTOR */
-    public static final double CORAL_STAGE_UP = 0;
-    public static final double CORAL_STAGE_DOWN = 0;
+    public static final double CORAL_RESTING_POS = 0;
+    public static final double CORAL_GROUND_INTAKE = 1;
+    public static final double CORAL_HUMAN_PLAYER_INTAKE = 4;
+    public static final double CORAL_L1 = 2;
+    public static final double CORAL_L2 = 3;
+    public static final double CORAL_L3 = 5;
+    public static final double CORAL_L4 = 6;
+    public static final double CORAL_BARGE = 7;
+    
 
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
@@ -87,8 +94,11 @@ public class ElevatorConstants {
 
 
     /* ALGAE ELEVATOR MOTOR */
-    public static final double ALGAE_STAGE_UP = 0;
-    public static final double ALGAE_STAGE_DOWN = 0;
+    public static final double ALGAE_PROCESSOR = 0;
+    public static final double ALGAE_RESTING_POS = 1;
+    public static final double ALGAE_L2 = 2;
+    public static final double ALGAE_L3 = 3;
+    public static final double ALGAE_BARGE = 4;
 
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =
     new TalonFXConfiguration()

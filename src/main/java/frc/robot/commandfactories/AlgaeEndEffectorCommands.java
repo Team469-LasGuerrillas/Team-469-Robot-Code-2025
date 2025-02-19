@@ -16,6 +16,10 @@ public class AlgaeEndEffectorCommands {
         return Commands.run(() -> algaeEndEffector.setVoltage(AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE), algaeEndEffector);
     }
 
+    public static Command algaeIntakeBargeOut() {
+        return Commands.run(() -> algaeEndEffector.setVoltage(AlgaeEndEffectorConstants.ALGAE_INTAKE_BARGE_OUT_VOLTAGE), algaeEndEffector);
+    }
+
     public static Command algaeIntakeStop() {
         return Commands.run(() -> algaeEndEffector.setVoltage(AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE), algaeEndEffector);
     }
