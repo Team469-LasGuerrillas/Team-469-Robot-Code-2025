@@ -8,7 +8,7 @@ import frc.lib.interfaces.vision.VisionIOLimelight;
 import frc.lib.interfaces.vision.VisionIOPhotonVision;
 
 public class VisionConstants {
-  public static final double MAX_AMBIGUITY = 0.4;
+  public static final double MAX_AMBIGUITY = 0.55;
   public static final double MAX_Z_ERROR = 0.5; // 0.25
   public static final double MAX_ROTATION_ERROR_DEGREES = 2;
   public static final double MAX_YAW_RATE = 3; // rad/sec
@@ -29,7 +29,7 @@ public class VisionConstants {
 
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
   public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 0.125;
-  public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 70;
+  public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 90;
   public static final double NEAR_REEF_RADIUS = 2.5;
 
   public static final int[] REEF_TAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
@@ -39,7 +39,7 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-left",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(-7.1), Units.inchesToMeters(9.8)),
+          new Translation3d(Units.inchesToMeters(-8.018), Units.inchesToMeters(-6.5), Units.inchesToMeters(9.7)),
           new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(35), Units.degreesToRadians(-25))
         )
       );
@@ -48,7 +48,7 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-right",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(7.1), Units.inchesToMeters(9.8)),
+          new Translation3d(Units.inchesToMeters(-8.018), Units.inchesToMeters(6.5), Units.inchesToMeters(9.7)),
           new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(35), Units.degreesToRadians(25))
         )
       );
