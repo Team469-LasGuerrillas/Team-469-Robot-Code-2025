@@ -62,6 +62,7 @@ import frc.lib.drivecontrollers.FieldRobotSpeedsConversion;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.LinearController;
 import frc.lib.drivecontrollers.TeleopDriveController;
+import frc.lib.interfaces.vision.VisionIO.PoseObservation;
 import frc.lib.util.Clock;
 import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
