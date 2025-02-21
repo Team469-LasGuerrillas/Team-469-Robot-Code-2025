@@ -19,10 +19,10 @@ public class DriveConstants {
   public static final double MAX_ANGULAR_ACCEL = MAX_LINEAR_ACCEL / 2;
 
   // Pathplanner PID constants
-  public static final double PP_TRANSLATION_P = 5;
+  public static final double PP_TRANSLATION_P = 9;
   public static final double PP_TRANSLATION_I = 2;
   public static final double PP_TRANSLATION_D = 0.0;
-  public static final double PP_HEADING_P = 7.5;
+  public static final double PP_HEADING_P = 5;
   public static final double PP_HEADING_I = 1;
   public static final double PP_HEADING_D = 0.0;
 
@@ -34,7 +34,7 @@ public class DriveConstants {
   public static final double HEADING_TOLERANCE_DEGREES = 0.05;
 
   // Linear Controller
-  public static final double LINEAR_P = 5;
+  public static final double LINEAR_P = 2.5;
   public static final double LINEAR_I = 0.0;
   public static final double LINEAR_D = 1.5;
 
