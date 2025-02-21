@@ -1,6 +1,7 @@
 package frc.robot.subsystems.constants;
 
 import frc.lib.interfaces.motor.MotorIOTalonFX;
+import frc.robot.generated.TunerConstants;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -48,7 +49,7 @@ public class ElevatorConstants {
     private static MotorConfigs coralElevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(469)
-        .withCanBus("469")
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralElevatorTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
@@ -78,7 +79,7 @@ public class ElevatorConstants {
     private static MotorConfigs coralElevatorFollowerMotorConfigs = 
     new MotorConfigs()
         .withCanId(469)
-        .withCanBus("469")
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralElevatorFollowerTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
@@ -114,7 +115,7 @@ public class ElevatorConstants {
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(469)
-        .withCanBus("469")
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeElevatorTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);

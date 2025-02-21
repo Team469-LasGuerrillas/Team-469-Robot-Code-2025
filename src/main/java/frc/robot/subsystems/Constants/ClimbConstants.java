@@ -1,6 +1,7 @@
 package frc.robot.subsystems.constants;
 
 import frc.lib.interfaces.motor.MotorIOTalonFX;
+import frc.robot.generated.TunerConstants;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -22,7 +23,7 @@ public class ClimbConstants {
 
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus("469")
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(climbMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);

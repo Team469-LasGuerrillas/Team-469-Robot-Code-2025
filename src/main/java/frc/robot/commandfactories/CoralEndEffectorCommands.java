@@ -1,46 +1,25 @@
 package frc.robot.commandfactories;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.constants.CoralEndEffectorConstants;
-import frc.robot.subsystems.endEffectors.CoralEndEffector;
+import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
+import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
 
 public class CoralEndEffectorCommands {
-    private static CoralEndEffector coralEndEffector = CoralEndEffector.getInstance();
+    private static CoralIntakeEndEffector coralIntakeEndEffector = CoralIntakeEndEffector.getInstance();
+    private static CoralWristEndEffector coralWristEndEffector = CoralWristEndEffector.getInstance();
 
-    public static Command coralIntakeIn() {
-        return Commands.run(() -> coralEndEffector.setVoltage(CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE), coralEndEffector);
+    public static Command coralIntake(DoubleSupplier voltage) {
+        return Commands.either(
+            Commands.run(() -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector), 
+            Commands.none(), 
+            () -> coralIntakeEndEffector.hasCoral()
+        );
     }
 
-    public static Command coralIntakeOut() {
-        return Commands.run(() -> coralEndEffector.setVoltage(CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE), coralEndEffector);
-    }
-
-    public static Command coralIntakeDefault() {
-        return Commands.run(() -> coralEndEffector.setVoltage(CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE), coralEndEffector);
-    }
-
-    public static Command coralWristL4() {
-        return Commands.run(() -> coralEndEffector.setPosition(CoralEndEffectorConstants.CORAL_L4_POSITION), coralEndEffector);
-    }
-
-    public static Command coralWristL3() {
-        return Commands.run(() -> coralEndEffector.setPosition(CoralEndEffectorConstants.CORAL_L3_POSITION), coralEndEffector);
-    }
-
-    public static Command coralWristL2() {
-        return Commands.run(() -> coralEndEffector.setPosition(CoralEndEffectorConstants.CORAL_L2_POSITION), coralEndEffector);
-    }
-
-    public static Command coralWristL1() {
-        return Commands.run(() -> coralEndEffector.setPosition(CoralEndEffectorConstants.CORAL_L1_POSITION), coralEndEffector);
-    }
-
-    public static Command coralWristGroundIntake() {
-        return Commands.run(() -> coralEndEffector.setPosition(CoralEndEffectorConstants.CORAL_GROUND_INTAKE_POSITION), coralEndEffector);
-    }
-
-    public static Command coralWristHPIntake() {
-        return Commands.run(() -> coralEndEffector.setPosition(CoralEndEffectorConstants.CORAL_HP_INTAKE_POSITION), coralEndEffector);
+    public static Command coralWrist(double position) {
+        return Commands.run(() -> coralWristEndEffector.setPosition(position), coralWristEndEffector);
     }
 }

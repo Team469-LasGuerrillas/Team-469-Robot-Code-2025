@@ -1,14 +1,26 @@
 package frc.robot.subsystems.constants;
 
+import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import frc.lib.interfaces.motor.CancoderConfigs;
 import frc.lib.interfaces.motor.MotorConfigs;
 import frc.lib.interfaces.motor.MotorIOTalonFX;
+import frc.lib.interfaces.sensor.SensorIOCANRange;
+import frc.robot.generated.TunerConstants;
 
 public class AlgaeEndEffectorConstants {
+
+    /* SENSOR CANRANGE */
+    SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 0);
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
@@ -25,7 +37,7 @@ public class AlgaeEndEffectorConstants {
     
     private static MotorConfigs algaeIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus("469")
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeIntakeMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
@@ -59,10 +71,24 @@ public class AlgaeEndEffectorConstants {
 
     private static MotorConfigs algaeWristMotorConfigs = new MotorConfigs()    
         .withCanId(469)
-        .withCanBus("469")
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeWristMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
+    
+    private static CANcoderConfiguration algaeWristCcConfig = 
+    new CANcoderConfiguration()
+        .withMagnetSensor(
+            new MagnetSensorConfigs()
+            .withAbsoluteSensorDiscontinuityPoint(0)
+            .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
+            .withMagnetOffset(0.5)
+        );
+    
+    private static CancoderConfigs algaeWristCancoderConfigs = new CancoderConfigs()
+        .withCanId(0)
+        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCcConfig(algaeWristCcConfig);
 
-    public static MotorIOTalonFX algaeWristMotor = new MotorIOTalonFX(algaeWristMotorConfigs);
+    public static MotorIOTalonFX algaeWristMotor = new MotorIOTalonFX(algaeWristMotorConfigs, algaeWristCancoderConfigs);
 }

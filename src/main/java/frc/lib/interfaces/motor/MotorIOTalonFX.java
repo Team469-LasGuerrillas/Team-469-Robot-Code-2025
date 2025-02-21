@@ -1,5 +1,7 @@
 package frc.lib.interfaces.motor;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
@@ -93,8 +95,8 @@ public class MotorIOTalonFX implements MotorIO {
   }
 
   @Override
-  public void setOpenLoopVoltage(double volts) {
-    talon.setVoltage(volts);
+  public void setOpenLoopVoltage(DoubleSupplier volts) {
+    talon.setVoltage(volts.getAsDouble());
   }
 
   @Override
