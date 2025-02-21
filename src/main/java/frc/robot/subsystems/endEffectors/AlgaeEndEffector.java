@@ -2,6 +2,8 @@ package frc.robot.subsystems.endEffectors;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.hardware.CANrange;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
@@ -19,6 +21,7 @@ public class AlgaeEndEffector extends SubsystemBase {
     private AlgaeEndEffector(MotorIO algaeIntakeMotor, MotorIO algaeWristMotor) {
         this.algaeIntakeMotor = algaeIntakeMotor;
         this.algaeWristMotor = algaeWristMotor;
+
     }
 
     public static AlgaeEndEffector createInstance(MotorIO algaeIntakeMotor, MotorIO algaeWristMotor) {

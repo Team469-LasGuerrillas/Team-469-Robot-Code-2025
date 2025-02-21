@@ -39,8 +39,8 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-left",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(-7.1), Units.inchesToMeters(9.8)),
-          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(35), Units.degreesToRadians(-25))
+          new Translation3d(Units.inchesToMeters(-8.061), Units.inchesToMeters(-7.182), Units.inchesToMeters(9.25)),
+          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(-25))
         )
       );
   
@@ -48,8 +48,8 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-right",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-8.625), Units.inchesToMeters(7.1), Units.inchesToMeters(9.8)),
-          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(35), Units.degreesToRadians(25))
+          new Translation3d(Units.inchesToMeters(-8.061), Units.inchesToMeters(7.182), Units.inchesToMeters(9.25)),
+          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(25))
         )
       );
 
