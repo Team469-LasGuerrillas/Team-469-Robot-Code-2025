@@ -1,5 +1,7 @@
 package frc.robot.subsystems.endEffectors;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.CANrange;
@@ -47,7 +49,7 @@ public class AlgaeEndEffector extends SubsystemBase {
     }
 
 
-    public void setVoltage(double voltage) {
+    public void setVoltage(DoubleSupplier voltage) {
         algaeIntakeMotor.setOpenLoopVoltage(voltage);
     }  
 
