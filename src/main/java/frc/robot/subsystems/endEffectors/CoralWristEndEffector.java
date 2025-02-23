@@ -2,16 +2,23 @@ package frc.robot.subsystems.endEffectors;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
+import frc.lib.util.math.ToleranceUtil;
+import frc.robot.subsystems.constants.CoralEndEffectorConstants;
+import frc.robot.subsystems.constants.ElevatorConstants;
+import frc.robot.subsystems.elevator.Elevator;
 
 public class CoralWristEndEffector extends SubsystemBase {
     private static CoralWristEndEffector instance;  
 
     private final MotorIO coralWristMotor;
     MotorIOInputsAutoLogged coralWristInputs = new MotorIOInputsAutoLogged();
+
+    private double requestedPosition = CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POSITION;
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;}
@@ -33,9 +40,32 @@ public class CoralWristEndEffector extends SubsystemBase {
     public void periodic() {
         coralWristMotor.updateInputs(coralWristInputs);
         Logger.processInputs("Coral Wrist", coralWristInputs);
+
+        if (isPositionAllowed(requestedPosition)) {
+            coralWristMotor.setMagicalPositionSetpoint(requestedPosition, 7);
+        }
+    }
+
+    private boolean isPositionAllowed(double targetPosition) {
+        return !(
+            Elevator.getInstance().getCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP
+                && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD
+        );
     }
 
     public void setPosition(double position) {
-        coralWristMotor.setMagicalPositionSetpoint(position, 7);
+        requestedPosition = position;
+    } 
+
+    public double getWristPosition() {
+        return coralWristInputs.unitPosition;
     }
+
+    public boolean isOnTarget() {
+        return ToleranceUtil.epsilonEquals(
+            requestedPosition, 
+            coralWristInputs.unitPosition, 
+            CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+    
 }

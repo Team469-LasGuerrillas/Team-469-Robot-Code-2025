@@ -27,6 +27,7 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_INTAKE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -24;
     public static final double ALGAE_INTAKE_DEFAULT_VOLTAGE = 0;
+    public static final double ALGAE_EXTENSION_THRESHOLD = 0;
 
     private static TalonFXConfiguration algaeIntakeMotorFxConfig = 
     new TalonFXConfiguration()
@@ -44,12 +45,14 @@ public class AlgaeEndEffectorConstants {
     
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
-    /* ALGAE WIRST MOTOR */
+    /* ALGAE WRIST MOTOR */
     public static final double ALGAE_WRIST_DEFAULT = 0;
     public static final double ALGAE_WRIST_PROCESSOR = 0;
     public static final double ALGAE_WRIST_BARGE = 0;
     public static final double ALGAE_WRIST_GROUND = 0;
     public static final double ALGAE_WRIST_REEF = 0;
+    public static final double IS_ON_TARGET_THRESHOLD = 0.002;
+    public static final double ALGAE_WRIST_FEED_FORWARD_VOLTS = 0;
 
     private static TalonFXConfiguration algaeWristMotorFxConfig = 
     new TalonFXConfiguration()

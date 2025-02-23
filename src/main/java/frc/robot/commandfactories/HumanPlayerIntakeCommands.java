@@ -12,8 +12,8 @@ public class HumanPlayerIntakeCommands {
 
     public static Command humanPlayerIntake(DoubleSupplier voltage) {
         return Commands.either(
-            Commands.run(() -> humanPlayerIntake.setVoltage(voltage), humanPlayerIntake), 
             Commands.none(), 
+            Commands.run(() -> humanPlayerIntake.setVoltage(voltage), humanPlayerIntake), 
             () -> humanPlayerIntake.hasCoral()
         );
     }

@@ -12,10 +12,17 @@ import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
 
-    public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES = 6;
+    // TODO: Go to Onshape and get the correct values for all of the following 3 static final variables
+    public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES = 6; 
     public static final double CARRIAGE_HEIGHT = 2;
-    public static final double GROUND_TO_ZERO_INCHES = 4;
+    public static final double GROUND_TO_CORAL_REST_POS_INCHES = 6;
+    public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 4;
 
+    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP = GROUND_TO_CORAL_REST_POS_INCHES + 0.5;
+    public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = 5;
+
+    public static final double IS_ON_TARGET_THRESHOLD = 0.002;
+    
     /* CORAL ELEVATOR MOTOR */
     public static final double CORAL_RESTING_POS = 0;
     public static final double CORAL_GROUND_INTAKE = 1;
@@ -26,6 +33,7 @@ public class ElevatorConstants {
     public static final double CORAL_L4 = 6;
     public static final double CORAL_BARGE = 7;
     
+    public static final double FEEDFORWARD_VOLTS = 0;    
 
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()

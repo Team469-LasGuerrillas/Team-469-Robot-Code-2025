@@ -28,7 +28,10 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L2_POSITION = 0;
     public static final double CORAL_L1_POSITION = 0;
     public static final double CORAL_GROUND_INTAKE_POSITION = 0;
+    public static final double CORAL_WRIST_DEFAULT_POSITION = 0;
     public static final double CORAL_HP_INTAKE_POSITION = 0;
+    public static final double CORAL_WRIST_FLIP_THRESHOLD = 0;
+    public static final double IS_ON_TARGET_THRESHOLD = 0.002;
 
     private static TalonFXConfiguration coralWristMotorFxConfig = 
     new TalonFXConfiguration()
