@@ -1,5 +1,7 @@
 package frc.robot.subsystems.endEffectors;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -18,7 +20,7 @@ public class CoralWristEndEffector extends SubsystemBase {
     private final MotorIO coralWristMotor;
     MotorIOInputsAutoLogged coralWristInputs = new MotorIOInputsAutoLogged();
 
-    private double requestedPosition = CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POSITION;
+    private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POSITION;
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;}
@@ -41,8 +43,8 @@ public class CoralWristEndEffector extends SubsystemBase {
         coralWristMotor.updateInputs(coralWristInputs);
         Logger.processInputs("Coral Wrist", coralWristInputs);
 
-        if (isPositionAllowed(requestedPosition)) {
-            coralWristMotor.setMagicalPositionSetpoint(requestedPosition, 7);
+        if (isPositionAllowed(requestedPosition.getAsDouble())) {
+            coralWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), 7);
         }
     }
 
@@ -53,7 +55,7 @@ public class CoralWristEndEffector extends SubsystemBase {
         );
     }
 
-    public void setPosition(double position) {
+    public void setPosition(DoubleSupplier position) {
         requestedPosition = position;
     } 
 
@@ -63,7 +65,7 @@ public class CoralWristEndEffector extends SubsystemBase {
 
     public boolean isOnTarget() {
         return ToleranceUtil.epsilonEquals(
-            requestedPosition, 
+            requestedPosition.getAsDouble(), 
             coralWristInputs.unitPosition, 
             CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
     }

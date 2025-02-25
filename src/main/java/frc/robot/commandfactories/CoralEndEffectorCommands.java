@@ -12,14 +12,14 @@ public class CoralEndEffectorCommands {
     private static CoralWristEndEffector coralWristEndEffector = CoralWristEndEffector.getInstance();
 
     public static Command coralIntake(DoubleSupplier voltage) {
-        return Commands.either(
-            Commands.run(() -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector), 
-            Commands.none(), 
+        return Commands.either( 
+            Commands.none(),
+            Commands.run(() -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector),
             () -> coralIntakeEndEffector.hasCoral()
         );
     }
 
-    public static Command coralWrist(double position) {
+    public static Command coralWrist(DoubleSupplier position) {
         return Commands.run(() -> coralWristEndEffector.setPosition(position), coralWristEndEffector);
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.endEffectors;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,7 +17,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
     private final MotorIO algaeWristMotor;
     private final MotorIOInputsAutoLogged algaeWristInputs = new MotorIOInputsAutoLogged();
 
-    private double requestedPosition = AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT;
+    private DoubleSupplier requestedPosition = () -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT;
 
     private AlgaeWristEndEffector(MotorIO algaeWristMotor) {
         this.algaeWristMotor = algaeWristMotor;
@@ -38,10 +40,10 @@ public class AlgaeWristEndEffector extends SubsystemBase {
         algaeWristMotor.updateInputs(algaeWristInputs);
         Logger.processInputs("Algae Wrist", algaeWristInputs);
 
-        algaeWristMotor.setMagicalPositionSetpoint(requestedPosition, AlgaeEndEffectorConstants.ALGAE_WRIST_FEED_FORWARD_VOLTS);
+        algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), AlgaeEndEffectorConstants.ALGAE_WRIST_FEED_FORWARD_VOLTS);
     }
 
-    public void setPosition(double position) {
+    public void setPosition(DoubleSupplier position) {
         requestedPosition = position;
     }
 
@@ -51,7 +53,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
 
     public boolean isOnTarget() {
         return ToleranceUtil.epsilonEquals(
-            requestedPosition, 
+            requestedPosition.getAsDouble(), 
             algaeWristInputs.unitPosition, 
             AlgaeEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
     }

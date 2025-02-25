@@ -13,14 +13,14 @@ public class AlgaeEndEffectorCommands {
     private static AlgaeWristEndEffector algaeWristEndEffector = AlgaeWristEndEffector.getInstance();
 
      public static Command algaeIntake(DoubleSupplier voltage) {
-        return Commands.either(
-            Commands.run(() -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector), 
-            Commands.none(), 
+        return Commands.either( 
+            Commands.none(),
+            Commands.run(() -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector),
             () -> algaeIntakeEndEffector.hasAlgae()
         );
     }
 
-    public static Command algaeWrist(double position) {
+    public static Command algaeWrist(DoubleSupplier position) {
         return Commands.run(() -> algaeWristEndEffector.setPosition(position), algaeWristEndEffector);
     }
 }

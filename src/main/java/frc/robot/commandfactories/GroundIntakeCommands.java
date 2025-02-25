@@ -14,8 +14,8 @@ public class GroundIntakeCommands {
 
     public static Command groundIntake(DoubleSupplier voltage) {
         return Commands.either(
-            Commands.run(() -> groundIntake.setVoltage(voltage), groundIntake), 
             Commands.none(), 
+            Commands.run(() -> groundIntake.setVoltage(voltage), groundIntake), 
             () -> groundIntake.hasCoral()
         );
     }
