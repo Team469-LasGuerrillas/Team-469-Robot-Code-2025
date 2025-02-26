@@ -32,6 +32,7 @@ public interface MotorIO {
 
   // MotionMagic Position
   public default void setMagicalPositionSetpoint(double units, double feedForward) {}
+  public default void setMagicalPositionSetpoint(double units, double feedForward, MotorIOTalonFX... followerMotors) {}
 
   // Velocity
   public default void setVelocitySetpoint(double unitsPerSecond) {}

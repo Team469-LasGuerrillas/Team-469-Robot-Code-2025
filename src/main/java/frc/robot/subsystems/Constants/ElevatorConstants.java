@@ -7,7 +7,9 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.networktables.BooleanEntry;
 import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
@@ -56,7 +58,7 @@ public class ElevatorConstants {
 
     private static MotorConfigs coralElevatorMotorConfigs = 
     new MotorConfigs()
-        .withCanId(469)
+        .withCanId(8)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralElevatorTalonFXConfiguration)
         .withMaxPositionUnits(469)
@@ -78,7 +80,8 @@ public class ElevatorConstants {
                 .withKV(0)
                 .withKP(0)
                 .withKI(0)
-                .withKD(0))
+                .withKD(0)
+            )
             .withMotionMagic(
                 new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(80)
@@ -86,14 +89,13 @@ public class ElevatorConstants {
 
     private static MotorConfigs coralElevatorFollowerMotorConfigs = 
     new MotorConfigs()
-        .withCanId(469)
+        .withCanId(9)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralElevatorFollowerTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
 
     public static MotorIOTalonFX coralElevatorFollowerMotor = new MotorIOTalonFX(coralElevatorFollowerMotorConfigs);
-
 
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_PROCESSOR = 0;

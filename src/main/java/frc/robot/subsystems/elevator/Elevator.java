@@ -7,6 +7,7 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
+import frc.lib.interfaces.motor.MotorIOTalonFX;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
@@ -67,7 +68,7 @@ public class Elevator extends SubsystemBase {
         }
 
         if (isAlgaeWristLegal() && isCoralWristLegal()) {
-            coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), ElevatorConstants.FEEDFORWARD_VOLTS);
+            coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), ElevatorConstants.FEEDFORWARD_VOLTS, (MotorIOTalonFX) coralElevatorMotorFollower);
             algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.FEEDFORWARD_VOLTS);
         }
     }
