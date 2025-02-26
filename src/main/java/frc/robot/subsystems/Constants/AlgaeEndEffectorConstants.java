@@ -7,8 +7,10 @@ import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import frc.lib.interfaces.motor.CancoderConfigs;
@@ -31,6 +33,10 @@ public class AlgaeEndEffectorConstants {
 
     private static TalonFXConfiguration algaeIntakeMotorFxConfig = 
     new TalonFXConfiguration()
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.Clockwise_Positive)
+        )
         .withCurrentLimits(
             new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -56,6 +62,10 @@ public class AlgaeEndEffectorConstants {
 
     private static TalonFXConfiguration algaeWristMotorFxConfig = 
     new TalonFXConfiguration()
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.Clockwise_Positive)
+        )
         .withCurrentLimits(
             new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)

@@ -6,7 +6,9 @@ import frc.robot.generated.TunerConstants;
 
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import frc.lib.interfaces.motor.MotorConfigs;
 
@@ -22,6 +24,10 @@ public class HumanPlayerIntakeConstants {
     
     private static TalonFXConfiguration hpIntakeTalonFXConfig = 
         new TalonFXConfiguration()
+            .withMotorOutput(
+                new MotorOutputConfigs()
+                    .withInverted(InvertedValue.Clockwise_Positive)
+            )
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)

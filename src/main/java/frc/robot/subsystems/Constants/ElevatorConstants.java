@@ -5,9 +5,11 @@ import frc.robot.generated.TunerConstants;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.networktables.BooleanEntry;
 import frc.lib.interfaces.motor.MotorConfigs;
@@ -39,6 +41,10 @@ public class ElevatorConstants {
 
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
+    .withMotorOutput(
+        new MotorOutputConfigs()
+            .withInverted(InvertedValue.Clockwise_Positive)
+    )
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
@@ -70,22 +76,26 @@ public class ElevatorConstants {
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerTalonFXConfiguration =
     new TalonFXConfiguration()
-    .withCurrentLimits(
-        new CurrentLimitsConfigs()
-            .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(10))
-            .withSlot0(
-                new Slot0Configs()
-                .withKS(0)
-                .withKV(0)
-                .withKP(0)
-                .withKI(0)
-                .withKD(0)
-            )
-            .withMotionMagic(
-                new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(80)
-                .withMotionMagicAcceleration(90));
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.Clockwise_Positive)
+        )
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(10))
+                .withSlot0(
+                    new Slot0Configs()
+                    .withKS(0)
+                    .withKV(0)
+                    .withKP(0)
+                    .withKI(0)
+                    .withKD(0)
+                )
+        .withMotionMagic(
+            new MotionMagicConfigs()
+            .withMotionMagicCruiseVelocity(80)
+            .withMotionMagicAcceleration(90));
 
     private static MotorConfigs coralElevatorFollowerMotorConfigs = 
     new MotorConfigs()
@@ -106,6 +116,10 @@ public class ElevatorConstants {
 
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
+    .withMotorOutput(
+        new MotorOutputConfigs()
+            .withInverted(InvertedValue.Clockwise_Positive)
+    )
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
