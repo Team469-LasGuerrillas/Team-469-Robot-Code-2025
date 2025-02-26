@@ -32,7 +32,7 @@ import java.util.HashMap;
 
 public class VisionIOLimelight implements VisionIO {
   static HashMap<String, VisionIOLimelight> instances = new HashMap<String, VisionIOLimelight>();
-
+  
   private final String limelightName;
   private double lastHeartbeat = 0;
 

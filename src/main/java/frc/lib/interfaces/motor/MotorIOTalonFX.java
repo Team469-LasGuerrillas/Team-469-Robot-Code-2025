@@ -1,10 +1,14 @@
 package frc.lib.interfaces.motor;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -93,8 +97,8 @@ public class MotorIOTalonFX implements MotorIO {
   }
 
   @Override
-  public void setOpenLoopVoltage(double volts) {
-    talon.setVoltage(volts);
+  public void setOpenLoopVoltage(DoubleSupplier volts) {
+    talon.setVoltage(volts.getAsDouble());
   }
 
   @Override
@@ -107,6 +111,16 @@ public class MotorIOTalonFX implements MotorIO {
   public void setMagicalPositionSetpoint(double units, double feedForward) {
     talon.setControl(
         motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward));
+  }
+
+  @Override
+  public void setMagicalPositionSetpoint(double units, double feedForward, MotorIOTalonFX... followerMotors) {
+    for (int i = 0; i < followerMotors.length; i++) {
+      followerMotors[i].talon.setControl(new StrictFollower(talon.getDeviceID()));
+    }
+
+    talon.setControl(
+      motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward));
   }
 
   @Override

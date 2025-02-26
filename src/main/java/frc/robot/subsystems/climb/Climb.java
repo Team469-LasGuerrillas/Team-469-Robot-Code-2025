@@ -1,5 +1,7 @@
 package frc.robot.subsystems.climb;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +36,7 @@ public class Climb extends SubsystemBase {
         climbMotor.updateInputs(climbInputs);
         Logger.processInputs("Climb", climbInputs);
     }
-    public void setVoltage(double voltage) {
+    public void setVoltage(DoubleSupplier voltage) {
         climbMotor.setOpenLoopVoltage(voltage);
     }
 }

@@ -1,6 +1,9 @@
 package frc.lib.interfaces.motor;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface MotorIO {
@@ -22,13 +25,14 @@ public interface MotorIO {
   public default void updateInputs(MotorIOInputs inputs) {}
 
   // Open-Loop Voltage
-  public default void setOpenLoopVoltage(double volts) {}
+  public default void setOpenLoopVoltage(DoubleSupplier volts) {}
 
   // Position
   public default void setPositionSetpoint(double units, double feedForward) {}
 
   // MotionMagic Position
   public default void setMagicalPositionSetpoint(double units, double feedForward) {}
+  public default void setMagicalPositionSetpoint(double units, double feedForward, MotorIOTalonFX... followerMotors) {}
 
   // Velocity
   public default void setVelocitySetpoint(double unitsPerSecond) {}
