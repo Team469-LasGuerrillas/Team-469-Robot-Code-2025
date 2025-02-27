@@ -185,7 +185,7 @@ public class Drive extends SubsystemBase {
               TunerConstants.FrontLeft.WheelRadius,
               DriveConstants.TELEOP_MAX_LINEAR_VELOCITY,
               DriveConstants.WHEEL_COF,
-              DCMotor.getFalcon500(1)
+              DCMotor.getKrakenX60(1)
                   .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
               TunerConstants.FrontLeft.SlipCurrent,
               1),
@@ -587,6 +587,10 @@ public class Drive extends SubsystemBase {
     currentSetpoint = setpointGenerator.generateSetpoint(currentSetpoint, speeds, 0.02);
     SwerveModuleState[] optimizedSetpointStates = new SwerveModuleState[4];
     SwerveModuleState[] optimizedSetpointTorques = new SwerveModuleState[4];
+
+    // ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    // SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+
 
     for (int i = 0; i < 4; i++) {
       optimizedSetpointStates[i] = currentSetpoint.moduleStates()[i];
