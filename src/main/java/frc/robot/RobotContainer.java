@@ -75,7 +75,8 @@ public class RobotContainer {
   private final Vision arducamTwo;
 
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driver = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   private ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drive Station 2025");
 
@@ -157,55 +158,26 @@ public class RobotContainer {
     Dashboard.addWidgets(shuffleboardTab);
 
     // Configure the button bindings
-    configureButtonBindings();
+    configureDefaultBindings();
+    configureDriverBindings();
+    configureOperatorBindings();
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-
-    // Default command, normal field-relative drive
+  private void configureDefaultBindings() {
     drive.setDefaultCommand(
-        DriveCommands.acceptTeleopFieldOriented(controller, true));
+        DriveCommands.acceptTeleopFieldOriented(driver, true));
+  }
 
-    controller.x().whileTrue(DriveCommands.autoRotate(controller, () -> new Rotation2d()));
- 
-    // controller.y().whileTrue(DriveCommands.aimAssistToPose(controller, new Pose2d(2, 4.03, new Rotation2d()))
-    // );
-
-    controller.y().whileTrue(
+  private void configureDriverBindings() {
+    driver.y().whileTrue(
       DriveCommands.pidToClosestReefPose()
     );
 
-    controller.rightBumper().whileTrue(
-      DriveCommands.aimAssistToClosestReefPose(controller, 0.469)
-    );
+    driver.b().onTrue(
+      Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
+  }
 
-    // controller.y().whileTrue(DriveCommands.autoRotate(controller, () -> Rotation2d.fromDegrees(45)));
-    
-    controller.a().whileTrue(Commands.startEnd(
-      () -> drive.setPathfinding(new Pose2d(2, 4.05, new Rotation2d())), 
-      () -> drive.clearMode())
-    );
-
-    // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
-    // Reset Pose when B button is pressed
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d()),
-                    drive)
-                .ignoringDisable(true));
-    
+  private void configureOperatorBindings() {
     
   }
 

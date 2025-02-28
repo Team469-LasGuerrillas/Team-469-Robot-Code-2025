@@ -5,8 +5,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
+import frc.robot.subsystems.constants.ClimbConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
+import frc.robot.subsystems.constants.HumanPlayerIntakeConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
@@ -15,75 +17,127 @@ public class GlobalCommands {
   public static Elevator elevator = Elevator.getInstance();
   public static CoralWristEndEffector coralWristEndEffector = CoralWristEndEffector.getInstance();
   public static AlgaeWristEndEffector algaeWristEndEffector = AlgaeWristEndEffector.getInstance();
-
-  /* EXAMPLE */
-  public static Command hehe() {
-    // () -> variable
-    // () -> {return variable;}
-
-    // () -> {return (Elevator.getInstance().isOnTarget() && CoralWristEndEffector.getInstance().isOnTarget());}
-    return Commands.deadline(
-      Commands.waitUntil(() -> {return (Elevator.getInstance().isOnTarget() && CoralWristEndEffector.getInstance().isOnTarget());}), 
-      Commands.none()
-    );
-  }
-
-
   
   public static Command humanPlayerIntake() {
     return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget());}),
-     Commands.none());
+    Commands.parallel(
+            CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE),
+            CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_HUMAN_PLAYER_INTAKE_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)));
   }
 
-  public static Command scoreProcessor() {
-    return Commands.deadline(Commands.waitUntil(() -> elevator.isOnTarget()),
-     Commands.none());
+  public static Command algaeGroundIntake() {
+    return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
+    Commands.parallel(
+            AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_GROUND_POS),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_DEFAULT_POS, () -> ElevatorConstants.ALGAE_GROUND_POS)));
   }
 
   public static Command coralL4AlgaeL3() {
     return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
-     Commands.none());
+    Commands.parallel(
+            CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE),
+            CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L4_POS),
+            AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L4_POS, () -> ElevatorConstants.ALGAE_L3_POS)));
+  }
+
+  public static Command coralL4AlgaeL2() {
+    return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
+    Commands.parallel(
+            CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE),
+            CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L4_POS),
+            AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L4_POS, () -> ElevatorConstants.ALGAE_L2_POS)));
   }
 
   public static Command coralL3AlgaeL2() {
     return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
-     Commands.none());
+    Commands.parallel(
+            CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE),
+            CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L3_POS),
+            AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L3_POS, () -> ElevatorConstants.ALGAE_L2_POS)));
+
   }
 
   public static Command coralL2() {
     return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget());}),
-     Commands.none());
+    Commands.parallel(
+            CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE),
+            CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L2_POS),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)));
+
   }
 
   public static Command coralL1() {
     return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget());}),
-     Commands.none());
+     Commands.parallel(
+            CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE),
+            CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)));
   }
 
-  // public static Command groundIntake() {
-  //   return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && coralWristEndEffector.isOnTarget());}),
-  //    Commands.none());
-  // }
+  public static Command algaeProcessor() {
+    return Commands.deadline(Commands.waitUntil(() -> {return (elevator.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
+     Commands.parallel(
+            AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)));
+  }
+
+  public static Command algaeBarge() {
+    return Commands.deadline(Commands.waitUntil(() -> elevator.isOnTarget()),
+     Commands.parallel(
+            AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_BARGE_OUT_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_BARGE_POS),
+            ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)));
+  }
+
+  public static Command climb() {
+    return Commands.parallel(
+      ClimbCommands.climb(() -> ClimbConstants.CLIMB_EXTEND));
+  }
+
+  public static Command algaeRelease() {
+    return Commands.parallel(
+      AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE));
+  }
+
+  public static Command coralRelease() {
+    return Commands.parallel(
+      CoralEndEffectorCommands.coralIntake(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
+  }
 
   /* DEFAULT POSITIONS */
   public static Command defaultAlgaeElevatorPosition() {
-    return ElevatorCommands.setAlgaePosFromZero(() -> ElevatorConstants.ALGAE_RESTING_POS);
+    return ElevatorCommands.setAlgaePosFromZero(() -> ElevatorConstants.ALGAE_DEFAULT_POS);
   }
 
   public static Command defaultCoralElevatorPosition() {
-    return ElevatorCommands.setCoralPosFromZero(() -> ElevatorConstants.CORAL_RESTING_POS);
+    return ElevatorCommands.setCoralPosFromZero(() -> ElevatorConstants.CORAL_DEFAULT_POS);
   }
 
   public static Command defaultCoralWristEndEffector() {
-    return CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POSITION);
+    return CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS);
   }
 
   public static Command defaultAlgaeWristEndEffector() {
-    return AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT);
-    }
+    return AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS);
   }
-    
+  
+  public static Command defaultCoralIntakeEndEffector() {
+    return CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
+  }
 
+  public static Command defaultAlgaeIntakeEndEffector() {
+    return AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE);
+  }
+}
 
 
 
@@ -96,13 +150,13 @@ public class GlobalCommands {
 //     );
 //   }
 
-//   public static Command coralGroundIntakeOut() {
-//     return Commands.parallel(
-//       GroundIntakeCommands.groundIntakeOut(),
-//       ElevatorCommands.algaeRestingPos(),
-//       ElevatorCommands.coralGroundIntake()
-//     );
-//   }
+  // public static Command coralGroundIntakeOut() {
+  //   return Commands.parallel(
+  //     GroundIntakeCommands.groundIntakeOut(),
+  //     ElevatorCommands.algaeRestingPos(),
+  //     ElevatorCommands.coralGroundIntake()
+  //   );
+  // }
 
 //   public static Command coralHumanPlayerIntakeIn() {
 //     return Commands.parallel(

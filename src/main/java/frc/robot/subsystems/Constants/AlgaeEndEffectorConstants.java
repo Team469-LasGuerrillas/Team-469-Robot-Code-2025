@@ -52,11 +52,11 @@ public class AlgaeEndEffectorConstants {
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
     /* ALGAE WRIST MOTOR */
-    public static final double ALGAE_WRIST_DEFAULT = 0;
-    public static final double ALGAE_WRIST_PROCESSOR = 0;
-    public static final double ALGAE_WRIST_BARGE = 0;
-    public static final double ALGAE_WRIST_GROUND = 0;
-    public static final double ALGAE_WRIST_REEF = 0;
+    public static final double ALGAE_WRIST_DEFAULT_POS = 0;
+    public static final double ALGAE_WRIST_PROCESSOR_POS = 0;
+    public static final double ALGAE_WRIST_BARGE_POS = 0;
+    public static final double ALGAE_WRIST_GROUND_POS = 0;
+    public static final double ALGAE_WRIST_L2_L3 = 0;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double ALGAE_WRIST_FEED_FORWARD_VOLTS = 0;
 

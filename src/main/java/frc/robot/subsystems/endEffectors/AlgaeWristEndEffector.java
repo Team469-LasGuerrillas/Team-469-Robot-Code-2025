@@ -17,7 +17,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
     private final MotorIO algaeWristMotor;
     private final MotorIOInputsAutoLogged algaeWristInputs = new MotorIOInputsAutoLogged();
 
-    private DoubleSupplier requestedPosition = () -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT;
+    private DoubleSupplier requestedPosition = () -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS;
 
     private AlgaeWristEndEffector(MotorIO algaeWristMotor) {
         this.algaeWristMotor = algaeWristMotor;

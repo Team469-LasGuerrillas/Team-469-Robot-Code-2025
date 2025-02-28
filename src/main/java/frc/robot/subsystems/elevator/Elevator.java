@@ -29,8 +29,8 @@ public class Elevator extends SubsystemBase {
     private final MotorIOInputsAutoLogged algaeElevatorInputs = new MotorIOInputsAutoLogged();
 
 
-    private DoubleSupplier coralRequestedHeight = () -> ElevatorConstants.CORAL_RESTING_POS;
-    private DoubleSupplier algaeRequestedHeight = () -> ElevatorConstants.ALGAE_RESTING_POS;
+    private DoubleSupplier coralRequestedHeight = () -> ElevatorConstants.CORAL_DEFAULT_POS;
+    private DoubleSupplier algaeRequestedHeight = () -> ElevatorConstants.ALGAE_DEFAULT_POS;
 
     private Elevator(MotorIO coralElevatorMotor, MotorIO coralElevatorMotorFollower, MotorIO algaeElevatorMotor) {
         this.coralElevatorMotor = coralElevatorMotor;

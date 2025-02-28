@@ -25,15 +25,16 @@ public class CoralEndEffectorConstants {
     SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 0);
 
     /* CORAL WRIST MOTOR */
-    public static final double CORAL_L4_POSITION = -12;
-    public static final double CORAL_L3_POSITION = 12;
-    public static final double CORAL_L2_POSITION = 0;
-    public static final double CORAL_L1_POSITION = 0;
-    public static final double CORAL_GROUND_INTAKE_POSITION = 0;
-    public static final double CORAL_WRIST_DEFAULT_POSITION = 0;
-    public static final double CORAL_HP_INTAKE_POSITION = 0;
+    public static final double CORAL_L4_POS = -12;
+    public static final double CORAL_L3_POS = 12;
+    public static final double CORAL_L2_POS = 0;
+    public static final double CORAL_L1_POS = 0;
+    public static final double CORAL_GROUND_INTAKE_POS = 0;
+    public static final double CORAL_WRIST_DEFAULT_POS = 0;
+    public static final double CORAL_HP_INTAKE_POS = 0;
     public static final double CORAL_WRIST_FLIP_THRESHOLD = 0;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
+    
 
     private static TalonFXConfiguration coralWristMotorFxConfig = 
     new TalonFXConfiguration()

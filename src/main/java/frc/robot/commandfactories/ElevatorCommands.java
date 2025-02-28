@@ -9,8 +9,8 @@ import frc.robot.subsystems.elevator.Elevator;
 public class ElevatorCommands {
     private static Elevator elevator = Elevator.getInstance();
 
-  public static Command setTargetPosFromZero(DoubleSupplier algaePosition, DoubleSupplier coralPosition) {
-    return Commands.run(() -> elevator.setTargetPosFromZero(algaePosition, coralPosition));
+  public static Command setTargetPosFromZero(DoubleSupplier coralPosition, DoubleSupplier algaePosition) {
+    return Commands.run(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition));
   }
 
   public static Command setCoralPosFromZero(DoubleSupplier coralPosition) {

@@ -42,6 +42,7 @@ public class DriveConstants {
 
   // Teleop driving constants
   public static final double STICK_DEADBAND = 0.01;
+  public static final double TRIGGER_DEADBAND = 0.25;
   public static final double STICK_EXPO = 1;
 
   public static final double TELEOP_MAX_LINEAR_VELOCITY =

@@ -20,7 +20,7 @@ public class HumanPlayerIntakeConstants {
     /* HUMAN PLAYER INTAKE MOTOR */
     public static final double HP_INTAKE_IN = 12;
     public static final double HP_INTAKE_OUT = -12;
-    public static final double HP_INTAKE_DEFAULT = 0;
+    public static final double HP_INTAKE_DEFAULT_VOLTAGE = 0;
     
     private static TalonFXConfiguration hpIntakeTalonFXConfig = 
         new TalonFXConfiguration()

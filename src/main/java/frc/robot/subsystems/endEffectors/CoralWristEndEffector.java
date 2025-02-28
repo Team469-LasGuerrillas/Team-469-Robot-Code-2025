@@ -20,7 +20,7 @@ public class CoralWristEndEffector extends SubsystemBase {
     private final MotorIO coralWristMotor;
     MotorIOInputsAutoLogged coralWristInputs = new MotorIOInputsAutoLogged();
 
-    private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POSITION;
+    private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS;
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;}
