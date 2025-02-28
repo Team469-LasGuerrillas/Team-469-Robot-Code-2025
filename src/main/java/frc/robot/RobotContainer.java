@@ -26,11 +26,13 @@ import frc.lib.Dashboard;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.DriveCommands;
+import frc.robot.commandfactories.GlobalCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.ClimbConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.constants.GroundIntakeConstants;
 import frc.robot.subsystems.constants.HumanPlayerIntakeConstants;
@@ -178,7 +180,16 @@ public class RobotContainer {
   }
 
   private void configureOperatorBindings() {
+    operator.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.humanPlayerIntake());
     
+    operator.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.algaeGroundIntake());
+
+    operator.leftBumper().whileTrue(GlobalCommands.algaeBarge());
+
+    operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
+
+    operator.b().whileTrue(GlobalCommands.coralL3AlgaeL2());
+
   }
 
   /**
