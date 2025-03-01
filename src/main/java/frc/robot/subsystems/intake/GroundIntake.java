@@ -30,9 +30,7 @@ public class GroundIntake extends SubsystemBase {
     }
 
     public static GroundIntake getInstance() {
-        if (instance == null) {
-            instance = new GroundIntake(new MotorIO() {}, new SensorIO() {});
-        }
+        if (instance == null) throw new Error("Subsystem has not been created");
         return instance;
     }
 

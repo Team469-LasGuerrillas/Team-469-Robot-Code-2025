@@ -32,9 +32,7 @@ public class HumanPlayerIntake extends SubsystemBase {
     }
 
     public static HumanPlayerIntake getInstance() {
-        if (instance == null) {
-            instance = new HumanPlayerIntake(new MotorIO() {}, new SensorIO() {});
-        }
+        if (instance == null) throw new Error("Subsystem has not been created");
         return instance;
     }
     @Override

@@ -22,9 +22,7 @@ public class GroundWrist extends SubsystemBase {
     }
 
     public static GroundWrist getInstance() {
-        if (instance == null) {
-            instance = new GroundWrist(new MotorIO() {});
-        }
+        if (instance == null) throw new Error("Subsystem has not been created");
         return instance;
     }
 
