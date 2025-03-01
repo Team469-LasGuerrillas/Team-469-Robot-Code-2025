@@ -50,12 +50,14 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
         algaeIntakeMotor.setOpenLoopVoltage(voltage);
     }  
 
-    public boolean hasAlgae() {
-        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE) { 
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isHoldingAlgae() {
+        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE) return true; 
+        return false;
+    }
 
+    public boolean isSeeingAlgae() {
+        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_MAX_ALGAE_VALUE 
+            && CANRangeInputs.distance > SensorConstants.CAN_RANGE_MIN_ALGAE_VALUE) return true;
+        return false;
     }
 }

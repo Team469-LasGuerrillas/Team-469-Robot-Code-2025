@@ -16,11 +16,22 @@ public class AlgaeEndEffectorCommands {
         return Commands.either( 
             Commands.none(),
             Commands.run(() -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector),
-            () -> algaeIntakeEndEffector.hasAlgae()
+            () -> algaeIntakeEndEffector.isHoldingAlgae()
         );
     }
 
     public static Command algaeWrist(DoubleSupplier position) {
         return Commands.run(() -> algaeWristEndEffector.setPosition(position), algaeWristEndEffector);
+    }
+
+    public static Command algaeWrist() {
+        return Commands.deferredProxy(
+            () -> Commands.either(
+                Commands.run(() -> algaeWristEndEffector.setPosition(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
+                 algaeWristEndEffector), 
+                Commands.none(), 
+                () -> algaeIntakeEndEffector.isSeeingAlgae()
+            )
+        );
     }
 }

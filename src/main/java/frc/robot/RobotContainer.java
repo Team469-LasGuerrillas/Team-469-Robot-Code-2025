@@ -171,12 +171,25 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    driver.y().whileTrue(
-      DriveCommands.pidToClosestReefPose()
+    driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
+      DriveCommands.pidToClosestReefPoseRight()
+    );
+
+    driver.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
+      DriveCommands.pidToClosestReefPoseLeft()
     );
 
     driver.b().onTrue(
       Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
+
+
+    driver.leftBumper().whileTrue(
+      GlobalCommands.algaeRelease()
+    );
+
+    driver.rightBumper().whileTrue(
+      GlobalCommands.coralRelease()
+    );
   }
 
   private void configureOperatorBindings() {
@@ -188,8 +201,15 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
 
-    operator.b().whileTrue(GlobalCommands.coralL3AlgaeL2());
+    operator.b().whileTrue(GlobalCommands.coralL3());
 
+    operator.x().whileTrue(GlobalCommands.coralL2());
+
+    operator.a().whileTrue(GlobalCommands.coralL1());
+
+    operator.povDown().or(operator.povUp()).whileTrue(GlobalCommands.climbExtend());
+
+    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.climbRetract());
   }
 
   /**

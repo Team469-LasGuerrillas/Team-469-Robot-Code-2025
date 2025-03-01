@@ -23,7 +23,7 @@ import frc.robot.subsystems.drive.Drive;
 public class GeomUtil {
   public static boolean isLookingAtReef() {
     Pose2d robotPose = Drive.getInstance().getPose();
-    Pose2d reefPose = FieldLayout.REEF_CENTER;
+    Pose2d reefPose = FieldLayout.REEF_CENTER_BLUE;
 
     Rotation2d rotationToReef =
       new Rotation2d(reefPose.getX() - robotPose.getX(), reefPose.getY() - robotPose.getY());
@@ -33,7 +33,7 @@ public class GeomUtil {
 
   public static boolean isWithinReefRadius() {
     Pose2d robotPose = Drive.getInstance().getPose();
-    Pose2d reefPose = FieldLayout.REEF_CENTER;
+    Pose2d reefPose = FieldLayout.REEF_CENTER_BLUE;
 
     double distance = robotPose.getTranslation().getDistance(reefPose.getTranslation());
 

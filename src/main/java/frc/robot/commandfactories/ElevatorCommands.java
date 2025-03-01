@@ -4,20 +4,32 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.elevator.Elevator;
 
 public class ElevatorCommands {
     private static Elevator elevator = Elevator.getInstance();
 
   public static Command setTargetPosFromZero(DoubleSupplier coralPosition, DoubleSupplier algaePosition) {
-    return Commands.run(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition));
+    return Commands.run(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition), elevator);
+  }
+
+  public static Command setDynamicL4Pos() {
+    double algaePosition;
+    if (elevator.goToAlgaeL3()) algaePosition = ElevatorConstants.ALGAE_L3_POS;
+    else algaePosition = ElevatorConstants.ALGAE_L2_POS;
+    
+    return Commands.deferredProxy(
+      () -> setTargetPosFromZero(
+        () -> ElevatorConstants.CORAL_L4_POS, () -> algaePosition)
+    );
   }
 
   public static Command setCoralPosFromZero(DoubleSupplier coralPosition) {
-    return Commands.run(() -> elevator.setCoralPosFromZero(coralPosition));
+    return Commands.run(() -> elevator.setCoralPosFromZero(coralPosition), elevator);
   }
 
   public static Command setAlgaePosFromZero(DoubleSupplier algaePosition) {
-    return Commands.run(() -> elevator.setAlgaePosFromZero(algaePosition));
+    return Commands.run(() -> elevator.setAlgaePosFromZero(algaePosition), elevator);
   }
 }

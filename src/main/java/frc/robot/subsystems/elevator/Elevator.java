@@ -4,10 +4,13 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.interfaces.motor.MotorIOTalonFX;
+import frc.lib.util.FieldLayout;
+import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
@@ -138,5 +141,14 @@ public class Elevator extends SubsystemBase {
             algaeRequestedHeight.getAsDouble(), algaeElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
 
         return isOnTargetCoral && isOnTargetAlgae;
+    }
+
+    // True: Closer to Algae L3; False: Closer to Algae L2
+    public boolean goToAlgaeL3() {
+        ReefPositions closestReefPosition = FieldLayout.findClosestReefPoseRight();
+        Pose2d closestPose = FieldLayout.reefPositionPoseRight.get(closestReefPosition);
+
+        if (closestPose.getRotation().getDegrees() % 120 == 0) return true;
+        return false;
     }
 }
