@@ -47,9 +47,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public static Elevator getInstance() {
-        if (instance == null) {
-            instance = new Elevator(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
-        }
+        if (instance == null) throw new Error("Subsystem has not been created");
         return instance;
     }
 

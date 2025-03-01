@@ -13,11 +13,12 @@ public class AlgaeEndEffectorCommands {
     private static AlgaeWristEndEffector algaeWristEndEffector = AlgaeWristEndEffector.getInstance();
 
      public static Command algaeIntake(DoubleSupplier voltage) {
-        return Commands.either( 
+        return Commands.deferredProxy(
+            () -> Commands.either(
             Commands.none(),
             Commands.run(() -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector),
             () -> algaeIntakeEndEffector.isHoldingAlgae()
-        );
+        ));
     }
 
     public static Command algaeWrist(DoubleSupplier position) {
@@ -27,10 +28,9 @@ public class AlgaeEndEffectorCommands {
     public static Command algaeWrist() {
         return Commands.deferredProxy(
             () -> Commands.either(
-                Commands.run(() -> algaeWristEndEffector.setPosition(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
-                 algaeWristEndEffector), 
-                Commands.none(), 
-                () -> algaeIntakeEndEffector.isSeeingAlgae()
+            Commands.none(),
+            Commands.run(() -> algaeWristEndEffector.setPosition(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3), algaeWristEndEffector),
+            () -> algaeIntakeEndEffector.isSeeingAlgae()
             )
         );
     }

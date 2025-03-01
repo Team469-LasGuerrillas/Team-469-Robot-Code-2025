@@ -10,6 +10,7 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
+import frc.robot.subsystems.constants.SensorConstants;
 
 public class AlgaeWristEndEffector extends SubsystemBase {
     private static AlgaeWristEndEffector instance;
@@ -29,9 +30,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
     }
 
     public static AlgaeWristEndEffector getInstance() {
-        if (instance == null) {
-            instance = new AlgaeWristEndEffector(new MotorIO() {});
-        }
+        if (instance == null) throw new Error("Subsystem has not been created");
         return instance;
     }
 

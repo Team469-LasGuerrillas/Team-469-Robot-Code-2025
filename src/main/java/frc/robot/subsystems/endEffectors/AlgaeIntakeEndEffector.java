@@ -31,9 +31,7 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
     }
 
     public static AlgaeIntakeEndEffector getInstance() {
-        if (instance == null) {
-            instance = new AlgaeIntakeEndEffector(new MotorIO() {}, new SensorIO() {});
-        }
+        if (instance == null) throw new Error("Subsystem has not been created");
         return instance;
     }
 

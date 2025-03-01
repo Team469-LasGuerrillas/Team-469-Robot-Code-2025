@@ -94,6 +94,8 @@ public class MotorIOTalonFX implements MotorIO {
     inputs.currentStatorAmps = currentStatorSignal.getValueAsDouble();
 
     inputs.canbusId = mConfig.canId;
+
+    inputs.talon = talon;
   }
 
   @Override

@@ -88,14 +88,16 @@ public class GlobalCommands {
             ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)));
   }
 
-  public static Command climbExtend() {
-    return Commands.parallel(
-      ClimbCommands.climb(() -> ClimbConstants.CLIMB_EXTEND));
+  public static Command slowRetract() {
+    return ClimbCommands.climb(() -> ClimbConstants.SLOW_RETRACT);
+  } 
+
+  public static Command fastRetract() {
+    return ClimbCommands.climb(() -> ClimbConstants.FAST_RETRACT);
   }
 
-  public static Command climbRetract() {
-    return Commands.parallel(
-      ClimbCommands.climb(() -> ClimbConstants.CLIMB_RETRACT));
+  public static Command deploy() {
+    return ClimbCommands.climb(() -> ClimbConstants.DEPLOY);
   }
 
   public static Command algaeRelease() {

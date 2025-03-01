@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import frc.robot.subsystems.vision.Vision;
+
 public class Dashboard {
   public static final Field2d m_field = new Field2d();
   public static final Field2d m_visionField = new Field2d();
@@ -34,8 +36,13 @@ public class Dashboard {
 
     tab
     .add("Auton Chooser", autoChooser)
-    .withSize(1, 6)
+    .withSize(1, 3)
     .withPosition(14, 0);
+
+    tab
+    .add("Target Count", Vision.getInstance().getTargetCount())
+    .withSize(1, 3)
+    .withPosition(14, 4);
   }
 
   public static Command getAutonomousCommand() {

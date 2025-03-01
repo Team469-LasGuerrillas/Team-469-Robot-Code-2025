@@ -13,8 +13,9 @@ import frc.lib.interfaces.motor.MotorConfigs;
 public class ClimbConstants {
 
     /*CLIMB MOTOR */
-    public static final double CLIMB_EXTEND = 12;
-    public static final double CLIMB_RETRACT = -12;
+    public static final double SLOW_RETRACT = -2;
+    public static final double FAST_RETRACT = 12;
+    public static final double DEPLOY = 1;
 
     private static TalonFXConfiguration climbMotorFxConfig = 
     new TalonFXConfiguration()

@@ -34,9 +34,7 @@ public class CoralIntakeEndEffector extends SubsystemBase {
         }
     
         public static CoralIntakeEndEffector getInstance() {
-            if (instance == null) {
-                instance = new CoralIntakeEndEffector(new MotorIO() {}, new SensorIO() {});
-            }
+            if (instance == null) throw new Error("Subsystem has not been created");
             return instance;
         
     }

@@ -8,10 +8,8 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.networktables.BooleanEntry;
 import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
@@ -67,18 +65,18 @@ public class ElevatorConstants {
         .withCanId(8)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralElevatorTalonFXConfiguration)
+        .withUnitToRotorRatio(1 / 3.5)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
 
     public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs);
-
 
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerTalonFXConfiguration =
     new TalonFXConfiguration()
         .withMotorOutput(
             new MotorOutputConfigs()
-                .withInverted(InvertedValue.Clockwise_Positive)
+                .withInverted(InvertedValue.CounterClockwise_Positive)
         )
         .withCurrentLimits(
             new CurrentLimitsConfigs()

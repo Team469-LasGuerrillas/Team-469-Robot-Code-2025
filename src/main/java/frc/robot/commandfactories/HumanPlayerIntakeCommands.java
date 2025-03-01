@@ -11,10 +11,10 @@ public class HumanPlayerIntakeCommands {
     private static HumanPlayerIntake humanPlayerIntake = HumanPlayerIntake.getInstance();
 
     public static Command humanPlayerIntake(DoubleSupplier voltage) {
-        return Commands.either(
+        return Commands.deferredProxy(
+            () -> Commands.either(
             Commands.none(),
-            Commands.run(() -> humanPlayerIntake.setVoltage(voltage), humanPlayerIntake), 
-            () -> humanPlayerIntake.hasCoral()
-        );
+            Commands.run(() -> humanPlayerIntake.setVoltage(voltage), humanPlayerIntake),
+            () -> humanPlayerIntake.hasCoral()));
     }
 }

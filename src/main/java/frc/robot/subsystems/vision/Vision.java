@@ -17,13 +17,14 @@ import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.lib.interfaces.vision.VisionIOInputsAutoLogged;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
+  private static Vision instance;
+
   private final VisionIO io;
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   
@@ -32,11 +33,23 @@ public class Vision extends SubsystemBase {
   public static boolean onlyReefUpdateGlobal = false;
   public static double lastGoodReefUpdateTime = 0;
 
-  public Vision(VisionIO io) {
+  private double targetCount = 0;
+
+  private Vision(VisionIO io) {
     this.io = io;
     io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
   }
-  
+
+  public static Vision createInstance(VisionIO io) {
+    instance = new Vision(io);
+    return instance;
+  }
+
+  public static Vision getInstance() {
+    if (instance == null) throw new Error("Subsystem has not been created");
+    return instance;
+  }
+
   @Override
   public void periodic() {
     setRobotYaw();
@@ -127,6 +140,8 @@ public class Vision extends SubsystemBase {
           robotPosesAccepted.add(observation);
           // System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
           
+          targetCount = observation.tagCount();
+
           boolean updateYaw =
               observation.tagCount() >= 2
                 && (observation.type() == PoseObservationType.MEGATAG_1 || observation.type() == PoseObservationType.MULTITAG_1);
@@ -174,6 +189,10 @@ public class Vision extends SubsystemBase {
 
   public boolean hasTargets() {
     return inputs.hasTargets;
+  }
+
+  public double getTargetCount() {
+    return targetCount;
   }
 
   public void setRobotYaw() {

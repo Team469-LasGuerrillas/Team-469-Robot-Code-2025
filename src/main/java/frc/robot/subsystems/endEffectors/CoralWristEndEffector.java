@@ -23,19 +23,17 @@ public class CoralWristEndEffector extends SubsystemBase {
     private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS;
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
-        this.coralWristMotor = coralWristMotor;}
+        this.coralWristMotor = coralWristMotor;
+    }
 
-        public static CoralWristEndEffector createInstance(MotorIO coralWristMotor) {
-            instance = new CoralWristEndEffector(coralWristMotor);
-            return instance;
-        }
+    public static CoralWristEndEffector createInstance(MotorIO coralWristMotor) {
+        instance = new CoralWristEndEffector(coralWristMotor);
+        return instance;
+    }
     
-        public static CoralWristEndEffector getInstance() {
-            if (instance == null) {
-                instance = new CoralWristEndEffector(new MotorIO() {});
-            }
-            return instance;
-        
+    public static CoralWristEndEffector getInstance() {
+        if (instance == null) throw new Error("Subsystem has not been created");
+        return instance;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package frc.lib.interfaces.motor;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import java.util.function.DoubleSupplier;
@@ -20,6 +21,8 @@ public interface MotorIO {
 
     public double temperatureCelcius = 0.0;
     public int canbusId;
+
+    public TalonFX talon;
   }
 
   public default void updateInputs(MotorIOInputs inputs) {}

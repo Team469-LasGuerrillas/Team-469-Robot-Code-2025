@@ -118,10 +118,10 @@ public class RobotContainer {
         //   ElevatorConstants.coralElevatorFollowerMotor, 
         //   ElevatorConstants.algaeElevatorMotor);
 
-        limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
-        limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
-        arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
-        arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
+        limelightLeft = Vision.createInstance(VisionConstants.LIMELIGHT_LEFT);
+        limelightRight = Vision.createInstance(VisionConstants.LIMELIGHT_RIGHT);
+        arducamOne = Vision.createInstance(VisionConstants.ARDUCAM_ONE);
+        arducamTwo = Vision.createInstance(VisionConstants.ARDUCAM_TWO);
 
         break;
 
@@ -148,10 +148,10 @@ public class RobotContainer {
 
         // elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
 
-        limelightLeft = new Vision(new VisionIO() {});
-        limelightRight = new Vision(new VisionIO() {});
-        arducamOne = new Vision(new VisionIO() {});
-        arducamTwo = new Vision(new VisionIO() {});
+        limelightLeft = Vision.createInstance(new VisionIO() {});
+        limelightRight = Vision.createInstance(new VisionIO() {});
+        arducamOne = Vision.createInstance(new VisionIO() {});
+        arducamTwo = Vision.createInstance(new VisionIO() {});
 
         break;
     }
@@ -207,9 +207,11 @@ public class RobotContainer {
 
     operator.a().whileTrue(GlobalCommands.coralL1());
 
-    operator.povDown().or(operator.povUp()).whileTrue(GlobalCommands.climbExtend());
+    operator.povUp().whileTrue(GlobalCommands.deploy());
 
-    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.climbRetract());
+    operator.povDown().whileTrue(GlobalCommands.fastRetract());
+
+    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
   }
 
   /**

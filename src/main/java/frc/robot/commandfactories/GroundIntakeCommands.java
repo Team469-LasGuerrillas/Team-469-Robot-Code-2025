@@ -13,11 +13,12 @@ public class GroundIntakeCommands {
     private static GroundWrist groundWrist = GroundWrist.getInstance();
 
     public static Command groundIntake(DoubleSupplier voltage) {
-        return Commands.either(
-            Commands.none(), 
-            Commands.run(() -> groundIntake.setVoltage(voltage), groundIntake), 
-            () -> groundIntake.hasCoral()
-        );
+        return Commands.deferredProxy(
+            () -> Commands.either(
+            Commands.none(),
+            Commands.run(() -> groundIntake.setVoltage(voltage), groundIntake),
+            () -> groundIntake.hasCoral()));
+        
     }
 
     public static Command groundWrist(double Position) {
