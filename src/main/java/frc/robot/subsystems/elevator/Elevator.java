@@ -4,7 +4,11 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
@@ -13,6 +17,7 @@ import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
@@ -30,7 +35,6 @@ public class Elevator extends SubsystemBase {
 
     private final MotorIO algaeElevatorMotor;
     private final MotorIOInputsAutoLogged algaeElevatorInputs = new MotorIOInputsAutoLogged();
-
 
     private DoubleSupplier coralRequestedHeight = () -> ElevatorConstants.CORAL_DEFAULT_POS;
     private DoubleSupplier algaeRequestedHeight = () -> ElevatorConstants.ALGAE_DEFAULT_POS;
@@ -62,16 +66,16 @@ public class Elevator extends SubsystemBase {
         algaeElevatorMotor.updateInputs(algaeElevatorInputs);
         Logger.processInputs("algaeElevator", algaeElevatorInputs);
 
-        double updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble();
+        // double updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble();
 
-        if (coralRequestedHeight.getAsDouble() > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES) {
-            updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() + ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES);
-        }
+        // if (coralRequestedHeight.getAsDouble() > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES) {
+        //     updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() + ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES);
+        // }
 
-        if (isAlgaeWristLegal() && isCoralWristLegal()) {
-            coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), ElevatorConstants.FEEDFORWARD_VOLTS, (MotorIOTalonFX) coralElevatorMotorFollower);
-            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.FEEDFORWARD_VOLTS);
-        }
+        // if (isAlgaeWristLegal() && isCoralWristLegal()) {
+        //     coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), ElevatorConstants.FEEDFORWARD_VOLTS, (MotorIOTalonFX) coralElevatorMotorFollower);
+        //     algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.FEEDFORWARD_VOLTS);
+        // }
     }
 
     public void setTargetPosFromZero(DoubleSupplier targetCoralPosFromGroundInches, DoubleSupplier targetAlgaePosFromGroundInches) {
@@ -148,5 +152,13 @@ public class Elevator extends SubsystemBase {
 
         if (closestPose.getRotation().getDegrees() % 120 == 0) return true;
         return false;
+    }
+
+    public Command runVoltage() {
+        return run(() -> coralElevatorMotor.setOpenLoopVoltage(() -> 8));
+    }
+
+    public Command stopVoltage() {
+        return run(() -> coralElevatorMotor.setOpenLoopVoltage(() -> 0));
     }
 }

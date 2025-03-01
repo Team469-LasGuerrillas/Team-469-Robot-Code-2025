@@ -21,19 +21,17 @@ public class ClimbConstants {
     new TalonFXConfiguration()
     .withMotorOutput(
         new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive)
+            .withInverted(InvertedValue.CounterClockwise_Positive)
     )
     .withCurrentLimits(
         new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
-        .withStatorCurrentLimit(21));
+        .withStatorCurrentLimit(100));
 
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(10)
-        .withCanBus(TunerConstants.kCANBus.toString())
-        .withFxConfig(climbMotorFxConfig)
-        .withMaxPositionUnits(469)
-        .withMinPositionUnits(0);
+        .withCanBus(TunerConstants.kCANBus)
+        .withFxConfig(climbMotorFxConfig);
 
     public static MotorIOTalonFX climbMotor = new MotorIOTalonFX(climbMotorConfigs);
 }
