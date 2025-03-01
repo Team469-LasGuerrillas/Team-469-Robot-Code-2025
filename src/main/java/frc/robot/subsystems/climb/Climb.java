@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
@@ -36,7 +37,21 @@ public class Climb extends SubsystemBase {
         climbMotor.updateInputs(climbInputs);
         Logger.processInputs("Climb", climbInputs);
     }
+
     public void setVoltage(DoubleSupplier voltage) {
         climbMotor.setOpenLoopVoltage(voltage);
+    }
+
+    public Command runVoltage() {
+        return run(() -> setVoltage(() -> 1));
+    }
+    public Command scary() {
+        return run(() -> setVoltage(() -> 12));
+    }
+    public Command otherDirection() {
+        return run(() -> setVoltage(() -> -1));
+    }
+    public Command stopVoltage() {
+        return run(() -> setVoltage(() -> 0));
     }
 }

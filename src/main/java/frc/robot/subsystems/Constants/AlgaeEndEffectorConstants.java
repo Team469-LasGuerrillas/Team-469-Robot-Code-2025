@@ -44,7 +44,7 @@ public class AlgaeEndEffectorConstants {
     
     private static MotorConfigs algaeIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(algaeIntakeMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
@@ -84,7 +84,7 @@ public class AlgaeEndEffectorConstants {
 
     private static MotorConfigs algaeWristMotorConfigs = new MotorConfigs()    
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(algaeWristMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
