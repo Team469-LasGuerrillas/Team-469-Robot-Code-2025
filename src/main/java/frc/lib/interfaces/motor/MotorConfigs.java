@@ -1,11 +1,10 @@
 package frc.lib.interfaces.motor;
 
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public class MotorConfigs {
   public int canId;
-  public CANBus canBus;
+  public String canBus;
   public TalonFXConfiguration fxConfig = new TalonFXConfiguration();
 
   // Ratio of rotor to units for this talon. rotor * by this ratio should
@@ -23,7 +22,7 @@ public class MotorConfigs {
     return this;
   }
 
-  public MotorConfigs withCanBus(CANBus canBus) {
+  public MotorConfigs withCanBus(String canBus) {
     this.canBus = canBus;
     return this;
   }

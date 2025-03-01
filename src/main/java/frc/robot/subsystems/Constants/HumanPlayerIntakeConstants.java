@@ -35,7 +35,7 @@ public class HumanPlayerIntakeConstants {
 
     private static MotorConfigs hpIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(hpIntakeTalonFXConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);

@@ -60,7 +60,7 @@ public class CoralEndEffectorConstants {
 
     private static MotorConfigs coralWristMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralWristMotorFxConfig);
 
     private static CANcoderConfiguration coralWristCcConfig = 
@@ -97,7 +97,7 @@ public class CoralEndEffectorConstants {
 
     private static MotorConfigs coralIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralIntakeMotorFxConfig);
 
    public static MotorIOTalonFX coralIntakeMotor = new MotorIOTalonFX(coralIntakeMotorConfigs);

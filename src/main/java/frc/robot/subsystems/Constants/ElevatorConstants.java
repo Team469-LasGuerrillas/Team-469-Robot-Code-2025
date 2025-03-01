@@ -37,56 +37,21 @@ public class ElevatorConstants {
     
     public static final double FEEDFORWARD_VOLTS = 0;    
 
-    /* CORAL ELEVATOR MOTOR FOLLOWER */
-    private static TalonFXConfiguration coralElevatorFollowerTalonFXConfiguration =
-    new TalonFXConfiguration()
-        .withMotorOutput(
-            new MotorOutputConfigs()
-                .withInverted(InvertedValue.CounterClockwise_Positive)
-        )
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(40))
-                .withSlot0(
-                    new Slot0Configs()
-                    .withKS(1)
-                    .withKV(0)
-                    .withKP(1)
-                    .withKI(0)
-                    .withKD(0)
-                )
-        .withMotionMagic(
-            new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(80)
-            .withMotionMagicAcceleration(90));
-
-    private static MotorConfigs coralElevatorFollowerMotorConfigs = 
-    new MotorConfigs()
-        .withCanId(9)
-        .withCanBus(TunerConstants.kCANBus)
-        .withFxConfig(coralElevatorFollowerTalonFXConfiguration)
-        .withMaxPositionUnits(469)
-        .withMinPositionUnits(0);
-
-    public static MotorIOTalonFX coralElevatorFollowerMotor = new MotorIOTalonFX(coralElevatorFollowerMotorConfigs);
-
-    /* CORAL ELEVATOR MOTOR MAIN */
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withMotorOutput(
         new MotorOutputConfigs()
-            .withInverted(InvertedValue.CounterClockwise_Positive)
+            .withInverted(InvertedValue.Clockwise_Positive)
     )
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(40))
+            .withStatorCurrentLimit(10))
               .withSlot0(
             new Slot0Configs()
-            .withKS(1)
+            .withKS(0)
             .withKV(0)
-            .withKP(1)
+            .withKP(0)
             .withKI(0)
             .withKD(0))
         .withMotionMagic(
@@ -98,12 +63,47 @@ public class ElevatorConstants {
     private static MotorConfigs coralElevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(8)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralElevatorTalonFXConfiguration)
+        .withUnitToRotorRatio(1 / 3.5)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
 
-    public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs, coralElevatorFollowerMotor);
+    public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs);
+
+    /* CORAL ELEVATOR MOTOR FOLLOWER */
+    private static TalonFXConfiguration coralElevatorFollowerTalonFXConfiguration =
+    new TalonFXConfiguration()
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.CounterClockwise_Positive)
+        )
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(10))
+                .withSlot0(
+                    new Slot0Configs()
+                    .withKS(0)
+                    .withKV(0)
+                    .withKP(0)
+                    .withKI(0)
+                    .withKD(0)
+                )
+        .withMotionMagic(
+            new MotionMagicConfigs()
+            .withMotionMagicCruiseVelocity(80)
+            .withMotionMagicAcceleration(90));
+
+    private static MotorConfigs coralElevatorFollowerMotorConfigs = 
+    new MotorConfigs()
+        .withCanId(9)
+        .withCanBus(TunerConstants.kCANBus.toString())
+        .withFxConfig(coralElevatorFollowerTalonFXConfiguration)
+        .withMaxPositionUnits(469)
+        .withMinPositionUnits(0);
+
+    public static MotorIOTalonFX coralElevatorFollowerMotor = new MotorIOTalonFX(coralElevatorFollowerMotorConfigs);
 
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_PROCESSOR_POS = 0;
@@ -127,7 +127,7 @@ public class ElevatorConstants {
                 new Slot0Configs()
                 .withKS(0)
                 .withKV(0)
-                .withKP(1)
+                .withKP(0)
                 .withKI(0)
                 .withKD(0))
             .withMotionMagic(
@@ -138,10 +138,12 @@ public class ElevatorConstants {
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeElevatorTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
       
+
+
     public static MotorIOTalonFX algaeElevatorMotor = new MotorIOTalonFX(algaeElevatorMotorConfigs);
 }

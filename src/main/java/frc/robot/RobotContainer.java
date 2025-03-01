@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Dashboard;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.vision.VisionIO;
-import frc.robot.commandfactories.ClimbCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.GlobalCommands;
 import frc.robot.generated.TunerConstants;
@@ -68,8 +67,8 @@ public class RobotContainer {
   // private final CoralEndEffector coralEndEffector;
   // private final HumanPlayerIntake humanPlayerIntake;
   // private final GroundIntake groundIntake;
-  private final Climb climb;
-  //private final Elevator elevator;
+  // private final Climb climb;
+  // private final Elevator elevator;
 
 
   private final Vision limelightLeft;
@@ -96,11 +95,6 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
 
-       // elevator = Elevator.createInstance(
-         // ElevatorConstants.coralElevatorMotor, 
-          //ElevatorConstants.coralElevatorFollowerMotor, 
-          //ElevatorConstants.algaeElevatorMotor);
-
         // algaeEndEffector = AlgaeEndEffector.createInstance(
         //   AlgaeEndEffectorConstants.algaeIntakeMotor,
         //   AlgaeEndEffectorConstants.algaeWristMotor);
@@ -116,7 +110,13 @@ public class RobotContainer {
         // humanPlayerIntake = HumanPlayerIntake.createInstance(
         //   HumanPlayerIntakeConstants.hpIntakeMotor);
 
-        climb = Climb.createInstance(ClimbConstants.climbMotor);
+        // climb = Climb.createInstance(
+        //   ClimbConstants.climbMotor);
+
+        // elevator = Elevator.createInstance(
+        //   ElevatorConstants.coralElevatorMotor, 
+        //   ElevatorConstants.coralElevatorFollowerMotor, 
+        //   ElevatorConstants.algaeElevatorMotor);
 
         limelightLeft = Vision.createInstance(VisionConstants.LIMELIGHT_LEFT);
         limelightRight = Vision.createInstance(VisionConstants.LIMELIGHT_RIGHT);
@@ -144,9 +144,9 @@ public class RobotContainer {
 
         // humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
 
-        climb = Climb.createInstance(new MotorIO() {});
+        // climb = Climb.createInstance(new MotorIO() {});
 
-        //elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
+        // elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
 
         limelightLeft = Vision.createInstance(new VisionIO() {});
         limelightRight = Vision.createInstance(new VisionIO() {});
@@ -160,14 +160,9 @@ public class RobotContainer {
     Dashboard.addWidgets(shuffleboardTab);
 
     // Configure the button bindings
-    // configureDefaultBindings();
-    // configureDriverBindings();
-    // configureOperatorBindings();
-
-    driver.a().whileTrue(climb.runVoltage());
-    driver.y().whileTrue(climb.scary());
-    driver.b().whileTrue(climb.otherDirection());
-    climb.setDefaultCommand(climb.stopVoltage());
+    configureDefaultBindings();
+    configureDriverBindings();
+    configureOperatorBindings();
   }
 
   private void configureDefaultBindings() {

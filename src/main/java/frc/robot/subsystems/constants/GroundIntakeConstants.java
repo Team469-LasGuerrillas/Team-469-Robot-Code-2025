@@ -50,7 +50,7 @@ public class GroundIntakeConstants {
 
     private static MotorConfigs groundWristMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(groundWristMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
@@ -85,7 +85,7 @@ public class GroundIntakeConstants {
 
     private static MotorConfigs groundIntakeMotorConfigs = new MotorConfigs()
         .withCanId(469)
-        .withCanBus(TunerConstants.kCANBus)
+        .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(groundIntakeMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);

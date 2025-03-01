@@ -4,7 +4,6 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -39,11 +38,11 @@ public class MotorIOTalonFX implements MotorIO {
   private final StatusSignal<Current> currentStatorSignal;
   public BaseStatusSignal[] signals;
 
-  public MotorIOTalonFX(MotorConfigs config, MotorIOTalonFX... followerMotors) {
+  public MotorIOTalonFX(MotorConfigs config) {
     this.mConfig = config;
     talon = new TalonFX(config.canId, config.canBus);
 
-    CTREUtil.applyConfiguration(talon, config.fxConfig);
+    CTREUtil.applyConfiguration(talon, this.mConfig.fxConfig);
 
     positionSignal = talon.getPosition();
     velocitySignal = talon.getVelocity();
@@ -58,10 +57,6 @@ public class MotorIOTalonFX implements MotorIO {
     CTREUtil.tryUntilOK(
         () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, signals), talon.getDeviceID());
     CTREUtil.tryUntilOK(() -> talon.optimizeBusUtilization(), talon.getDeviceID());
-
-    for (int i = 0; i < followerMotors.length; i++) {
-      followerMotors[i].talon.setControl(new StrictFollower(talon.getDeviceID()));
-    }
   }
 
   public MotorIOTalonFX(MotorConfigs mConfig, CancoderConfigs ccConfig) {
@@ -118,6 +113,16 @@ public class MotorIOTalonFX implements MotorIO {
   public void setMagicalPositionSetpoint(double units, double feedForward) {
     talon.setControl(
         motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward));
+  }
+
+  @Override
+  public void setMagicalPositionSetpoint(double units, double feedForward, MotorIOTalonFX... followerMotors) {
+    for (int i = 0; i < followerMotors.length; i++) {
+      followerMotors[i].talon.setControl(new StrictFollower(talon.getDeviceID()));
+    }
+
+    talon.setControl(
+      motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward));
   }
 
   @Override
