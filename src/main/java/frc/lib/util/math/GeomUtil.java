@@ -28,7 +28,11 @@ public class GeomUtil {
     Rotation2d rotationToReef =
       new Rotation2d(reefPose.getX() - robotPose.getX(), reefPose.getY() - robotPose.getY());
 
-    return ToleranceUtil.epsilonEqualsRadialDegrees(rotationToReef.getDegrees(), robotPose.getRotation().getDegrees(), VisionConstants.LOOKING_AT_REEF_THRESHOLD_DEGREES);
+    return ToleranceUtil.epsilonEqualsRadialDegrees(
+      rotationToReef.getDegrees(),
+      robotPose.getRotation().rotateBy(new Rotation2d(Math.PI)).getDegrees(),
+      VisionConstants.LOOKING_AT_REEF_THRESHOLD_DEGREES
+    );
   }
 
   public static boolean isWithinReefRadius() {

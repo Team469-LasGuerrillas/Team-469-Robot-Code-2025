@@ -162,7 +162,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureDefaultBindings();
     configureDriverBindings();
-    configureOperatorBindings();
+    // configureOperatorBindings();
   }
 
   private void configureDefaultBindings() {
@@ -183,13 +183,13 @@ public class RobotContainer {
       Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
 
 
-    driver.leftBumper().whileTrue(
-      GlobalCommands.algaeRelease()
-    );
+    // driver.leftBumper().whileTrue(
+    //   GlobalCommands.algaeRelease()
+    // );
 
-    driver.rightBumper().whileTrue(
-      GlobalCommands.coralRelease()
-    );
+    // driver.rightBumper().whileTrue(
+    //   GlobalCommands.coralRelease()
+    // );
   }
 
   private void configureOperatorBindings() {
