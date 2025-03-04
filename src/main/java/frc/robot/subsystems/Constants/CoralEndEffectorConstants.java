@@ -59,7 +59,7 @@ public class CoralEndEffectorConstants {
             .withMotionMagicAcceleration(90));
 
     private static MotorConfigs coralWristMotorConfigs = new MotorConfigs()
-        .withCanId(469)
+        .withCanId(15)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralWristMotorFxConfig);
 
@@ -73,7 +73,7 @@ public class CoralEndEffectorConstants {
         );
 
     private static CancoderConfigs coralWristCancoderConfigs = new CancoderConfigs()
-        .withCanId(0)
+        .withCanId(4)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withCcConfig(coralWristCcConfig);
     
@@ -96,7 +96,7 @@ public class CoralEndEffectorConstants {
             .withStatorCurrentLimit(23));
 
     private static MotorConfigs coralIntakeMotorConfigs = new MotorConfigs()
-        .withCanId(469)
+        .withCanId(13)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(coralIntakeMotorFxConfig);
 

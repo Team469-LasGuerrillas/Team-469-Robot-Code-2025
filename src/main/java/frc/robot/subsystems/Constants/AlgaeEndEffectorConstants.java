@@ -22,7 +22,7 @@ import frc.robot.generated.TunerConstants;
 public class AlgaeEndEffectorConstants {
 
     /* SENSOR CANRANGE */
-    SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 0);
+    SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 1);
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
@@ -43,7 +43,7 @@ public class AlgaeEndEffectorConstants {
             .withStatorCurrentLimit(20));
     
     private static MotorConfigs algaeIntakeMotorConfigs = new MotorConfigs()
-        .withCanId(469)
+        .withCanId(12)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeIntakeMotorFxConfig)
         .withMaxPositionUnits(469)
@@ -83,7 +83,7 @@ public class AlgaeEndEffectorConstants {
             .withMotionMagicAcceleration(90));
 
     private static MotorConfigs algaeWristMotorConfigs = new MotorConfigs()    
-        .withCanId(469)
+        .withCanId(14)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeWristMotorFxConfig)
         .withMaxPositionUnits(469)
@@ -99,7 +99,7 @@ public class AlgaeEndEffectorConstants {
         );
     
     private static CancoderConfigs algaeWristCancoderConfigs = new CancoderConfigs()
-        .withCanId(0)
+        .withCanId(5)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withCcConfig(algaeWristCcConfig);
 

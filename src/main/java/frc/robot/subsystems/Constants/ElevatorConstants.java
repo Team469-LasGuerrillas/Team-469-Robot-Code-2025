@@ -136,13 +136,11 @@ public class ElevatorConstants {
 
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()
-        .withCanId(469)
+        .withCanId(11)
         .withCanBus(TunerConstants.kCANBus.toString())
         .withFxConfig(algaeElevatorTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
-      
-
 
     public static MotorIOTalonFX algaeElevatorMotor = new MotorIOTalonFX(algaeElevatorMotorConfigs);
 }
