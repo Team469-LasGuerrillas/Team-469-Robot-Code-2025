@@ -63,7 +63,8 @@ public class LinearController {
   public ChassisSpeeds update() {
     double xOutput =
       xController.calculate(
-        Drive.getInstance().getPose().getX(), goalPoseSupplier.get().getX());
+        Drive.getInstance().getPose().getX(),
+        goalPoseSupplier.get().getX());
 
     double yOutput =
       yController.calculate(

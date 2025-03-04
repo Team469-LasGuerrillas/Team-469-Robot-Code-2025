@@ -94,9 +94,14 @@ public class DriveCommands {
   }
 
   public static Command pidToReefPose(ReefPositions position) {
-    Pose2d pose = FieldLayout.reefPositionPoseRight.get(position);
+    Pose2d poseRight = FieldLayout.reefPositionPoseRight.get(position);
+    Pose2d poseLeft = FieldLayout.reefPositionPoseLeft.get(position);
 
-    return pidToPoint(() -> pose);
+    if (poseRight != null) {
+      return pidToPoint(() -> poseRight);
+    } else {
+      return pidToPoint(() -> poseLeft);
+    }
   }
 
   public static Command pidToClosestReefPoseLeft() {

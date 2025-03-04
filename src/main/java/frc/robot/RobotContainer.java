@@ -13,44 +13,29 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Dashboard;
-import frc.lib.interfaces.motor.MotorIO;
+import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.GlobalCommands;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.climb.Climb;
-import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
-import frc.robot.subsystems.constants.ClimbConstants;
-import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.subsystems.constants.GroundIntakeConstants;
-import frc.robot.subsystems.constants.HumanPlayerIntakeConstants;
+import frc.robot.subsystems.constants.SensorConstants;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
-import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
-import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
-import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
-import frc.robot.subsystems.intake.GroundWrist;
-import frc.robot.subsystems.intake.GroundIntake;
-import frc.robot.subsystems.intake.HumanPlayerIntake;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -94,77 +79,81 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackLeft),
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
+      
+   
+  
+        
+                // algaeEndEffector = AlgaeEndEffector.createInstance(
+                //   AlgaeEndEffectorConstants.algaeIntakeMotor,
+                //   AlgaeEndEffectorConstants.algaeWristMotor);
+        
+                // coralEndEffector = CoralEndEffector.createInstance(
+                //   CoralEndEffectorConstants.coralIntakeMotor,
+                //   CoralEndEffectorConstants.coralWristMotor);
+        
+                // groundIntake = GroundIntake.createInstance(
+                //   GroundIntakeConstants.groundIntakeMotor,
+                //   GroundIntakeConstants.groundWristMotor);
+        
+                // humanPlayerIntake = HumanPlayerIntake.createInstance(
+                //   HumanPlayerIntakeConstants.hpIntakeMotor);
+        
+                // climb = Climb.createInstance(
+                //   ClimbConstants.climbMotor);
+        
+                // elevator = Elevator.createInstance(
+                //   ElevatorConstants.coralElevatorMotor, 
+                //   ElevatorConstants.coralElevatorFollowerMotor, 
+                //   ElevatorConstants.algaeElevatorMotor);
+        
+                limelightLeft = Vision.createInstance(VisionConstants.LIMELIGHT_LEFT);
+                limelightRight = Vision.createInstance(VisionConstants.LIMELIGHT_RIGHT);
+                arducamOne = Vision.createInstance(VisionConstants.ARDUCAM_ONE);
+                arducamTwo = Vision.createInstance(VisionConstants.ARDUCAM_TWO);
+        
+                break;
+        
+              default:
 
-        // algaeEndEffector = AlgaeEndEffector.createInstance(
-        //   AlgaeEndEffectorConstants.algaeIntakeMotor,
-        //   AlgaeEndEffectorConstants.algaeWristMotor);
+                // Replayed robot, disable IO implementations
+                Drive.createInstance(
+                    new GyroIO() {},
+                    new ModuleIO() {},
+                    new ModuleIO() {},
+                    new ModuleIO() {},
+                    new ModuleIO() {});
+        
+                drive = Drive.getInstance();
+    
+                // algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+        
+                // coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+        
+                // groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
+        
+                // humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
+        
+                // climb = Climb.createInstance(new MotorIO() {});
+        
+                // elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
+        
+                    limelightLeft = Vision.createInstance(new VisionIO() {});
+                    limelightRight = Vision.createInstance(new VisionIO() {});
+                    arducamOne = Vision.createInstance(new VisionIO() {});
+                    arducamTwo = Vision.createInstance(new VisionIO() {});
+          
+                break;
+            }
 
-        // coralEndEffector = CoralEndEffector.createInstance(
-        //   CoralEndEffectorConstants.coralIntakeMotor,
-        //   CoralEndEffectorConstants.coralWristMotor);
-
-        // groundIntake = GroundIntake.createInstance(
-        //   GroundIntakeConstants.groundIntakeMotor,
-        //   GroundIntakeConstants.groundWristMotor);
-
-        // humanPlayerIntake = HumanPlayerIntake.createInstance(
-        //   HumanPlayerIntakeConstants.hpIntakeMotor);
-
-        // climb = Climb.createInstance(
-        //   ClimbConstants.climbMotor);
-
-        // elevator = Elevator.createInstance(
-        //   ElevatorConstants.coralElevatorMotor, 
-        //   ElevatorConstants.coralElevatorFollowerMotor, 
-        //   ElevatorConstants.algaeElevatorMotor);
-
-        limelightLeft = Vision.createInstance(VisionConstants.LIMELIGHT_LEFT);
-        limelightRight = Vision.createInstance(VisionConstants.LIMELIGHT_RIGHT);
-        arducamOne = Vision.createInstance(VisionConstants.ARDUCAM_ONE);
-        arducamTwo = Vision.createInstance(VisionConstants.ARDUCAM_TWO);
-
-        break;
-
-      default:
-        // Replayed robot, disable IO implementations
-        Drive.createInstance(
-            new GyroIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {},
-            new ModuleIO() {});
-
-        drive = Drive.getInstance();
-
-        // algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
-
-        // coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
-
-        // groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
-
-        // humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
-
-        // climb = Climb.createInstance(new MotorIO() {});
-
-        // elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
-
-        limelightLeft = Vision.createInstance(new VisionIO() {});
-        limelightRight = Vision.createInstance(new VisionIO() {});
-        arducamOne = Vision.createInstance(new VisionIO() {});
-        arducamTwo = Vision.createInstance(new VisionIO() {});
-
-        break;
-    }
-
-    // Add Dashboard Widgets
     Dashboard.addWidgets(shuffleboardTab);
+          
+      configureDefaultBindings();
+      configureDriverBindings();
+      configureOperatorBindings();
 
-    // Configure the button bindings
-    configureDefaultBindings();
-    configureDriverBindings();
-    configureOperatorBindings();
+      registerNamedCommands();
   }
-
+        
   private void configureDefaultBindings() {
     drive.setDefaultCommand(
         DriveCommands.acceptTeleopFieldOriented(driver, true));
@@ -172,24 +161,24 @@ public class RobotContainer {
 
   private void configureDriverBindings() {
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-      DriveCommands.pidToClosestReefPoseRight()
+        DriveCommands.pidToClosestReefPoseRight()
     );
 
     driver.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-      DriveCommands.pidToClosestReefPoseLeft()
+        DriveCommands.pidToClosestReefPoseLeft()
     );
 
     driver.b().onTrue(
-      Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
+        Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
 
 
-    driver.leftBumper().whileTrue(
-      GlobalCommands.algaeRelease()
-    );
+    // driver.leftBumper().whileTrue(
+    //   GlobalCommands.algaeRelease()
+    // );
 
-    driver.rightBumper().whileTrue(
-      GlobalCommands.coralRelease()
-    );
+    // driver.rightBumper().whileTrue(
+    //   GlobalCommands.coralRelease()
+    // );
   }
 
   private void configureOperatorBindings() {
@@ -221,5 +210,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return Dashboard.getAutonomousCommand();
+  }
+
+         //Named commands
+  public void registerNamedCommands() {
+    NamedCommands.registerCommand("Elevator + score L4", GlobalCommands.coralL4());
+    NamedCommands.registerCommand("Coral HP intake", GlobalCommands.humanPlayerIntake());
   }
 }
