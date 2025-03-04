@@ -30,7 +30,7 @@ public class ClimbConstants {
 
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(10)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(climbMotorFxConfig)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);

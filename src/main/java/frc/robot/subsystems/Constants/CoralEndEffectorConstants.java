@@ -45,7 +45,7 @@ public class CoralEndEffectorConstants {
         .withCurrentLimits(
             new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(23)
+            .withStatorCurrentLimit(20)
         ).withSlot0(
             new Slot0Configs()
             .withKS(0)
@@ -60,7 +60,7 @@ public class CoralEndEffectorConstants {
 
     private static MotorConfigs coralWristMotorConfigs = new MotorConfigs()
         .withCanId(15)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(coralWristMotorFxConfig);
 
     private static CANcoderConfiguration coralWristCcConfig = 
@@ -74,7 +74,7 @@ public class CoralEndEffectorConstants {
 
     private static CancoderConfigs coralWristCancoderConfigs = new CancoderConfigs()
         .withCanId(4)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withCcConfig(coralWristCcConfig);
     
     public static MotorIOTalonFX coralWristMotor = new MotorIOTalonFX(coralWristMotorConfigs, coralWristCancoderConfigs);
@@ -97,7 +97,7 @@ public class CoralEndEffectorConstants {
 
     private static MotorConfigs coralIntakeMotorConfigs = new MotorConfigs()
         .withCanId(13)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(coralIntakeMotorFxConfig);
 
    public static MotorIOTalonFX coralIntakeMotor = new MotorIOTalonFX(coralIntakeMotorConfigs);

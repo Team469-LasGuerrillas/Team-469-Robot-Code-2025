@@ -62,7 +62,7 @@ public class ElevatorConstants {
     private static MotorConfigs coralElevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(8)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(coralElevatorTalonFXConfiguration)
         .withUnitToRotorRatio(1 / 3.5)
         .withMaxPositionUnits(469)

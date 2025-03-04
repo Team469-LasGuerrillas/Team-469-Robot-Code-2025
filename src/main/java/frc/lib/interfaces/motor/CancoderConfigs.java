@@ -1,10 +1,11 @@
 package frc.lib.interfaces.motor;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
 public class CancoderConfigs {
     public int canId; 
-    public String canBus;
+    public CANBus canBus;
     public CANcoderConfiguration ccConfig = new CANcoderConfiguration();
 
     public CancoderConfigs withCanId(int canId) {
@@ -12,7 +13,7 @@ public class CancoderConfigs {
         return this;
     }
 
-    public CancoderConfigs withCanBus(String canBus) {
+    public CancoderConfigs withCanBus(CANBus canBus) {
         this.canBus = canBus;
         return this;
     }

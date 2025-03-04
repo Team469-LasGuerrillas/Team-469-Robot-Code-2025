@@ -27,6 +27,8 @@ import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.GlobalCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.climb.Climb;
+import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.constants.SensorConstants;
@@ -36,6 +38,12 @@ import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
+import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
+import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
+import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
+import frc.robot.subsystems.intake.HumanPlayerIntake;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -48,13 +56,12 @@ import frc.robot.subsystems.vision.Vision;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  // private final AlgaeEndEffector algaeEndEffector;
-  // private final CoralEndEffector coralEndEffector;
-  // private final HumanPlayerIntake humanPlayerIntake;
-  // private final GroundIntake groundIntake;
-  // private final Climb climb;
-  // private final Elevator elevator;
-
+  private final AlgaeWristEndEffector algaeWristEndEffector;
+  private final AlgaeIntakeEndEffector algaeIntakeEndEffector;
+  private final CoralWristEndEffector coralWristEndEffector;
+  private final CoralIntakeEndEffector coralIntakeEndEffector;
+  private final Climb climb;
+  private final Elevator elevator;
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
@@ -79,32 +86,18 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.BackLeft),
             new ModuleIOTalonFX(TunerConstants.BackRight));
         drive = Drive.getInstance();
-      
-   
-  
         
-                // algaeEndEffector = AlgaeEndEffector.createInstance(
-                //   AlgaeEndEffectorConstants.algaeIntakeMotor,
-                //   AlgaeEndEffectorConstants.algaeWristMotor);
-        
-                // coralEndEffector = CoralEndEffector.createInstance(
-                //   CoralEndEffectorConstants.coralIntakeMotor,
-                //   CoralEndEffectorConstants.coralWristMotor);
-        
-                // groundIntake = GroundIntake.createInstance(
-                //   GroundIntakeConstants.groundIntakeMotor,
-                //   GroundIntakeConstants.groundWristMotor);
-        
-                // humanPlayerIntake = HumanPlayerIntake.createInstance(
-                //   HumanPlayerIntakeConstants.hpIntakeMotor);
-        
-                // climb = Climb.createInstance(
-                //   ClimbConstants.climbMotor);
-        
-                // elevator = Elevator.createInstance(
-                //   ElevatorConstants.coralElevatorMotor, 
-                //   ElevatorConstants.coralElevatorFollowerMotor, 
-                //   ElevatorConstants.algaeElevatorMotor);
+              algaeWristEndEffector = AlgaeWristEndEffector.createInstance(null);
+
+              algaeIntakeEndEffector = AlgaeIntakeEndEffector.createInstance(null, null);
+
+              coralWristEndEffector = CoralWristEndEffector.createInstance(null);
+
+              coralIntakeEndEffector = CoralIntakeEndEffector.createInstance(null, null);
+
+              climb = Climb.createInstance(null);
+
+              elevator = Elevator.createInstance(null, null, null);
         
                 limelightLeft = Vision.createInstance(VisionConstants.LIMELIGHT_LEFT);
                 limelightRight = Vision.createInstance(VisionConstants.LIMELIGHT_RIGHT);
@@ -125,17 +118,17 @@ public class RobotContainer {
         
                 drive = Drive.getInstance();
     
-                // algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+                algaeEndEffector = AlgaeEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
         
-                // coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
+                coralEndEffector = CoralEndEffector.createInstance(new MotorIO() {}, new MotorIO() {});
         
-                // groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
+                groundIntake = GroundIntake.createInstance(new MotorIO() {}, new MotorIO() {});
         
-                // humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
+                humanPlayerIntake = HumanPlayerIntake.createInstance(new MotorIO() {});
         
-                // climb = Climb.createInstance(new MotorIO() {});
+                climb = Climb.createInstance(new MotorIO() {});
         
-                // elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
+                elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
         
                     limelightLeft = Vision.createInstance(new VisionIO() {});
                     limelightRight = Vision.createInstance(new VisionIO() {});
@@ -147,9 +140,9 @@ public class RobotContainer {
 
     Dashboard.addWidgets(shuffleboardTab);
           
-      configureDefaultBindings();
-      configureDriverBindings();
-      configureOperatorBindings();
+      // configureDefaultBindings();
+      // configureDriverBindings();
+      // configureOperatorBindings();
 
       registerNamedCommands();
   }
@@ -171,14 +164,13 @@ public class RobotContainer {
     driver.b().onTrue(
         Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
 
+    driver.leftBumper().whileTrue(
+      GlobalCommands.algaeRelease()
+    );
 
-    // driver.leftBumper().whileTrue(
-    //   GlobalCommands.algaeRelease()
-    // );
-
-    // driver.rightBumper().whileTrue(
-    //   GlobalCommands.coralRelease()
-    // );
+    driver.rightBumper().whileTrue(
+      GlobalCommands.coralRelease()
+    );
   }
 
   private void configureOperatorBindings() {
