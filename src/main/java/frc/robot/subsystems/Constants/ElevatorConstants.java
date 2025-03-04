@@ -14,11 +14,10 @@ import frc.lib.interfaces.motor.MotorConfigs;
 
 public class ElevatorConstants {
 
-    // TODO: Go to Onshape and get the correct values for all of the following 3 static final variables
-    public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_ZERO_INCHES = 6; 
-    public static final double CARRIAGE_HEIGHT = 2;
-    public static final double GROUND_TO_CORAL_REST_POS_INCHES = 6;
-    public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 4;
+    public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES = 39.6; 
+    public static final double CARRIAGE_HEIGHT = 8; // 7 inch Carriage Height + 1 inch Tolerance
+    public static final double GROUND_TO_CORAL_REST_POS_INCHES = 13.595;
+    public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 6.115;
 
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP = GROUND_TO_CORAL_REST_POS_INCHES + 0.5;
     public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = 5;
