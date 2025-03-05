@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.CANrange;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;

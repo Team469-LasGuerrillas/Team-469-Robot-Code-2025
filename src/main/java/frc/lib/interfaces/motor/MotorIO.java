@@ -21,6 +21,8 @@ public interface MotorIO {
 
     public double temperatureCelcius = 0.0;
     public int canbusId;
+
+    public double cancoderPos = 0.0;
   }
 
   public default void updateInputs(MotorIOInputs inputs) {}

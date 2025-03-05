@@ -97,7 +97,7 @@ public class ElevatorConstants {
     private static MotorConfigs coralElevatorFollowerMotorConfigs = 
     new MotorConfigs()
         .withCanId(9)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(coralElevatorFollowerTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
@@ -137,7 +137,7 @@ public class ElevatorConstants {
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()
         .withCanId(11)
-        .withCanBus(TunerConstants.kCANBus.toString())
+        .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(algaeElevatorTalonFXConfiguration)
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);

@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
@@ -18,7 +19,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
     private final MotorIO algaeWristMotor;
     private final MotorIOInputsAutoLogged algaeWristInputs = new MotorIOInputsAutoLogged();
 
-    private DoubleSupplier requestedPosition = () -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS;
+    private DoubleSupplier requestedPosition = () -> 0.23;
 
     private AlgaeWristEndEffector(MotorIO algaeWristMotor) {
         this.algaeWristMotor = algaeWristMotor;
@@ -39,7 +40,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
         algaeWristMotor.updateInputs(algaeWristInputs);
         Logger.processInputs("Algae Wrist", algaeWristInputs);
 
-        algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), AlgaeEndEffectorConstants.ALGAE_WRIST_FEED_FORWARD_VOLTS);
+        algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), -Math.cos((requestedPosition.getAsDouble() - AlgaeEndEffectorConstants.ALGAE_WRIST_HORZIONTAL_POS) * Math.PI * 2) * AlgaeEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
     }
 
     public void setPosition(DoubleSupplier position) {
@@ -55,6 +56,10 @@ public class AlgaeWristEndEffector extends SubsystemBase {
             requestedPosition.getAsDouble(), 
             algaeWristInputs.unitPosition, 
             AlgaeEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+
+    public Command test() {
+        return run(() -> setPosition(() -> 0.12));
     }
 }
 

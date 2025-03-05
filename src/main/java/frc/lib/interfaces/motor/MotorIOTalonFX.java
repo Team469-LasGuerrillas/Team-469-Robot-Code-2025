@@ -99,6 +99,8 @@ public class MotorIOTalonFX implements MotorIO {
     inputs.currentStatorAmps = currentStatorSignal.getValueAsDouble();
 
     inputs.canbusId = mConfig.canId;
+
+    inputs.cancoderPos = cancoder == null ? 0.0 : cancoder.getPosition().getValueAsDouble();
   }
 
   @Override

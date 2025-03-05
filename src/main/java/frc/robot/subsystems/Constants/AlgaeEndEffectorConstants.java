@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import frc.lib.interfaces.motor.CancoderConfigs;
@@ -22,7 +23,7 @@ import frc.robot.generated.TunerConstants;
 public class AlgaeEndEffectorConstants {
 
     /* SENSOR CANRANGE */
-    SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 1);
+    public static SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 1);
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
@@ -35,7 +36,7 @@ public class AlgaeEndEffectorConstants {
     new TalonFXConfiguration()
         .withMotorOutput(
             new MotorOutputConfigs()
-                .withInverted(InvertedValue.Clockwise_Positive)
+                .withInverted(InvertedValue.CounterClockwise_Positive)
         )
         .withCurrentLimits(
             new CurrentLimitsConfigs()
@@ -58,18 +59,20 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_WRIST_GROUND_POS = 0;
     public static final double ALGAE_WRIST_L2_L3 = 0;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
-    public static final double ALGAE_WRIST_FEED_FORWARD_VOLTS = 0;
+    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
+    public static final double ALGAE_WRIST_HORZIONTAL_POS = 0.23;
 
     private static TalonFXConfiguration algaeWristMotorFxConfig = 
     new TalonFXConfiguration()
         .withMotorOutput(
             new MotorOutputConfigs()
                 .withInverted(InvertedValue.Clockwise_Positive)
+                .withNeutralMode(NeutralModeValue.Brake)
         )
         .withCurrentLimits(
             new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(23))
+            .withStatorCurrentLimit(60))
         .withSlot0(
             new Slot0Configs()
             .withKS(0)
@@ -86,16 +89,19 @@ public class AlgaeEndEffectorConstants {
         .withCanId(14)
         .withCanBus(TunerConstants.kCANBus)
         .withFxConfig(algaeWristMotorFxConfig)
-        .withMaxPositionUnits(469)
+        .withRotorToSensorRatio(36.8)
+        .withSensorToMechanismRatio(1)
+        .withUnitToRotorRatio(36.8)
+        .withMaxPositionUnits(0.27)
         .withMinPositionUnits(0);
     
     private static CANcoderConfiguration algaeWristCcConfig = 
     new CANcoderConfiguration()
         .withMagnetSensor(
             new MagnetSensorConfigs()
-            .withAbsoluteSensorDiscontinuityPoint(0)
-            .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
-            .withMagnetOffset(0.5)
+            .withAbsoluteSensorDiscontinuityPoint(1)
+            .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
+            .withMagnetOffset(-0.25)
         );
     
     private static CancoderConfigs algaeWristCancoderConfigs = new CancoderConfigs()

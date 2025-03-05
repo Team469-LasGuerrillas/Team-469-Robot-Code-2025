@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -41,8 +42,8 @@ public class CoralWristEndEffector extends SubsystemBase {
         coralWristMotor.updateInputs(coralWristInputs);
         Logger.processInputs("Coral Wrist", coralWristInputs);
 
-        if (isPositionAllowed(requestedPosition.getAsDouble())) {
-            coralWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), 7);
+        if (isPositionAllowed(requestedPosition.getAsDouble()) || true) {
+            coralWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), Math.cos((coralWristInputs.unitPosition - CoralEndEffectorConstants.HORIZONTAL_POSITION) * Math.PI * 2) * CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
         }
     }
 
@@ -68,4 +69,15 @@ public class CoralWristEndEffector extends SubsystemBase {
             CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
     }
     
+    public Command test() {
+        return run(() -> setPosition(() -> 0.55));
+    }
+
+    public Command tes2() {
+        return run(() -> setPosition(() -> 0.2));
+    }
+
+    public Command tes3() {
+        return run(() -> setPosition(() -> 0.469));
+    }
 }
