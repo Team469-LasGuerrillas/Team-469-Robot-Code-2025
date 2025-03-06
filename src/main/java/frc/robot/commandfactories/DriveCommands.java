@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 
 public class DriveCommands {
@@ -96,12 +97,23 @@ public class DriveCommands {
   public static Command pidToReefPose(ReefPositions position) {
     Pose2d poseRight = FieldLayout.reefPositionPoseRight.get(position);
     Pose2d poseLeft = FieldLayout.reefPositionPoseLeft.get(position);
+    Pose2d realPose;
 
     if (poseRight != null) {
-      return pidToPoint(() -> poseRight);
+      realPose = poseRight;
     } else {
-      return pidToPoint(() -> poseLeft);
+      realPose = poseLeft;
     }
+
+    return Commands.sequence(
+      Commands.deadline(
+        Commands.waitUntil(
+          () -> Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
+        ),
+        pidToPoint(() -> realPose.transformBy(FieldLayout.L1_TRANSFORM))
+      ),
+      pidToPoint(() -> realPose)
+    );
   }
 
   public static Command pidToClosestReefPoseLeft() {

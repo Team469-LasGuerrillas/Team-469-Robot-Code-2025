@@ -22,6 +22,8 @@ public class FieldLayout {
   public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.5, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.5, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
+  public static Transform2d L1_TRANSFORM = new Transform2d(0.5, 0, new Rotation2d());
+
   private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());

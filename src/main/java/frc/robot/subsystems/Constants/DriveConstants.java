@@ -32,6 +32,7 @@ public class DriveConstants {
   public static final double HEADING_D = 0.0;
 
   public static final double HEADING_TOLERANCE_DEGREES = 0.05;
+  public static final double L1_HEADING_TOLERANCE_DEGREES = 15;
 
   // Linear Controller
   public static final double LINEAR_P = 2.5;
@@ -39,6 +40,7 @@ public class DriveConstants {
   public static final double LINEAR_D = 1.5;
 
   public static final double LINEAR_TOLERANCE_METERS = 0.02;
+  public static final double L1_LINEAR_TOLERANCE_METERS = 0.15;
 
   // Teleop driving constants
   public static final double STICK_DEADBAND = 0.01;

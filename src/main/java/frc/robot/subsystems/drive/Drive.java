@@ -68,6 +68,7 @@ import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
 import frc.lib.util.hardware.QuestNavUtil;
 import frc.lib.util.math.InterpolatorUtil;
+import frc.lib.util.math.ToleranceUtil;
 import frc.lib.util.math.estimator.SequencingSwerveDrivePoseEstimator;
 import frc.lib.util.math.odometry.OdometryType;
 import frc.robot.Constants;
@@ -720,6 +721,25 @@ public class Drive extends SubsystemBase {
   @AutoLogOutput(key = "Odometry/RobotPose")
   public Pose2d getPose() {
     return poseEstimator.getCurrentPoseEstimate();
+  }
+
+  public boolean isOnTarget() {
+    if (linearController == null || headingController == null) return false;
+
+    return
+      linearController.atXGoal()
+      && linearController.atYGoal()
+      && headingController.atGoal();
+
+  }
+
+  public boolean isOnTarget(double linearTolerance, double headingTolerance) {
+    if (linearController == null || headingController == null) return false;
+
+    return
+      linearController.getTargetPose().getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
+      && headingController.atGoal(headingTolerance);
+
   }
 
   public Optional<Pose2d> getTimestampedPose(double timestamp) {

@@ -93,4 +93,8 @@ public class LinearController {
         yController.getGoal().position,
         Units.degreesToRadians(DriveConstants.LINEAR_TOLERANCE_METERS));
   }
+
+  public Pose2d getTargetPose() {
+    return goalPoseSupplier.get();
+  }
 }

@@ -57,4 +57,11 @@ public class HeadingController {
         controller.getGoal().position,
         Units.degreesToRadians(DriveConstants.HEADING_TOLERANCE_DEGREES));
   }
+
+  public boolean atGoal(double headingToleranceDegrees) {
+    return ToleranceUtil.epsilonEquals(
+      controller.getSetpoint().position,
+      controller.getGoal().position,
+      Units.degreesToRadians(headingToleranceDegrees));
+  }
 }
