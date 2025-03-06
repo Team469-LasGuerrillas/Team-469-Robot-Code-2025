@@ -25,6 +25,7 @@ import frc.lib.Dashboard;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
+import frc.robot.commandfactories.AlgaeEndEffectorCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.GlobalCommands;
 import frc.robot.generated.TunerConstants;
@@ -146,9 +147,10 @@ public class RobotContainer {
 
     Dashboard.addWidgets(shuffleboardTab);
           
-    driver.a().whileTrue(coralWristEndEffector.test());
-    driver.b().whileTrue(coralWristEndEffector.tes2());
-    driver.y().whileTrue(coralWristEndEffector.tes3());
+    driver.a().whileTrue(GlobalCommands.algaeGroundIntake());
+    driver.b().whileTrue(GlobalCommands.algaeRelease());
+    driver.x().whileTrue(GlobalCommands.humanPlayerIntake());
+    driver.y().whileTrue(GlobalCommands.coralRelease());
     
       configureDefaultBindings();
       // configureDriverBindings();
@@ -162,6 +164,9 @@ public class RobotContainer {
     //     DriveCommands.acceptTeleopFieldOriented(driver, true));
     
     coralWristEndEffector.setDefaultCommand(GlobalCommands.defaultCoralWristEndEffector());
+    algaeWristEndEffector.setDefaultCommand(GlobalCommands.defaultAlgaeWristEndEffector());
+    algaeIntakeEndEffector.setDefaultCommand(GlobalCommands.defaultAlgaeIntakeEndEffector());
+    coralIntakeEndEffector.setDefaultCommand(GlobalCommands.defaultCoralIntakeEndEffector());
   }
 
   // private void configureDriverBindings() {

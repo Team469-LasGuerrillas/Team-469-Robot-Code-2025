@@ -31,7 +31,6 @@ public class Elevator extends SubsystemBase {
     private final MotorIO algaeElevatorMotor;
     private final MotorIOInputsAutoLogged algaeElevatorInputs = new MotorIOInputsAutoLogged();
 
-
     private DoubleSupplier coralRequestedHeight = () -> ElevatorConstants.CORAL_DEFAULT_POS;
     private DoubleSupplier algaeRequestedHeight = () -> ElevatorConstants.ALGAE_DEFAULT_POS;
 
@@ -39,6 +38,8 @@ public class Elevator extends SubsystemBase {
         this.coralElevatorMotor = coralElevatorMotor;
         this.coralElevatorMotorFollower = coralElevatorMotorFollower;
         this.algaeElevatorMotor = algaeElevatorMotor;
+
+        coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);
     }
 
     public static Elevator createInstance(MotorIO coralElevatorMotor, MotorIO coralElevatorMotorFollower, MotorIO algaeElevatorMotor) {
@@ -64,20 +65,26 @@ public class Elevator extends SubsystemBase {
 
         double updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble();
 
+        double appliedFF;
+
+        if (coralElevatorInputs.unitPosition < 17.63) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L0;
+        else if (coralElevatorInputs.unitPosition < 23.72) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L1;
+        else appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L2;
+        
         if (coralRequestedHeight.getAsDouble() > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES) {
             updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() + ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES);
         }
 
-        if (isAlgaeWristLegal() && isCoralWristLegal()) {
-            coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), ElevatorConstants.FEEDFORWARD_VOLTS, (MotorIOTalonFX) coralElevatorMotorFollower);
-            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.FEEDFORWARD_VOLTS);
+        if (isAlgaeWristLegal() && isCoralWristLegal() || true) {
+            coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), appliedFF);
+            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
     }
 
     public void setTargetPosFromZero(DoubleSupplier targetCoralPosFromGroundInches, DoubleSupplier targetAlgaePosFromGroundInches) {
         boolean isPossibleTarget = isCarriageHeightsLegal(coralRequestedHeight.getAsDouble(), algaeRequestedHeight.getAsDouble());
 
-        if (isPossibleTarget) {
+        if (isPossibleTarget || true) {
             coralRequestedHeight = targetCoralPosFromGroundInches;
             algaeRequestedHeight = targetAlgaePosFromGroundInches;
         }

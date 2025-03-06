@@ -31,8 +31,8 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L2_POS = 0;
     public static final double CORAL_L1_POS = 0;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_WRIST_DEFAULT_POS = 0.1;
-    public static final double CORAL_HP_INTAKE_POS = 0;
+    public static final double CORAL_HP_INTAKE_POS = 0.2025;
+    public static final double CORAL_WRIST_DEFAULT_POS = 0.45;
     public static final double CORAL_WRIST_FLIP_THRESHOLD = 0;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double HORIZONTAL_POSITION = 0.045;
@@ -88,7 +88,7 @@ public class CoralEndEffectorConstants {
     public static MotorIOTalonFX coralWristMotor = new MotorIOTalonFX(coralWristMotorConfigs);
 
     /* CORAL INTAKE MOTOR */
-    public static final double CORAL_INTAKE_IN_VOLTAGE = -12;
+    public static final double CORAL_INTAKE_IN_VOLTAGE = -2.5;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
     public static final double CORAL_DEFAULT_VOLTAGE = 0;
 
@@ -101,7 +101,7 @@ public class CoralEndEffectorConstants {
         .withCurrentLimits(
             new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(23));
+            .withStatorCurrentLimit(50));
 
     private static MotorConfigs coralIntakeMotorConfigs = new MotorConfigs()
         .withCanId(13)

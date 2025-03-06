@@ -19,7 +19,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
     private final MotorIO algaeWristMotor;
     private final MotorIOInputsAutoLogged algaeWristInputs = new MotorIOInputsAutoLogged();
 
-    private DoubleSupplier requestedPosition = () -> 0.23;
+    private DoubleSupplier requestedPosition = () -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS;
 
     private AlgaeWristEndEffector(MotorIO algaeWristMotor) {
         this.algaeWristMotor = algaeWristMotor;
@@ -56,10 +56,6 @@ public class AlgaeWristEndEffector extends SubsystemBase {
             requestedPosition.getAsDouble(), 
             algaeWristInputs.unitPosition, 
             AlgaeEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
-    }
-
-    public Command test() {
-        return run(() -> setPosition(() -> 0.12));
     }
 }
 

@@ -28,7 +28,7 @@ public class AlgaeEndEffectorConstants {
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
     public static final double ALGAE_INTAKE_OUT_VOLTAGE = -12;
-    public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -24;
+    public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_DEFAULT_VOLTAGE = 0;
     public static final double ALGAE_EXTENSION_THRESHOLD = 0;
 
@@ -41,22 +41,20 @@ public class AlgaeEndEffectorConstants {
         .withCurrentLimits(
             new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20));
+            .withStatorCurrentLimit(60));
     
     private static MotorConfigs algaeIntakeMotorConfigs = new MotorConfigs()
         .withCanId(12)
         .withCanBus(TunerConstants.kCANBus)
-        .withFxConfig(algaeIntakeMotorFxConfig)
-        .withMaxPositionUnits(469)
-        .withMinPositionUnits(0);
+        .withFxConfig(algaeIntakeMotorFxConfig);
     
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
     /* ALGAE WRIST MOTOR */
-    public static final double ALGAE_WRIST_DEFAULT_POS = 0;
+    public static final double ALGAE_WRIST_DEFAULT_POS = 0.05;
     public static final double ALGAE_WRIST_PROCESSOR_POS = 0;
     public static final double ALGAE_WRIST_BARGE_POS = 0;
-    public static final double ALGAE_WRIST_GROUND_POS = 0;
+    public static final double ALGAE_WRIST_GROUND_POS = 0.25;
     public static final double ALGAE_WRIST_L2_L3 = 0;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
@@ -77,7 +75,7 @@ public class AlgaeEndEffectorConstants {
             new Slot0Configs()
             .withKS(0)
             .withKV(0)
-            .withKP(0)
+            .withKP(30)
             .withKI(0)
             .withKD(0))
         .withMotionMagic(
@@ -91,7 +89,7 @@ public class AlgaeEndEffectorConstants {
         .withFxConfig(algaeWristMotorFxConfig)
         .withRotorToSensorRatio(36.8)
         .withSensorToMechanismRatio(1)
-        .withUnitToRotorRatio(36.8)
+        .withUnitToRotorRatio(1)
         .withMaxPositionUnits(0.27)
         .withMinPositionUnits(0);
     

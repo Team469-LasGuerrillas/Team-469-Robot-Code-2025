@@ -19,6 +19,8 @@ public interface MotorIO {
     public double currentStatorAmps = 0.0;
     public double currentSupplyAmps = 0.0;
 
+    public double positionError = 0.0;
+
     public double temperatureCelcius = 0.0;
     public int canbusId;
 
@@ -35,7 +37,6 @@ public interface MotorIO {
 
   // MotionMagic Position
   public default void setMagicalPositionSetpoint(double units, double feedForward) {}
-  public default void setMagicalPositionSetpoint(double units, double feedForward, MotorIOTalonFX... followerMotors) {}
 
   // Velocity
   public default void setVelocitySetpoint(double unitsPerSecond) {}

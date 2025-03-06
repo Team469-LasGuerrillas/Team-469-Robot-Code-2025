@@ -40,7 +40,7 @@ public class CTREUtil {
     mConfig.fxConfig.Feedback.SensorToMechanismRatio = mConfig.sensorToMechanismRatio;
     mConfig.fxConfig.Feedback.RotorToSensorRatio = mConfig.rotorToSensorRatio;
 
-    return tryUntilOK(() -> motor.getConfigurator().refresh(mConfig.fxConfig), cancoder.getDeviceID());
+    return tryUntilOK(() -> motor.getConfigurator().apply(mConfig.fxConfig), cancoder.getDeviceID());
   }
 
   public static StatusCode applyConfiguration(TalonFX motor, TalonFXConfiguration config) {

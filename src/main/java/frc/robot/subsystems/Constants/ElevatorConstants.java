@@ -8,7 +8,9 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.lib.interfaces.motor.MotorConfigs;
 
@@ -23,7 +25,24 @@ public class ElevatorConstants {
     public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = 5;
 
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
-    
+
+    /* CORAL ELEVATOR MOTOR FOLLOWER */
+    private static TalonFXConfiguration coralElevatorFollowerFxConfiguration = 
+    new TalonFXConfiguration()
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.Clockwise_Positive)
+                .withNeutralMode(NeutralModeValue.Brake)
+        );
+
+    private static MotorConfigs coralElevatorFollowerMotorConfigs = 
+    new MotorConfigs()
+        .withCanId(9)
+        .withCanBus(TunerConstants.kCANBus)
+        .withFxConfig(coralElevatorFollowerFxConfiguration);
+
+    public static MotorIOTalonFX coralElevatorFollowerMotor = new MotorIOTalonFX(coralElevatorFollowerMotorConfigs);
+
     /* CORAL ELEVATOR MOTOR */
     public static final double CORAL_DEFAULT_POS = 0;
     public static final double CORAL_GROUND_INTAKE_POS = 1;
@@ -34,18 +53,22 @@ public class ElevatorConstants {
     public static final double CORAL_L4_POS = 6;
     public static final double CORAL_BARGE_POS = 7;
     
-    public static final double FEEDFORWARD_VOLTS = 0;    
+    public static final double CORAL_FEEDFORWARD_VOLTS_L0 = 0.4; 
+    public static final double CORAL_FEEDFORWARD_VOLTS_L1 = 0.65; 
+    public static final double CORAL_FEEDFORWARD_VOLTS_L2 = 0.8; 
+    public static final double ALGAE_FEEDFORWARD_VOLTS = 0;  
 
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withMotorOutput(
         new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive)
+            .withInverted(InvertedValue.CounterClockwise_Positive)
+            .withNeutralMode(NeutralModeValue.Brake)
     )
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(10))
+            .withStatorCurrentLimit(60))
               .withSlot0(
             new Slot0Configs()
             .withKS(0)
@@ -68,41 +91,7 @@ public class ElevatorConstants {
         .withMaxPositionUnits(469)
         .withMinPositionUnits(0);
 
-    public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs);
-
-    /* CORAL ELEVATOR MOTOR FOLLOWER */
-    private static TalonFXConfiguration coralElevatorFollowerTalonFXConfiguration =
-    new TalonFXConfiguration()
-        .withMotorOutput(
-            new MotorOutputConfigs()
-                .withInverted(InvertedValue.CounterClockwise_Positive)
-        )
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(10))
-                .withSlot0(
-                    new Slot0Configs()
-                    .withKS(0)
-                    .withKV(0)
-                    .withKP(0)
-                    .withKI(0)
-                    .withKD(0)
-                )
-        .withMotionMagic(
-            new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(80)
-            .withMotionMagicAcceleration(90));
-
-    private static MotorConfigs coralElevatorFollowerMotorConfigs = 
-    new MotorConfigs()
-        .withCanId(9)
-        .withCanBus(TunerConstants.kCANBus)
-        .withFxConfig(coralElevatorFollowerTalonFXConfiguration)
-        .withMaxPositionUnits(469)
-        .withMinPositionUnits(0);
-
-    public static MotorIOTalonFX coralElevatorFollowerMotor = new MotorIOTalonFX(coralElevatorFollowerMotorConfigs);
+    public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs, coralElevatorFollowerMotor);
 
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_PROCESSOR_POS = 0;

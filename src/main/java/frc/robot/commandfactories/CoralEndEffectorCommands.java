@@ -14,9 +14,16 @@ public class CoralEndEffectorCommands {
     public static Command coralIntake(DoubleSupplier voltage) {
         return Commands.deferredProxy(
             () -> Commands.either(
+            runCoralIntake(voltage),
             Commands.none(),
-            Commands.run(() -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector),
-            () -> coralIntakeEndEffector.hasCoral()));
+            () -> 
+            // coralIntakeEndEffector.hasCoral() ||
+             true
+            ));
+    }
+
+    public static Command runCoralIntake(DoubleSupplier voltage) {
+        return Commands.run(() -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector);
     }
 
 

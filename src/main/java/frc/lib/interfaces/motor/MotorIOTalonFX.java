@@ -1,5 +1,7 @@
 package frc.lib.interfaces.motor;
 
+import static edu.wpi.first.units.Units.Microsecond;
+
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -33,10 +35,11 @@ public class MotorIOTalonFX implements MotorIO {
   private final PositionVoltage positionVoltageControl = new PositionVoltage(0.0);
   private final MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0.0);
 
-  private final StatusSignal<Angle> positionSignal;
-  private final StatusSignal<AngularVelocity> velocitySignal;
-  private final StatusSignal<Voltage> voltageSignal;
-  private final StatusSignal<Current> currentStatorSignal;
+  private StatusSignal<Angle> positionSignal;
+  private StatusSignal<AngularVelocity> velocitySignal;
+  private StatusSignal<Voltage> voltageSignal;
+  private StatusSignal<Current> currentStatorSignal;
+  
   public BaseStatusSignal[] signals;
 
   public MotorIOTalonFX(MotorConfigs config, MotorIOTalonFX... followerMotors) {
@@ -65,16 +68,27 @@ public class MotorIOTalonFX implements MotorIO {
   }
 
   public MotorIOTalonFX(MotorConfigs mConfig, CancoderConfigs ccConfig) {
-    this(mConfig);
+    this.mConfig = mConfig;
 
+    talon = new TalonFX(mConfig.canId, mConfig.canBus);
     cancoder = new CANcoder(ccConfig.canId, ccConfig.canBus);
-    CTREUtil.applyConfiguration(cancoder, ccConfig.ccConfig);
 
+    positionSignal = cancoder.getPosition();
+    velocitySignal = talon.getVelocity();
+    voltageSignal = talon.getMotorVoltage();
+    currentStatorSignal = talon.getStatorCurrent();
+
+    signals =
+        new BaseStatusSignal[] {
+          positionSignal, velocitySignal, voltageSignal, currentStatorSignal
+        };
+
+    CTREUtil.applyConfiguration(cancoder, ccConfig.ccConfig);
     CTREUtil.applyFusedCancoderToTalon(mConfig, talon, cancoder);
-    
+
     CTREUtil.tryUntilOK(
-        () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, signals), cancoder.getDeviceID());
-    CTREUtil.tryUntilOK(() -> talon.optimizeBusUtilization(), cancoder.getDeviceID());
+      () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, signals), talon.getDeviceID());
+    CTREUtil.tryUntilOK(() -> talon.optimizeBusUtilization(), talon.getDeviceID());
   }
 
   private double rotorToUnits(double rotor) {
@@ -97,6 +111,8 @@ public class MotorIOTalonFX implements MotorIO {
     inputs.velocityUnitsPerSecond = rotorToUnits(velocitySignal.getValueAsDouble());
     inputs.appliedVolts = voltageSignal.getValueAsDouble();
     inputs.currentStatorAmps = currentStatorSignal.getValueAsDouble();
+
+    inputs.positionError = talon.getClosedLoopError().getValueAsDouble();
 
     inputs.canbusId = mConfig.canId;
 

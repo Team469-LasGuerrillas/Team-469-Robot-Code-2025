@@ -2,6 +2,7 @@ package frc.robot.subsystems.endEffectors;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.CANrange;
@@ -53,6 +54,7 @@ public class CoralIntakeEndEffector extends SubsystemBase {
         coralIntakeMotor.setOpenLoopVoltage(voltage);
     }   
     
+    @AutoLogOutput
     public boolean hasCoral() {
         if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE) {
             return true;
