@@ -55,7 +55,7 @@ public class ElevatorConstants {
     
     public static final double CORAL_FEEDFORWARD_VOLTS_L0 = 0.4; 
     public static final double CORAL_FEEDFORWARD_VOLTS_L1 = 0.65; 
-    public static final double CORAL_FEEDFORWARD_VOLTS_L2 = 0.8; 
+    public static final double CORAL_FEEDFORWARD_VOLTS_L2 = 0.725; 
     public static final double ALGAE_FEEDFORWARD_VOLTS = 0;  
 
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =

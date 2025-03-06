@@ -22,11 +22,11 @@ public class AlgaeEndEffectorCommands {
     }
 
     public static Command runAlgaeIntake(DoubleSupplier voltage) {
-        return Commands.run(() -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector);
+        return Commands.startRun(() -> algaeIntakeEndEffector.setVoltage(voltage), () -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector);
     }
 
     public static Command algaeWrist(DoubleSupplier position) {
-        return Commands.run(() -> algaeWristEndEffector.setPosition(position), algaeWristEndEffector);
+        return Commands.startRun(() -> algaeWristEndEffector.setPosition(position), () -> algaeWristEndEffector.setPosition(position), algaeWristEndEffector);
     }
 
     public static Command algaeWrist() {

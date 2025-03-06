@@ -23,11 +23,11 @@ public class CoralEndEffectorCommands {
     }
 
     public static Command runCoralIntake(DoubleSupplier voltage) {
-        return Commands.run(() -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector);
+        return Commands.startRun(() -> coralIntakeEndEffector.setVoltage(voltage), () -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector);
     }
 
 
     public static Command coralWrist(DoubleSupplier position) {
-        return Commands.run(() -> coralWristEndEffector.setPosition(position), coralWristEndEffector);
+        return Commands.startRun(() -> coralWristEndEffector.setPosition(position), () -> coralWristEndEffector.setPosition(position), coralWristEndEffector);
     }
 }

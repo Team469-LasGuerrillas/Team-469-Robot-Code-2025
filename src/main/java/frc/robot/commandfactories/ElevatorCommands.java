@@ -11,7 +11,7 @@ public class ElevatorCommands {
     private static Elevator elevator = Elevator.getInstance();
 
   public static Command setTargetPosFromZero(DoubleSupplier coralPosition, DoubleSupplier algaePosition) {
-    return Commands.run(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition), elevator);
+    return Commands.startRun(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition), () -> elevator.setTargetPosFromZero(coralPosition, algaePosition), elevator);
   }
 
   public static Command setDynamicL4Pos() {
@@ -26,10 +26,10 @@ public class ElevatorCommands {
   }
 
   public static Command setCoralPosFromZero(DoubleSupplier coralPosition) {
-    return Commands.run(() -> elevator.setCoralPosFromZero(coralPosition), elevator);
+    return Commands.startRun(() -> elevator.setCoralPosFromZero(coralPosition), () -> elevator.setCoralPosFromZero(coralPosition), elevator);
   }
 
   public static Command setAlgaePosFromZero(DoubleSupplier algaePosition) {
-    return Commands.run(() -> elevator.setAlgaePosFromZero(algaePosition), elevator);
+    return Commands.startRun(() -> elevator.setAlgaePosFromZero(algaePosition), () -> elevator.setAlgaePosFromZero(algaePosition), elevator);
   }
 }
