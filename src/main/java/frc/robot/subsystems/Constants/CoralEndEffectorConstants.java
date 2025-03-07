@@ -4,11 +4,14 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.ToFParamsConfigs;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -23,7 +26,14 @@ import frc.robot.generated.TunerConstants;
 public class CoralEndEffectorConstants {
     
     /* SENSOR CANRANGE */
-    public static SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 0);
+    private static CANrangeConfiguration canRangeConfig = new CANrangeConfiguration()
+        .withFovParams(
+            new FovParamsConfigs()
+            .withFOVRangeX(27)
+            .withFOVRangeY(27)
+        );
+
+    public static SensorIOCANRange canRange = new SensorIOCANRange(canRangeConfig, 1);
 
     /* CORAL WRIST MOTOR */
     public static final double CORAL_L4_POS = -12;
@@ -31,8 +41,8 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L2_POS = 0;
     public static final double CORAL_L1_POS = 0;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.2025;
-    public static final double CORAL_WRIST_DEFAULT_POS = 0.45;
+    public static final double CORAL_HP_INTAKE_POS = 0.2;
+    public static final double CORAL_WRIST_DEFAULT_POS = 0.625;
     public static final double CORAL_WRIST_FLIP_THRESHOLD = 0;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double HORIZONTAL_POSITION = 0.045;

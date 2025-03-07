@@ -38,6 +38,9 @@ public interface MotorIO {
   // MotionMagic Position
   public default void setMagicalPositionSetpoint(double units, double feedForward) {}
 
+  // Dynamic MotionMagic
+  public default void setDynamicallyMagicalPositionSetpoint(double units, double feedForward, double velocityUnits, double accelerationUnits, double jerkUnits) {}
+
   // Velocity
   public default void setVelocitySetpoint(double unitsPerSecond) {}
 
@@ -55,4 +58,9 @@ public interface MotorIO {
 
   // Soft Limits
   public default void setSoftLimits(boolean fwd, boolean rev, double fwdLimit, double revLimit) {}
+
+  // PID slot
+  public default void setSlot(int slot) {}
+
+  
 }

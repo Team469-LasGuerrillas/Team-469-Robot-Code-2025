@@ -27,6 +27,7 @@ import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.AlgaeEndEffectorCommands;
 import frc.robot.commandfactories.DriveCommands;
+import frc.robot.commandfactories.ElevatorCommands;
 import frc.robot.commandfactories.GlobalCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.climb.Climb;
@@ -97,7 +98,7 @@ public class RobotContainer {
 
               coralWristEndEffector = CoralWristEndEffector.createInstance(CoralEndEffectorConstants.coralWristMotor);
 
-              coralIntakeEndEffector = CoralIntakeEndEffector.createInstance(CoralEndEffectorConstants.coralIntakeMotor, CoralEndEffectorConstants.CanRange);
+              coralIntakeEndEffector = CoralIntakeEndEffector.createInstance(CoralEndEffectorConstants.coralIntakeMotor, CoralEndEffectorConstants.canRange);
 
               climb = Climb.createInstance(ClimbConstants.climbMotor);
 
@@ -147,11 +148,16 @@ public class RobotContainer {
 
     Dashboard.addWidgets(shuffleboardTab);
           
-    driver.a().whileTrue(GlobalCommands.algaeGroundIntake());
-    driver.b().whileTrue(GlobalCommands.algaeRelease());
-    driver.x().whileTrue(GlobalCommands.humanPlayerIntake());
-    driver.y().whileTrue(GlobalCommands.coralRelease());
+    driver.a().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 40, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES));
+    driver.b().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 25, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES));
+    driver.y().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 88.5, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES));
     
+    operator.povUp().whileTrue(GlobalCommands.deploy());
+
+    operator.povDown().whileTrue(GlobalCommands.fastRetract());
+
+    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
+
       configureDefaultBindings();
       // configureDriverBindings();
       // configureOperatorBindings();
@@ -160,13 +166,16 @@ public class RobotContainer {
   }
         
   private void configureDefaultBindings() {
-    // drive.setDefaultCommand(
-    //     DriveCommands.acceptTeleopFieldOriented(driver, true));
+    drive.setDefaultCommand(
+        DriveCommands.acceptTeleopFieldOriented(driver, true));
     
     coralWristEndEffector.setDefaultCommand(GlobalCommands.defaultCoralWristEndEffector());
     algaeWristEndEffector.setDefaultCommand(GlobalCommands.defaultAlgaeWristEndEffector());
     algaeIntakeEndEffector.setDefaultCommand(GlobalCommands.defaultAlgaeIntakeEndEffector());
     coralIntakeEndEffector.setDefaultCommand(GlobalCommands.defaultCoralIntakeEndEffector());
+    climb.setDefaultCommand(GlobalCommands.defaultClimb());
+
+    elevator.setDefaultCommand(GlobalCommands.defaultElevator());
   }
 
   // private void configureDriverBindings() {

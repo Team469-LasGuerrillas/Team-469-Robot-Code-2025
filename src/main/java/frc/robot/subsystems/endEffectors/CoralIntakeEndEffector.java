@@ -47,7 +47,7 @@ public class CoralIntakeEndEffector extends SubsystemBase {
         Logger.processInputs("Coral Intake", coralIntakeInputs);
 
         CANRange.updateInputs(CANRangeInputs);
-        Logger.processInputs("CANRange", CANRangeInputs);
+        Logger.processInputs("CANRange Coral", CANRangeInputs);
     }
 
     public void setVoltage(DoubleSupplier voltage) {
@@ -56,10 +56,7 @@ public class CoralIntakeEndEffector extends SubsystemBase {
     
     @AutoLogOutput
     public boolean hasCoral() {
-        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE) {
-            return true;
-        } else {
-            return false;
-        }
+        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE && CANRangeInputs.signalStrength > SensorConstants.CAN_RANGE_SIGNAL_THRESHOLD_VALUE) return true;
+        return false;
     }
 }

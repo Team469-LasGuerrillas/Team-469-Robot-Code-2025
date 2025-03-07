@@ -41,7 +41,7 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
         Logger.processInputs("Algae Intake", algaeIntakeInputs);
 
         CANRange.updateInputs(CANRangeInputs);
-        Logger.processInputs("CANRange", CANRangeInputs);
+        Logger.processInputs("CANRange Algae", CANRangeInputs);
     }
 
     public void setVoltage(DoubleSupplier voltage) {

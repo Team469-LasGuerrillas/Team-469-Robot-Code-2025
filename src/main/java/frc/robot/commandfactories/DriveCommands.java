@@ -127,23 +127,4 @@ public class DriveCommands {
       () -> pidToReefPose(FieldLayout.findClosestReefPoseRight())
     );
   }
-
-  // public static Command pathfindToPose(Pose2d pose) {
-  //   return Commands.startEnd(
-  //     () -> Drive.getInstance().setPathfinding(pose), 
-  //     () -> Drive.getInstance().clearMode());
-  // }
-
-  // public static Command pathfindToReefPose(ReefPositions position) {
-  //   Pose2d pose = FieldLayout.reefPositionPoseRight.get(position);
-
-  //   return pathfindToPose(pose);
-  // }
-
-  // // public static Command pathfindToClosestReefPose() {
-  // //   ReefPositions closestReefPosition = FieldLayout.findClosestReefPose();
-
-  // //   return pathfindToReefPose(closestReefPosition);
-  // // }
-
 }

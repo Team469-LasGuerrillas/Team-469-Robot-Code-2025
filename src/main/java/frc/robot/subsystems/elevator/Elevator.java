@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
@@ -67,16 +68,25 @@ public class Elevator extends SubsystemBase {
 
         double appliedFF;
 
-        if (coralElevatorInputs.unitPosition < 17.63) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L0;
-        else if (coralElevatorInputs.unitPosition < 23.72) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L1;
+        if (coralRequestedHeight.getAsDouble() - coralElevatorInputs.unitPosition > 0) coralElevatorMotor.setSlot(0);
+        else coralElevatorMotor.setSlot(1);
+
+        if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_FEEDFORWARDS_HEIGHT_L0) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L0;
+        else if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_FEEDFORWARDS_HEIGHT_L1) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L1;
         else appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L2;
         
         if (coralRequestedHeight.getAsDouble() > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES) {
             updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() + ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES);
         }
 
+
         if (isAlgaeWristLegal() && isCoralWristLegal() || true) {
-            coralElevatorMotor.setMagicalPositionSetpoint(coralRequestedHeight.getAsDouble(), appliedFF);
+            double requestedVelocity = ElevatorConstants.CORAL_VELOCITY;
+            if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER) requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;
+            
+            coralElevatorMotor.setDynamicallyMagicalPositionSetpoint(
+                coralRequestedHeight.getAsDouble(), appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
+            );
             algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
     }

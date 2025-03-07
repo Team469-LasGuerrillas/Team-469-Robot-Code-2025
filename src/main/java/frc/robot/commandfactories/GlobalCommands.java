@@ -136,6 +136,14 @@ public class GlobalCommands {
   public static Command defaultAlgaeIntakeEndEffector() {
     return AlgaeEndEffectorCommands.runAlgaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE);
   }
+
+  public static Command defaultClimb() {
+    return ClimbCommands.climb(() -> 0);
+  }
+
+  public static Command defaultElevator() {
+    return ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_DEFAULT_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS);
+  }
 }
 
 

@@ -7,6 +7,7 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -34,6 +35,7 @@ public class MotorIOTalonFX implements MotorIO {
       new MotionMagicVelocityVoltage(0.0);
   private final PositionVoltage positionVoltageControl = new PositionVoltage(0.0);
   private final MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0.0);
+  private DynamicMotionMagicVoltage dynamicMotionMagicPositionControl = new DynamicMotionMagicVoltage(0, 0, 0, 0);
 
   private StatusSignal<Angle> positionSignal;
   private StatusSignal<AngularVelocity> velocitySignal;
@@ -41,6 +43,9 @@ public class MotorIOTalonFX implements MotorIO {
   private StatusSignal<Current> currentStatorSignal;
   
   public BaseStatusSignal[] signals;
+
+  public int slot = 0;
+  public double velocity = 99999;
 
   public MotorIOTalonFX(MotorConfigs config, MotorIOTalonFX... followerMotors) {
     this.mConfig = config;
@@ -127,23 +132,34 @@ public class MotorIOTalonFX implements MotorIO {
   @Override
   public void setPositionSetpoint(double units, double feedForward) {
     talon.setControl(
-        positionVoltageControl.withPosition(clampPosition(units)).withFeedForward(feedForward));
+        positionVoltageControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot));
   }
 
   @Override
   public void setMagicalPositionSetpoint(double units, double feedForward) {
     talon.setControl(
-        motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward));
+        motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot));
+  }
+
+  @Override
+  public void setDynamicallyMagicalPositionSetpoint(double units, double feedForward, double velocityUnits, double accelerationUnits, double jerkUnits) {
+    dynamicMotionMagicPositionControl.Velocity = velocityUnits;
+    dynamicMotionMagicPositionControl.Acceleration = accelerationUnits;
+    dynamicMotionMagicPositionControl.Jerk = jerkUnits;
+    
+    talon.setControl(
+      dynamicMotionMagicPositionControl.withPosition(units).withFeedForward(feedForward).withSlot(slot)
+    );
   }
 
   @Override
   public void setVelocitySetpoint(double unitsPerSecond) {
-    talon.setControl(velocityVoltageControl.withVelocity(clampPosition(unitsPerSecond)));
+    talon.setControl(velocityVoltageControl.withVelocity(clampPosition(unitsPerSecond)).withSlot(slot));
   }
 
   @Override
   public void setMagicalVelocitySetpoint(double unitsPerSecond) {
-    talon.setControl(motionMagicVelocityControl.withVelocity(clampPosition(unitsPerSecond)));
+    talon.setControl(motionMagicVelocityControl.withVelocity(clampPosition(unitsPerSecond)).withSlot(slot));
   }
 
   @Override
@@ -169,5 +185,10 @@ public class MotorIOTalonFX implements MotorIO {
     mConfig.fxConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = fwdLimit;
     mConfig.fxConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = revLimit;
     CTREUtil.applyConfiguration(talon, mConfig.fxConfig);
+  }
+
+  @Override
+  public void setSlot(int slot) {
+    this.slot = slot;
   }
 }

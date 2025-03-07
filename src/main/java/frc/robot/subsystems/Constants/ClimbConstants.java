@@ -21,12 +21,12 @@ public class ClimbConstants {
     new TalonFXConfiguration()
     .withMotorOutput(
         new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive)
+            .withInverted(InvertedValue.CounterClockwise_Positive)
     )
     .withCurrentLimits(
         new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
-        .withStatorCurrentLimit(21));
+        .withStatorCurrentLimit(80));
 
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(10)

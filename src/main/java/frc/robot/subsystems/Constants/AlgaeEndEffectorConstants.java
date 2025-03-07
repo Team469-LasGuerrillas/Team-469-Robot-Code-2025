@@ -23,7 +23,7 @@ import frc.robot.generated.TunerConstants;
 public class AlgaeEndEffectorConstants {
 
     /* SENSOR CANRANGE */
-    public static SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 1);
+    public static SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 2);
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
@@ -51,7 +51,7 @@ public class AlgaeEndEffectorConstants {
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
     /* ALGAE WRIST MOTOR */
-    public static final double ALGAE_WRIST_DEFAULT_POS = 0.05;
+    public static final double ALGAE_WRIST_DEFAULT_POS = 0.275;
     public static final double ALGAE_WRIST_PROCESSOR_POS = 0;
     public static final double ALGAE_WRIST_BARGE_POS = 0;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;

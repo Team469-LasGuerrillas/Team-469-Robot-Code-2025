@@ -7,6 +7,7 @@ public interface SensorIO {
   @AutoLog
   class SensorIOInputs {
     public double distance = 1;
+    public double signalStrength = 9999;
     public boolean isCut = false;
   }
 

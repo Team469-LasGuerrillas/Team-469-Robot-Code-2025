@@ -25,6 +25,7 @@ public class CoralWristEndEffector extends SubsystemBase {
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;
+        this.coralWristMotor.setCurrentPosition(0);
     }
 
     public static CoralWristEndEffector createInstance(MotorIO coralWristMotor) {
@@ -43,7 +44,7 @@ public class CoralWristEndEffector extends SubsystemBase {
         Logger.processInputs("Coral Wrist", coralWristInputs);
 
         if (isPositionAllowed(requestedPosition.getAsDouble()) || true) {
-            // coralWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), Math.cos((coralWristInputs.unitPosition - CoralEndEffectorConstants.HORIZONTAL_POSITION) * Math.PI * 2) * CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
+            coralWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), Math.cos((coralWristInputs.unitPosition - CoralEndEffectorConstants.HORIZONTAL_POSITION) * Math.PI * 2) * CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
         }
     }
 
