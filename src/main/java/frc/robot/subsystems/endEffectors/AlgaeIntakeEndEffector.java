@@ -2,6 +2,7 @@ package frc.robot.subsystems.endEffectors;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -48,14 +49,16 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
         algaeIntakeMotor.setOpenLoopVoltage(voltage);
     }  
 
-    public boolean isHoldingAlgae() {
-        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE) return true; 
-        return false;
-    }
-
+    @AutoLogOutput
     public boolean isSeeingAlgae() {
         if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_MAX_ALGAE_VALUE 
             && CANRangeInputs.distance > SensorConstants.CAN_RANGE_MIN_ALGAE_VALUE) return true;
+        return false;
+    }
+
+    @AutoLogOutput
+    public boolean hasAlgae() {
+        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_MIN_ALGAE_VALUE) return true;
         return false;
     }
 }

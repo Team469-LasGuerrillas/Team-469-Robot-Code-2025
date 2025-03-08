@@ -41,6 +41,7 @@ public class Elevator extends SubsystemBase {
         this.algaeElevatorMotor = algaeElevatorMotor;
 
         coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);
+        algaeElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES);
     }
 
     public static Elevator createInstance(MotorIO coralElevatorMotor, MotorIO coralElevatorMotorFollower, MotorIO algaeElevatorMotor) {
@@ -76,17 +77,21 @@ public class Elevator extends SubsystemBase {
         else appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L2;
         
         if (coralRequestedHeight.getAsDouble() > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES) {
-            updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() + ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES);
+            updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() - ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES);
         }
 
 
-        if (isAlgaeWristLegal() && isCoralWristLegal() || true) {
+        if (isAlgaeWristLegal() && isCoralWristLegal()) {
             double requestedVelocity = ElevatorConstants.CORAL_VELOCITY;
-            if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER) requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;
-            
-            coralElevatorMotor.setDynamicallyMagicalPositionSetpoint(
+            if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER 
+            && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER 
+            && coralElevatorInputs.velocityUnitsPerSecond < 0) 
+                requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;            
+
+            coralElevatorMotor.setDynamicMagicalPositionSetpoint(
                 coralRequestedHeight.getAsDouble(), appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
             );
+
             algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
     }
@@ -120,18 +125,29 @@ public class Elevator extends SubsystemBase {
 
     private boolean isAlgaeWristLegal() {
         boolean algaeOutCaseIsLegal = (AlgaeWristEndEffector.getInstance().getWristPosition() > AlgaeEndEffectorConstants.ALGAE_EXTENSION_THRESHOLD
-            && algaeRequestedHeight.getAsDouble() > ElevatorConstants.MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT)
-            && GeomUtil.isLookingAtReef() 
-            && GeomUtil.isWithinReefRadius();
+            && algaeRequestedHeight.getAsDouble() > ElevatorConstants.MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT) ||
+            (!GeomUtil.isLookingAtReef() 
+            && !GeomUtil.isWithinReefRadius());
+
         boolean algaeUpCase =          AlgaeWristEndEffector.getInstance().getWristPosition() < AlgaeEndEffectorConstants.ALGAE_EXTENSION_THRESHOLD;
+
+        if (!algaeUpCase) {
+            System.out.println("sigma");
+        }
 
         return algaeOutCaseIsLegal || algaeUpCase;
     }
 
     private boolean isCoralWristLegal() {
-        boolean coralIntakingCaseIsLegal = (CoralWristEndEffector.getInstance().getWristPosition() < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD
-            && coralRequestedHeight.getAsDouble() < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP);
-        boolean coralOutCase =              CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD;
+        boolean coralIntakingCaseIsLegal =
+            (CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW
+            && coralRequestedHeight.getAsDouble() < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW);
+
+        boolean coralOutCase =              CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH;
+
+        if (!coralIntakingCaseIsLegal) {
+            System.out.println("sigmoid");
+        }
 
         return coralIntakingCaseIsLegal || coralOutCase;
     }

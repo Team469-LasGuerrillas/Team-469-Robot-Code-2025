@@ -35,7 +35,7 @@ public class MotorIOTalonFX implements MotorIO {
       new MotionMagicVelocityVoltage(0.0);
   private final PositionVoltage positionVoltageControl = new PositionVoltage(0.0);
   private final MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0.0);
-  private DynamicMotionMagicVoltage dynamicMotionMagicPositionControl = new DynamicMotionMagicVoltage(0, 0, 0, 0);
+  private final DynamicMotionMagicVoltage dynamicMotionMagicPositionControl = new DynamicMotionMagicVoltage(0, 0, 0, 0);
 
   private StatusSignal<Angle> positionSignal;
   private StatusSignal<AngularVelocity> velocitySignal;
@@ -142,13 +142,13 @@ public class MotorIOTalonFX implements MotorIO {
   }
 
   @Override
-  public void setDynamicallyMagicalPositionSetpoint(double units, double feedForward, double velocityUnits, double accelerationUnits, double jerkUnits) {
+  public void setDynamicMagicalPositionSetpoint(double units, double feedForward, double velocityUnits, double accelerationUnits, double jerkUnits) {
     dynamicMotionMagicPositionControl.Velocity = velocityUnits;
     dynamicMotionMagicPositionControl.Acceleration = accelerationUnits;
     dynamicMotionMagicPositionControl.Jerk = jerkUnits;
     
     talon.setControl(
-      dynamicMotionMagicPositionControl.withPosition(units).withFeedForward(feedForward).withSlot(slot)
+      dynamicMotionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot)
     );
   }
 

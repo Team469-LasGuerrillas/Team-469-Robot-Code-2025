@@ -36,14 +36,16 @@ public class CoralEndEffectorConstants {
     public static SensorIOCANRange canRange = new SensorIOCANRange(canRangeConfig, 1);
 
     /* CORAL WRIST MOTOR */
-    public static final double CORAL_L4_POS = -12;
-    public static final double CORAL_L3_POS = 12;
-    public static final double CORAL_L2_POS = 0;
-    public static final double CORAL_L1_POS = 0;
+    public static final double CORAL_L4_POS = 0.65;
+    public static final double CORAL_L3_POS = 0.65;
+    public static final double CORAL_L2_POS = 0.65;
+    public static final double CORAL_L1_POS = 0.5;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
     public static final double CORAL_HP_INTAKE_POS = 0.2;
-    public static final double CORAL_WRIST_DEFAULT_POS = 0.625;
-    public static final double CORAL_WRIST_FLIP_THRESHOLD = 0;
+    public static final double CORAL_WRIST_DEFAULT_POS = 0.3;
+    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.51;
+    public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
+    public static final double IDLE_WRIST_THRESHOLD = 0.525;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double HORIZONTAL_POSITION = 0.045;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.625;
@@ -79,7 +81,7 @@ public class CoralEndEffectorConstants {
         .withSensorToMechanismRatio(1)
         .withUnitToRotorRatio(1 / 16.1904761905)
         .withMinPositionUnits(0.01)
-        .withMaxPositionUnits(0.6);
+        .withMaxPositionUnits(0.7);
 
     // private static CANcoderConfiguration coralWristCcConfig = 
     // new CANcoderConfiguration()

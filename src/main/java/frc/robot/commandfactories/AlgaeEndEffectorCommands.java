@@ -15,9 +15,9 @@ public class AlgaeEndEffectorCommands {
     public static Command algaeIntake(DoubleSupplier voltage) {
         return Commands.deferredProxy(
             () -> Commands.either(
-            runAlgaeIntake(voltage),
             Commands.none(),
-            () -> algaeIntakeEndEffector.isHoldingAlgae() || false
+            runAlgaeIntake(voltage),
+            () -> algaeIntakeEndEffector.hasAlgae()
         ));
     }
 

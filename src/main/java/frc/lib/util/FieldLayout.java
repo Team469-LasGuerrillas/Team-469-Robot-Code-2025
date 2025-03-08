@@ -19,8 +19,8 @@ public class FieldLayout {
     ALR, ARR, BLR, BRR, CLR, CRR, DLR, DRR, ELR, ERR, FLR, FRR
   };
 
-  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.5, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
-  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.5, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
+  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.2, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
+  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.2, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
   public static Transform2d L1_TRANSFORM = new Transform2d(0.5, 0, new Rotation2d());
 

@@ -26,6 +26,7 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.commandfactories.AlgaeEndEffectorCommands;
+import frc.robot.commandfactories.CoralEndEffectorCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.ElevatorCommands;
 import frc.robot.commandfactories.GlobalCommands;
@@ -148,9 +149,9 @@ public class RobotContainer {
 
     Dashboard.addWidgets(shuffleboardTab);
           
-    driver.a().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 40, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES));
-    driver.b().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 25, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES));
-    driver.y().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 88.5, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES));
+    driver.a().whileTrue(GlobalCommands.coralL2());
+    driver.b().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 30, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES + 10));
+    driver.y().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L4_POS, () -> ElevatorConstants.ALGAE_L3_POS));
     
     operator.povUp().whileTrue(GlobalCommands.deploy());
 
@@ -159,7 +160,7 @@ public class RobotContainer {
     operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
 
       configureDefaultBindings();
-      // configureDriverBindings();
+      configureDriverBindings();
       // configureOperatorBindings();
 
       // registerNamedCommands();
@@ -178,26 +179,26 @@ public class RobotContainer {
     elevator.setDefaultCommand(GlobalCommands.defaultElevator());
   }
 
-  // private void configureDriverBindings() {
-  //   driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-  //       DriveCommands.pidToClosestReefPoseRight()
-  //   );
+  private void configureDriverBindings() {
+    driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
+        DriveCommands.pidToClosestReefPoseRight()
+    );
 
-  //   driver.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-  //       DriveCommands.pidToClosestReefPoseLeft()
-  //   );
+    driver.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
+        DriveCommands.pidToClosestReefPoseLeft()
+    );
 
-  //   driver.b().onTrue(
-  //       Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
+    // driver.b().onTrue(
+        // Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
 
-  //   driver.leftBumper().whileTrue(
-  //     GlobalCommands.algaeRelease()
-  //   );
+    driver.leftBumper().whileTrue(
+      GlobalCommands.algaeRelease()
+    );
 
-  //   driver.rightBumper().whileTrue(
-  //     GlobalCommands.coralRelease()
-  //   );
-  // }
+    driver.rightBumper().whileTrue(
+      GlobalCommands.coralRelease()
+    );
+  }
 
   // private void configureOperatorBindings() {
   //   operator.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.humanPlayerIntake());

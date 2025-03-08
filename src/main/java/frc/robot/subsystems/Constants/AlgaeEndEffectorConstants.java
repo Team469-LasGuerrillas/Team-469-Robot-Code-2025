@@ -30,7 +30,6 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_INTAKE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_DEFAULT_VOLTAGE = 0;
-    public static final double ALGAE_EXTENSION_THRESHOLD = 0;
 
     private static TalonFXConfiguration algaeIntakeMotorFxConfig = 
     new TalonFXConfiguration()
@@ -51,14 +50,16 @@ public class AlgaeEndEffectorConstants {
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
     /* ALGAE WRIST MOTOR */
-    public static final double ALGAE_WRIST_DEFAULT_POS = 0.275;
+    public static final double ALGAE_WRIST_DEFAULT_POS = 0.1;
     public static final double ALGAE_WRIST_PROCESSOR_POS = 0;
     public static final double ALGAE_WRIST_BARGE_POS = 0;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
-    public static final double ALGAE_WRIST_L2_L3 = 0;
+    public static final double ALGAE_WRIST_L2_L3 = 0.3;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
     public static final double ALGAE_WRIST_HORZIONTAL_POS = 0.23;
+    public static final double ALGAE_EXTENSION_THRESHOLD = 0.15;
+
 
     private static TalonFXConfiguration algaeWristMotorFxConfig = 
     new TalonFXConfiguration()
@@ -90,7 +91,7 @@ public class AlgaeEndEffectorConstants {
         .withRotorToSensorRatio(36.8)
         .withSensorToMechanismRatio(1)
         .withUnitToRotorRatio(1)
-        .withMaxPositionUnits(0.27)
+        .withMaxPositionUnits(0.3)
         .withMinPositionUnits(0);
     
     private static CANcoderConfiguration algaeWristCcConfig = 

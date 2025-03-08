@@ -39,7 +39,7 @@ public interface MotorIO {
   public default void setMagicalPositionSetpoint(double units, double feedForward) {}
 
   // Dynamic MotionMagic
-  public default void setDynamicallyMagicalPositionSetpoint(double units, double feedForward, double velocityUnits, double accelerationUnits, double jerkUnits) {}
+  public default void setDynamicMagicalPositionSetpoint(double units, double feedForward, double velocityUnits, double accelerationUnits, double jerkUnits) {}
 
   // Velocity
   public default void setVelocitySetpoint(double unitsPerSecond) {}
