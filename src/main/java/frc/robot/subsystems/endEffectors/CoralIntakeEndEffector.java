@@ -14,7 +14,10 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
+import frc.lib.util.FieldLayout;
+import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.SensorConstants;
+import frc.robot.subsystems.drive.Drive;
 
 public class CoralIntakeEndEffector extends SubsystemBase {
     private static CoralIntakeEndEffector instance;  
@@ -50,13 +53,27 @@ public class CoralIntakeEndEffector extends SubsystemBase {
         Logger.processInputs("CANRange Coral", CANRangeInputs);
     }
 
+    public DoubleSupplier getAutoIntake() {
+        DoubleSupplier result;
+
+        if (
+            Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_0) < FieldLayout.HP_ZONE
+            || Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_1) < FieldLayout.HP_ZONE
+            || Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_2) < FieldLayout.HP_ZONE
+            || Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_3) < FieldLayout.HP_ZONE
+        ) result = () -> CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE;
+        else
+            result = () -> 0;
+
+        return result;
+    }
+
     public void setVoltage(DoubleSupplier voltage) {
         coralIntakeMotor.setOpenLoopVoltage(voltage);
     }   
     
     @AutoLogOutput
     public boolean hasCoral() {
-        if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_THRESHOLD_VALUE && CANRangeInputs.signalStrength > SensorConstants.CAN_RANGE_SIGNAL_THRESHOLD_VALUE) return true;
-        return false;
+        return CANRangeInputs.isCut;
     }
 }

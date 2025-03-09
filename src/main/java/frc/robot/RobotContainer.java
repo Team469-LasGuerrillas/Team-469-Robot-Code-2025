@@ -95,7 +95,7 @@ public class RobotContainer {
         
               algaeWristEndEffector = AlgaeWristEndEffector.createInstance(AlgaeEndEffectorConstants.algaeWristMotor);
 
-              algaeIntakeEndEffector = AlgaeIntakeEndEffector.createInstance(AlgaeEndEffectorConstants.algaeIntakeMotor, AlgaeEndEffectorConstants.CanRange);
+              algaeIntakeEndEffector = AlgaeIntakeEndEffector.createInstance(AlgaeEndEffectorConstants.algaeIntakeMotor, AlgaeEndEffectorConstants.canRange);
 
               coralWristEndEffector = CoralWristEndEffector.createInstance(CoralEndEffectorConstants.coralWristMotor);
 
@@ -148,20 +148,10 @@ public class RobotContainer {
             }
 
     Dashboard.addWidgets(shuffleboardTab);
-          
-    driver.a().whileTrue(GlobalCommands.coralL2());
-    driver.b().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> 30, () -> ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES + 10));
-    driver.y().whileTrue(ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L4_POS, () -> ElevatorConstants.ALGAE_L3_POS));
-    
-    operator.povUp().whileTrue(GlobalCommands.deploy());
-
-    operator.povDown().whileTrue(GlobalCommands.fastRetract());
-
-    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
-
+        
       configureDefaultBindings();
       configureDriverBindings();
-      // configureOperatorBindings();
+      configureOperatorBindings();
 
       // registerNamedCommands();
   }
@@ -188,8 +178,8 @@ public class RobotContainer {
         DriveCommands.pidToClosestReefPoseLeft()
     );
 
-    // driver.b().onTrue(
-        // Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
+    driver.start().onTrue(
+        Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
 
     driver.leftBumper().whileTrue(
       GlobalCommands.algaeRelease()
@@ -200,27 +190,29 @@ public class RobotContainer {
     );
   }
 
-  // private void configureOperatorBindings() {
-  //   operator.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.humanPlayerIntake());
+  private void configureOperatorBindings() {
+    operator.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.humanPlayerIntake());
     
-  //   operator.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.algaeGroundIntake());
+    operator.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.algaeGroundIntake());
 
-  //   operator.leftBumper().whileTrue(GlobalCommands.algaeBarge());
+    operator.leftBumper().whileTrue(GlobalCommands.algaeBarge());
 
-  //   operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
+    operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
 
-  //   operator.b().whileTrue(GlobalCommands.coralL3());
+    operator.y().whileTrue(GlobalCommands.coralL4());
+    
+    operator.b().whileTrue(GlobalCommands.coralL3());
 
-  //   operator.x().whileTrue(GlobalCommands.coralL2());
+    operator.x().whileTrue(GlobalCommands.coralL2());
 
-  //   operator.a().whileTrue(GlobalCommands.coralL1());
+    operator.a().whileTrue(GlobalCommands.coralL1());
 
-  //   operator.povUp().whileTrue(GlobalCommands.deploy());
+    operator.povUp().whileTrue(GlobalCommands.deploy());
 
-  //   operator.povDown().whileTrue(GlobalCommands.fastRetract());
+    operator.povDown().whileTrue(GlobalCommands.fastRetract());
 
-  //   operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
-  // }
+    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

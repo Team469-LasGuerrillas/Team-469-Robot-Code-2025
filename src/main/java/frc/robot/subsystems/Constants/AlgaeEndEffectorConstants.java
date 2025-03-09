@@ -5,9 +5,11 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FovParamsConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -23,7 +25,23 @@ import frc.robot.generated.TunerConstants;
 public class AlgaeEndEffectorConstants {
 
     /* SENSOR CANRANGE */
-    public static SensorIOCANRange CanRange = new SensorIOCANRange(new CANrangeConfiguration(), 2);
+    private static final double SIGNAL_STRENGTH_THRESHOLD = 4000;
+    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.15;
+
+    private static CANrangeConfiguration canRangeConfig = 
+    new CANrangeConfiguration()
+    .withFovParams(
+        new FovParamsConfigs()
+        .withFOVRangeX(8)
+        .withFOVRangeY(8)
+    )
+    .withProximityParams(
+        new ProximityParamsConfigs()
+        .withMinSignalStrengthForValidMeasurement(SIGNAL_STRENGTH_THRESHOLD)
+        .withProximityThreshold(PROXIMITY_DETECTION_THRESHOLD_METERS)
+    );
+
+    public static SensorIOCANRange canRange = new SensorIOCANRange(canRangeConfig, 2);
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
@@ -50,9 +68,10 @@ public class AlgaeEndEffectorConstants {
     public static MotorIOTalonFX algaeIntakeMotor = new MotorIOTalonFX(algaeIntakeMotorConfigs);
 
     /* ALGAE WRIST MOTOR */
-    public static final double ALGAE_WRIST_DEFAULT_POS = 0.1;
-    public static final double ALGAE_WRIST_PROCESSOR_POS = 0;
-    public static final double ALGAE_WRIST_BARGE_POS = 0;
+    public static final double ALGAE_WRIST_DEFAULT_POS = 0.03;
+    public static final double ALGAE_WRIST_DEFAULT_POS_WA = 0.12;
+    public static final double ALGAE_WRIST_PROCESSOR_POS = 0.22;
+    public static final double ALGAE_WRIST_BARGE_POS = 0.1;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
     public static final double ALGAE_WRIST_L2_L3 = 0.3;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;

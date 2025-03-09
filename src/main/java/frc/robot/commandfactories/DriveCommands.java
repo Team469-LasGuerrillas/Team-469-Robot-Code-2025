@@ -105,17 +105,17 @@ public class DriveCommands {
       realPose = poseLeft;
     }
 
-    // return pidToPoint(() -> realPose);
+    return pidToPoint(() -> realPose);
 
-    return Commands.sequence(
-      Commands.deadline(
-        Commands.waitUntil(
-          () -> Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
-        ),
-        pidToPoint(() -> realPose.transformBy(FieldLayout.L1_TRANSFORM))
-      ),
-      pidToPoint(() -> realPose)
-    );
+    // return Commands.sequence(
+    //   Commands.deadline(
+    //     Commands.waitUntil(
+    //       () -> Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
+    //     ),
+    //     pidToPoint(() -> realPose.transformBy(FieldLayout.L1_TRANSFORM))
+    //   ),
+    //   pidToPoint(() -> realPose)
+    // );
   }
 
   public static Command pidToClosestReefPoseLeft() {

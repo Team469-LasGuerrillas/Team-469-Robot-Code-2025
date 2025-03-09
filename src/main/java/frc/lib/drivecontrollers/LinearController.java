@@ -71,7 +71,7 @@ public class LinearController {
         Drive.getInstance().getPose().getY(), goalPoseSupplier.get().getY());
     
     ChassisSpeeds outputLinearSpeeds = new ChassisSpeeds(xOutput, yOutput, 0);
-    if (xController.getPositionError() > DriveConstants.LINEAR_TOLERANCE_METERS 
+    if (Math.abs(xController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS 
         || Math.abs(yController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS) {
           return outputLinearSpeeds;
     }

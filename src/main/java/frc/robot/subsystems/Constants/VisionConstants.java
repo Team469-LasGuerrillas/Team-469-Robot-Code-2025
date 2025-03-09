@@ -30,7 +30,8 @@ public class VisionConstants {
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
   public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 0.125;
   public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 90;
-  public static final double NEAR_REEF_RADIUS = 2.5;
+  public static final double REEF_RADIUS = 2.5;
+  public static final double SMALL_REEF_RADIUS = 2;
 
   public static final int[] REEF_TAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
   public static final int[] ALL_TAG_IDS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};

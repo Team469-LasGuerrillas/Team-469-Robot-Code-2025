@@ -64,8 +64,10 @@ import frc.lib.drivecontrollers.LinearController;
 import frc.lib.drivecontrollers.TeleopDriveController;
 import frc.lib.interfaces.vision.VisionIO.PoseObservation;
 import frc.lib.util.Clock;
+import frc.lib.util.FieldLayout;
 import frc.lib.util.MonkeyState;
 import frc.lib.util.Station;
+import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.hardware.QuestNavUtil;
 import frc.lib.util.math.InterpolatorUtil;
 import frc.lib.util.math.ToleranceUtil;
@@ -733,13 +735,27 @@ public class Drive extends SubsystemBase {
 
   }
 
-  public boolean isOnTarget(double linearTolerance, double headingTolerance) {
+  public boolean isOnTarget(double linearTolerance, double headingToleranceDegrees) {
     if (linearController == null || headingController == null) return false;
 
     return
       linearController.getTargetPose().getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
-      && headingController.atGoal(headingTolerance);
+      && headingController.atGoal(headingToleranceDegrees);
+  }
 
+  public boolean isOnTarget(Pose2d targetPose, double linearTolerance, double headingToleranceDegrees) {
+    return targetPose.getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
+      && ToleranceUtil.epsilonEqualsRadialDegrees(targetPose.getRotation().getDegrees(), getPose().getRotation().getDegrees(), headingToleranceDegrees);
+  }
+
+  public boolean isOnTarget(ReefPositions targetReefPosition, double linearTolerance, double headingToleranceDegrees) {
+    Pose2d targetPose;
+
+    if (FieldLayout.reefPositionPoseLeft.containsKey(targetReefPosition))
+     targetPose = FieldLayout.reefPositionPoseLeft.get(targetReefPosition);
+    else targetPose = FieldLayout.reefPositionPoseRight.get(targetReefPosition);
+    
+    return isOnTarget(targetPose, linearTolerance, headingToleranceDegrees);
   }
 
   public Optional<Pose2d> getTimestampedPose(double timestamp) {

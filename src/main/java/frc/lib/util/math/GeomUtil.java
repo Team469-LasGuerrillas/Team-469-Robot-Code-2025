@@ -41,7 +41,20 @@ public class GeomUtil {
 
     double distance = robotPose.getTranslation().getDistance(reefPose.getTranslation());
 
-    if (distance < VisionConstants.NEAR_REEF_RADIUS) {
+    if (distance < VisionConstants.REEF_RADIUS) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public static boolean isWithinSmallReefRadius() {
+    Pose2d robotPose = Drive.getInstance().getPose();
+    Pose2d reefPose = FieldLayout.REEF_CENTER_BLUE;
+
+    double distance = robotPose.getTranslation().getDistance(reefPose.getTranslation());
+
+    if (distance < VisionConstants.REEF_RADIUS) {
       return true;
     } else {
       return false;

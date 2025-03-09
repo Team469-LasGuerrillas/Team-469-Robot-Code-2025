@@ -18,5 +18,6 @@ public class SensorIOCANRange implements SensorIO {
   public void updateInputs(SensorIOInputs inputs) {
     inputs.distance = canRange.getDistance().getValueAsDouble();
     inputs.signalStrength = canRange.getSignalStrength().getValueAsDouble();
+    inputs.isCut = canRange.getIsDetected().getValue();
   }
 }

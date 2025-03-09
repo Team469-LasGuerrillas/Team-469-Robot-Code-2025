@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.math.GeomUtil;
 import frc.robot.subsystems.drive.Drive;
@@ -19,16 +20,29 @@ public class FieldLayout {
     ALR, ARR, BLR, BRR, CLR, CRR, DLR, DRR, ELR, ERR, FLR, FRR
   };
 
-  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.2, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
-  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.2, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
+  public static final Pose2d humanPlayerBlue = new Pose2d();
+  public static final Pose2d humanPlayerRed = new Pose2d();
 
-  public static Transform2d L1_TRANSFORM = new Transform2d(0.5, 0, new Rotation2d());
+  public static final double FIELD_WIDTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldWidth();
+  public static final double FIELD_LENGTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldLength();
+
+  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.45, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
+  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.45, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
+
+  public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
 
   private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
 
   public static Pose2d REEF_CENTER_RED = new Pose2d(aprilTagFieldLayout.getFieldLength() - 4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
+
+  public static Translation2d HP_0 = new Translation2d(0, 0);
+  public static Translation2d HP_1 = new Translation2d(0, FIELD_LENGTH);
+  public static Translation2d HP_2 = new Translation2d(FIELD_WIDTH, 0);
+  public static Translation2d HP_3 = new Translation2d(FIELD_WIDTH, FIELD_LENGTH);
+
+  public static final double HP_ZONE = 4.5;
 
   public static HashMap<ReefPositions, Pose2d> reefPositionPoseRight = new HashMap<>() {{ 
     put(ReefPositions.ARB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(RIGHT_TRANSFORM));
@@ -82,7 +96,6 @@ public class FieldLayout {
       }
     }
 
-    System.out.println("Closest Reef Pose: " + closestReefPosition);
     return closestReefPosition;
   }
 }

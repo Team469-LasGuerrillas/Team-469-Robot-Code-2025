@@ -121,7 +121,8 @@ public class Vision extends SubsystemBase {
         if (onlyReefUpdateGlobal) {
           io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
 
-          if (observation.type() == PoseObservationType.MULTITAG_1 || observation.type() == PoseObservationType.MULTITAG_2) {
+          if (observation.type() == PoseObservationType.MULTITAG_1 
+            || observation.type() == PoseObservationType.MULTITAG_2) {
             rejectPose = true;
           }
         } else if (!onlyReefUpdateGlobal || (!onlyReefUpdateLocal && onlyReefUpdateCamera.equals(getCameraName()))) {
@@ -135,10 +136,10 @@ public class Vision extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          // System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
+          System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
         } else {
           robotPosesAccepted.add(observation);
-          // System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
+          System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
           
           targetCount = observation.tagCount();
 

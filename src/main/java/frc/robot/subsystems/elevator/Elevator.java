@@ -131,10 +131,6 @@ public class Elevator extends SubsystemBase {
 
         boolean algaeUpCase =          AlgaeWristEndEffector.getInstance().getWristPosition() < AlgaeEndEffectorConstants.ALGAE_EXTENSION_THRESHOLD;
 
-        if (!algaeUpCase) {
-            System.out.println("sigma");
-        }
-
         return algaeOutCaseIsLegal || algaeUpCase;
     }
 
@@ -143,25 +139,29 @@ public class Elevator extends SubsystemBase {
             (CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW
             && coralRequestedHeight.getAsDouble() < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW);
 
-        boolean coralOutCase =              CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH;
-
-        if (!coralIntakingCaseIsLegal) {
-            System.out.println("sigmoid");
-        }
+        boolean coralOutCase = CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
 
         return coralIntakingCaseIsLegal || coralOutCase;
     }
 
-    public double getCoralElevatorPosFromGroundInches() {
+    public double getCurrentCoralElevatorPosFromGroundInches() {
         return coralElevatorInputs.unitPosition;
     }
 
-    public double getAlgaeElevatorPosFromGroundInches() {
-        double coralCurrentPos = getCoralElevatorPosFromGroundInches();
+    public double getRequestedCoralElevatorPosFromGroundInches() {
+        return coralRequestedHeight.getAsDouble();
+    }
+
+    public double getCurrentAlgaeElevatorPosFromGroundInches() {
+        double coralCurrentPos = getCurrentCoralElevatorPosFromGroundInches();
         double algaePointOfReference = coralCurrentPos - ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES;
 
         return coralElevatorInputs.unitPosition > ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES 
             ? algaeElevatorInputs.unitPosition + algaePointOfReference : algaeElevatorInputs.unitPosition;
+    }
+
+    public double getRequestedAlgaeElevatorPosFromGroundInches() {
+        return algaeRequestedHeight.getAsDouble();
     }
 
     public boolean isOnTarget() {

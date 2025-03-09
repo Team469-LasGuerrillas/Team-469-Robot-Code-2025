@@ -18,7 +18,7 @@ import frc.lib.interfaces.motor.MotorConfigs;
 public class ElevatorConstants {
 
     public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES = 39.6; 
-    public static final double CARRIAGE_HEIGHT = 8; // 7 inch Carriage Height + 1 inch Tolerance
+    public static final double CARRIAGE_HEIGHT = 6; // 7 inch Carriage Height + 1 inch Tolerance
     public static final double GROUND_TO_CORAL_REST_POS_INCHES = 12;
     public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 5;
 
@@ -50,11 +50,12 @@ public class ElevatorConstants {
     public static final double CORAL_DEFAULT_POS = GROUND_TO_CORAL_REST_POS_INCHES;
     public static final double CORAL_GROUND_INTAKE_POS = 1;
     public static final double CORAL_HUMAN_PLAYER_INTAKE_POS = 4;
-    public static final double CORAL_L1_POS = 30;
+    public static final double CORAL_L1_POS = 32;
     public static final double CORAL_L2_POS = 38;
     public static final double CORAL_L3_POS = 56;
     public static final double CORAL_L4_POS = 80;
-    public static final double CORAL_BARGE_POS = 7;
+    public static final double CORAL_PROCESSOR_POS = 16.469;
+    public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 30;
     public static final double CORAL_SLOW_VELOCITY = 5;
@@ -111,11 +112,11 @@ public class ElevatorConstants {
     public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs, coralElevatorFollowerMotor);
 
     /* ALGAE ELEVATOR MOTOR */
-    public static final double ALGAE_PROCESSOR_POS = 0;
+    public static final double ALGAE_PROCESSOR_POS = 9.469;
     public static final double ALGAE_DEFAULT_POS = GROUND_TO_ALGAE_REST_POS_INCHES;
     public static final double ALGAE_L2_POS = 28;
     public static final double ALGAE_L3_POS = 45;
-    public static final double ALGAE_BARGE_POS = 4;
+    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 8;
     public static final double ALGAE_GROUND_POS = 5;
 
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =
