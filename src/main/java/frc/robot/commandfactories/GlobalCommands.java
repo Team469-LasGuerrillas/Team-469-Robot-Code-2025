@@ -80,7 +80,7 @@ public class GlobalCommands {
 
   public static Command algaeBarge() {
     return Commands.deadline(Commands.waitUntil(() -> elevator.isOnTarget()),
-      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS),
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_BARGE_POS),
       AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_BARGE_POS),
       ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_BARGE_POS, () -> ElevatorConstants.ALGAE_BARGE_POS)
     );
@@ -103,7 +103,8 @@ public class GlobalCommands {
   }
 
   public static Command coralRelease() {
-    return Commands.parallel(
+    return Commands.deadline(
+      Commands.waitSeconds(1),
       CoralEndEffectorCommands.coralIntake(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
   }
 
@@ -125,7 +126,7 @@ public class GlobalCommands {
   }
   
   public static Command defaultCoralIntakeEndEffector() {
-    return CoralEndEffectorCommands.coralIntake(CoralIntakeEndEffector.getInstance().getAutoIntake());
+    return CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
   }
 
   public static Command defaultAlgaeIntakeEndEffector() {

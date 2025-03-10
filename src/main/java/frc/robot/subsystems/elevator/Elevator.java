@@ -81,11 +81,12 @@ public class Elevator extends SubsystemBase {
         }
 
 
-        if (isAlgaeWristLegal() && isCoralWristLegal()) {
+        if (isAlgaeWristLegal() && isCoralWristLegal() && false) {
             double requestedVelocity = ElevatorConstants.CORAL_VELOCITY;
             if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER 
             && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER 
-            && coralElevatorInputs.velocityUnitsPerSecond < 0) 
+            && coralElevatorInputs.velocityUnitsPerSecond < 0
+            ) 
                 requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;            
 
             coralElevatorMotor.setDynamicMagicalPositionSetpoint(

@@ -167,6 +167,8 @@ public class Drive extends SubsystemBase {
 
   private PathfindingCommand pathfindingCommand;
 
+  public double isOnTargetLoopCount = 0;
+
   // TunerConstants doesn't include these constants, so they are declared locally
   static final double ODOMETRY_FREQUENCY =
       new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
@@ -615,7 +617,7 @@ public class Drive extends SubsystemBase {
 
     // Log optimized setpoints (runSetpoint mutates each state)
     Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", optimizedSetpointStates);
-
+    
     return optimizedSetpointStates;
   }
 
@@ -756,6 +758,17 @@ public class Drive extends SubsystemBase {
     else targetPose = FieldLayout.reefPositionPoseRight.get(targetReefPosition);
     
     return isOnTarget(targetPose, linearTolerance, headingToleranceDegrees);
+  }
+
+  public boolean isOnTarget(ReefPositions targetReefPosition, double linearTolerance, double headingToleranceDegrees, double numOfOnTargetLoops) {
+    if (isOnTarget(targetReefPosition, linearTolerance, headingToleranceDegrees))
+     isOnTargetLoopCount++;
+    else isOnTargetLoopCount = 0;
+
+    System.out.println(isOnTarget(targetReefPosition, linearTolerance, headingToleranceDegrees));
+    
+    if (isOnTargetLoopCount >= numOfOnTargetLoops) return true;
+    return false;
   }
 
   public Optional<Pose2d> getTimestampedPose(double timestamp) {

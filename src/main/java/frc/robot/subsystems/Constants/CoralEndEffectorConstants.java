@@ -27,8 +27,8 @@ import frc.robot.generated.TunerConstants;
 public class CoralEndEffectorConstants {
     
     /* SENSOR CANRANGE */
-    private static final double SIGNAL_STRENGTH_THRESHOLD = 3500;
-    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.055;
+    private static final double SIGNAL_STRENGTH_THRESHOLD = 10000;
+    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.06;
 
     private static CANrangeConfiguration canRangeConfig = new CANrangeConfiguration()
         .withFovParams(
@@ -46,16 +46,17 @@ public class CoralEndEffectorConstants {
 
     /* CORAL WRIST MOTOR */
     public static final double CORAL_L4_POS = 0.675;
-    public static final double CORAL_L3_POS = 0.65;
-    public static final double CORAL_L2_POS = 0.65;
-    public static final double CORAL_L1_POS = 0.5;
+    public static final double CORAL_L3_POS = 0.675;
+    public static final double CORAL_L2_POS = 0.675;
+    public static final double CORAL_L1_POS = 0.61;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.2115;
+    public static final double CORAL_HP_INTAKE_POS = 0.2075;
     public static final double CORAL_WRIST_DEFAULT_POS = 0.3;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 
-    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.51;
+    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.502;
     public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
+    public static final double CORAL_BARGE_POS = CORAL_WRIST_FLIP_THRESHOLD_HIGH;
     public static final double IDLE_WRIST_THRESHOLD = 0.45;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double HORIZONTAL_POSITION = 0.045;
@@ -77,7 +78,7 @@ public class CoralEndEffectorConstants {
             new Slot0Configs() // TODO: PID Tuning
             .withKS(0)
             .withKV(0)
-            .withKP(50)
+            .withKP(75)
             .withKI(0)
             .withKD(0)
         ).withSlot1(
@@ -120,7 +121,7 @@ public class CoralEndEffectorConstants {
     public static MotorIOTalonFX coralWristMotor = new MotorIOTalonFX(coralWristMotorConfigs, coralWristCancoderConfigs);
 
     /* CORAL INTAKE MOTOR */
-    public static final double CORAL_INTAKE_IN_VOLTAGE = -3;
+    public static final double CORAL_INTAKE_IN_VOLTAGE = -4.5;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
     public static final double CORAL_DEFAULT_VOLTAGE = 0;
 

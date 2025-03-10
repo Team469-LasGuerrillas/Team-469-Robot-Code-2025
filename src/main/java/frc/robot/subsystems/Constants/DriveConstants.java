@@ -27,11 +27,11 @@ public class DriveConstants {
   public static final double PP_HEADING_D = 0.0;
 
   // Heading Controller
-  public static final double HEADING_P = 7.5;
+  public static final double HEADING_P = 4;
   public static final double HEADING_I = 0.0;
   public static final double HEADING_D = 0.0;
 
-  public static final double HEADING_TOLERANCE_DEGREES = 0.05;
+  public static final double HEADING_TOLERANCE_DEGREES = 0.5;
   public static final double L1_HEADING_TOLERANCE_DEGREES = 5;
   public static final double HEADING_TOLERANCE_TO_SCORE_DEGREES = 1;
 
@@ -39,13 +39,13 @@ public class DriveConstants {
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 5;
 
   // Linear Controller
-  public static final double LINEAR_P = 5;
+  public static final double LINEAR_P = 4.25;
   public static final double LINEAR_I = 0.0;
-  public static final double LINEAR_D = 0.0;
+  public static final double LINEAR_D = 0.5;
 
-  public static final double LINEAR_TOLERANCE_METERS = 0.0025;
+  public static final double LINEAR_TOLERANCE_METERS = 0.005;
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.15;
-  public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.04;
+  public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.02;
 
   public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 0.5;
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.5;

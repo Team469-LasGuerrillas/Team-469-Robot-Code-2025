@@ -28,6 +28,8 @@ public class CoralIntakeEndEffector extends SubsystemBase {
     private final MotorIO coralIntakeMotor;
     private final MotorIOInputsAutoLogged coralIntakeInputs = new MotorIOInputsAutoLogged();
 
+    private DoubleSupplier requestedVoltage = () -> 0;
+
     public CoralIntakeEndEffector(MotorIO coralIntakeMotor, SensorIO CANRange) {
         this.coralIntakeMotor = coralIntakeMotor;
         this.CANRange = CANRange;
@@ -51,25 +53,28 @@ public class CoralIntakeEndEffector extends SubsystemBase {
 
         CANRange.updateInputs(CANRangeInputs);
         Logger.processInputs("CANRange Coral", CANRangeInputs);
+
+        coralIntakeMotor.setOpenLoopVoltage(requestedVoltage);
+
     }
 
-    public DoubleSupplier getAutoIntake() {
-        DoubleSupplier result;
+    public void setAutoIntake() {
+        double result;
 
         if (
             Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_0) < FieldLayout.HP_ZONE
             || Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_1) < FieldLayout.HP_ZONE
             || Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_2) < FieldLayout.HP_ZONE
             || Drive.getInstance().getPose().getTranslation().getDistance(FieldLayout.HP_3) < FieldLayout.HP_ZONE
-        ) result = () -> CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE;
+        ) result = CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE;
         else
-            result = () -> 0;
+            result = CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE;
 
-        return result;
+        requestedVoltage = () -> result;
     }
 
     public void setVoltage(DoubleSupplier voltage) {
-        coralIntakeMotor.setOpenLoopVoltage(voltage);
+        requestedVoltage = voltage;
     }   
     
     @AutoLogOutput

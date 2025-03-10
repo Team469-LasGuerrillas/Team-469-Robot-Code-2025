@@ -20,14 +20,14 @@ public class FieldLayout {
     ALR, ARR, BLR, BRR, CLR, CRR, DLR, DRR, ELR, ERR, FLR, FRR
   };
 
-  public static final Pose2d humanPlayerBlue = new Pose2d();
-  public static final Pose2d humanPlayerRed = new Pose2d();
-
   public static final double FIELD_WIDTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldWidth();
   public static final double FIELD_LENGTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldLength();
 
-  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.45, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
-  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.45, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
+  public static final Pose2d humanPlayerBlue = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
+  public static final Pose2d humanPlayerRed = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
+
+  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
+  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
   public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
 
@@ -42,7 +42,7 @@ public class FieldLayout {
   public static Translation2d HP_2 = new Translation2d(FIELD_WIDTH, 0);
   public static Translation2d HP_3 = new Translation2d(FIELD_WIDTH, FIELD_LENGTH);
 
-  public static final double HP_ZONE = 4.5;
+  public static final double HP_ZONE = 3.5;
 
   public static HashMap<ReefPositions, Pose2d> reefPositionPoseRight = new HashMap<>() {{ 
     put(ReefPositions.ARB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(RIGHT_TRANSFORM));

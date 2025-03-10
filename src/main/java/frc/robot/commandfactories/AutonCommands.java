@@ -16,24 +16,24 @@ public class AutonCommands {
     return Commands.sequence(
       Commands.deadline(
         Commands.waitUntil(
-          () -> Drive.getInstance().isOnTarget(
-            reefPosition, 
-            DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
-            DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES)), 
-        DriveCommands.pidToReefPose(ReefPositions.DLB),
+          () -> 
+            Drive.getInstance().isOnTarget(
+              reefPosition, 
+              DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
+              DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
+              25)
+            && Elevator.getInstance().isOnTarget()), 
+        DriveCommands.pidToReefPose(reefPosition),
         Commands.sequence(
           Commands.waitUntil(
             () -> Drive.getInstance().isOnTarget(
               reefPosition, 
               DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
-              DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
-          GlobalCommands.coralL4()
+              DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR))
+          // GlobalCommands.coralL4()
         )
       ),
-      Commands.sequence(
-        Commands.waitUntil(() -> Elevator.getInstance().isOnTarget()),
-        GlobalCommands.coralRelease()
-      )
+      GlobalCommands.coralRelease()
     );
   }
 
@@ -46,14 +46,7 @@ public class AutonCommands {
       Commands.waitUntil(
         () -> CoralIntakeEndEffector.getInstance().hasCoral()),
       DriveCommands.pidToPoint(() -> targetHPPose),
-      Commands.sequence(
-        Commands.waitUntil(
-          () -> Drive.getInstance().isOnTarget(
-            targetHPPose, 
-            DriveConstants.LINEAR_TOLERANCE_TO_START_HP_INTAKE, 
-            DriveConstants.HEADING_TOLERANCE_TO_START_HP_INTAKE)),
         GlobalCommands.humanPlayerIntake()
-      )
     );
   }
 }

@@ -32,8 +32,8 @@ public class AlgaeEndEffectorConstants {
     new CANrangeConfiguration()
     .withFovParams(
         new FovParamsConfigs()
-        .withFOVRangeX(8)
-        .withFOVRangeY(8)
+        .withFOVRangeX(6.75)
+        .withFOVRangeY(6.75)
     )
     .withProximityParams(
         new ProximityParamsConfigs()
@@ -71,9 +71,9 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_WRIST_DEFAULT_POS = 0.03;
     public static final double ALGAE_WRIST_DEFAULT_POS_WA = 0.12;
     public static final double ALGAE_WRIST_PROCESSOR_POS = 0.22;
-    public static final double ALGAE_WRIST_BARGE_POS = 0.1;
+    public static final double ALGAE_WRIST_BARGE_POS = 0.12;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
-    public static final double ALGAE_WRIST_L2_L3 = 0.3;
+    public static final double ALGAE_WRIST_L2_L3 = 0.27;
     public static final double IS_ON_TARGET_THRESHOLD = 0.002;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
     public static final double ALGAE_WRIST_HORZIONTAL_POS = 0.23;

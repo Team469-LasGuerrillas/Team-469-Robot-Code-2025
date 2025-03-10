@@ -28,7 +28,7 @@ public class VisionConstants {
   public static final double MEGATAG2_ROTATIONAL_FACTOR = 1.7976E26;
 
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
-  public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 0.125;
+  public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 0.469;
   public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 90;
   public static final double REEF_RADIUS = 2.5;
   public static final double SMALL_REEF_RADIUS = 2;
@@ -40,7 +40,7 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-left",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-11.683), Units.inchesToMeters(2.811), Units.inchesToMeters(5.475)),
+          new Translation3d(Units.inchesToMeters(-11.683), Units.inchesToMeters(2.811), Units.inchesToMeters(5.975)), // 5.599 in cad
           new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(220))
         )
       );
@@ -49,7 +49,7 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-right",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-11.683), Units.inchesToMeters(-2.811), Units.inchesToMeters(5.475)),
+          new Translation3d(Units.inchesToMeters(-11.683), Units.inchesToMeters(-2.811), Units.inchesToMeters(5.975)),
           new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(-220))
         )
       );

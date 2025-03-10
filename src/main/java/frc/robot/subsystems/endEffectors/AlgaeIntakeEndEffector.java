@@ -11,7 +11,10 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
+import frc.robot.subsystems.constants.CoralEndEffectorConstants;
+import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.constants.SensorConstants;
+import frc.robot.subsystems.elevator.Elevator;
 
 public class AlgaeIntakeEndEffector extends SubsystemBase {
     private static AlgaeIntakeEndEffector instance;
@@ -46,7 +49,10 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
     }
 
     public void setVoltage(DoubleSupplier voltage) {
-        algaeIntakeMotor.setOpenLoopVoltage(voltage);
+        if (Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() == ElevatorConstants.CORAL_L3_POS
+            && CoralIntakeEndEffector.getInstance().hasCoral())
+                algaeIntakeMotor.setOpenLoopVoltage(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
+        else algaeIntakeMotor.setOpenLoopVoltage(voltage);
     }  
 
     @AutoLogOutput

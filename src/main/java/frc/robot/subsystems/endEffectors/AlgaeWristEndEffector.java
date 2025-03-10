@@ -43,7 +43,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
     public void periodic() {
         algaeWristMotor.updateInputs(algaeWristInputs);
         Logger.processInputs("Algae Wrist", algaeWristInputs);
-
+    
         if (isPositionAllowed(getWristPosition()))
             algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), -Math.cos((requestedPosition.getAsDouble() - AlgaeEndEffectorConstants.ALGAE_WRIST_HORZIONTAL_POS) * Math.PI * 2) * AlgaeEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
     }

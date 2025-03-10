@@ -23,8 +23,6 @@ import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
-  private static Vision instance;
-
   private final VisionIO io;
   private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
   
@@ -35,19 +33,9 @@ public class Vision extends SubsystemBase {
 
   private double targetCount = 0;
 
-  private Vision(VisionIO io) {
+  public Vision(VisionIO io) {
     this.io = io;
     io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
-  }
-
-  public static Vision createInstance(VisionIO io) {
-    instance = new Vision(io);
-    return instance;
-  }
-
-  public static Vision getInstance() {
-    if (instance == null) throw new Error("Subsystem has not been created");
-    return instance;
   }
 
   @Override
@@ -109,7 +97,7 @@ public class Vision extends SubsystemBase {
           && GeomUtil.isWithinReefRadius() 
           && (observation.type() == PoseObservationType.MEGATAG_1 
               || observation.type() == PoseObservationType.MEGATAG_2);
-
+              
           // TODO: && IF WE CURRENTLY HAVE A CORAL
         
         if (onlyReefUpdateLocal) {
@@ -136,10 +124,10 @@ public class Vision extends SubsystemBase {
 
         if (rejectPose) {
           robotPosesRejected.add(observation);
-          System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
+          // System.out.println("REJECTING!!! " + getCameraName() + "Translation: " + observation.pose().getTranslation() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + " TA: " + observation.ta());
         } else {
           robotPosesAccepted.add(observation);
-          System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
+          // System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
           
           targetCount = observation.tagCount();
 

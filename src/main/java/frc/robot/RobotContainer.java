@@ -15,6 +15,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,7 +26,9 @@ import frc.lib.Dashboard;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
+import frc.robot.autons.Autons;
 import frc.robot.commandfactories.AlgaeEndEffectorCommands;
+import frc.robot.commandfactories.AutonCommands;
 import frc.robot.commandfactories.CoralEndEffectorCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.ElevatorCommands;
@@ -49,7 +52,6 @@ import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
-import frc.robot.subsystems.intake.HumanPlayerIntake;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -108,10 +110,10 @@ public class RobotContainer {
                 ElevatorConstants.coralElevatorFollowerMotor, 
                 ElevatorConstants.algaeElevatorMotor);
         
-                limelightLeft = Vision.createInstance(VisionConstants.LIMELIGHT_LEFT);
-                limelightRight = Vision.createInstance(VisionConstants.LIMELIGHT_RIGHT);
-                arducamOne = Vision.createInstance(VisionConstants.ARDUCAM_ONE);
-                arducamTwo = Vision.createInstance(VisionConstants.ARDUCAM_TWO);
+                limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
+                limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
+                arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
+                arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
         
                 break;
         
@@ -139,10 +141,10 @@ public class RobotContainer {
   
                 elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
         
-                    limelightLeft = Vision.createInstance(new VisionIO() {});
-                    limelightRight = Vision.createInstance(new VisionIO() {});
-                    arducamOne = Vision.createInstance(new VisionIO() {});
-                    arducamTwo = Vision.createInstance(new VisionIO() {});
+                    limelightLeft = new Vision(new VisionIO() {});
+                    limelightRight = new Vision(new VisionIO() {});
+                    arducamOne = new Vision(new VisionIO() {});
+                    arducamTwo = new Vision(new VisionIO() {});
           
                 break;
             }
@@ -170,6 +172,8 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
+    driver.a().whileTrue(Autons.startEFF());
+
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
         DriveCommands.pidToClosestReefPoseRight()
     );
