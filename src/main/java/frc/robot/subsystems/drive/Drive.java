@@ -331,9 +331,9 @@ public class Drive extends SubsystemBase {
     teleopDriveController = new TeleopDriveController();
 
     if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      setPose(new Pose2d(8, 6, Rotation2d.fromDegrees(180)));
+      setPose(new Pose2d(8, 6, Rotation2d.fromDegrees(0)));
     } else {
-      setPose(new Pose2d(8, 2, Rotation2d.fromDegrees(0)));
+      setPose(new Pose2d(8, 2, Rotation2d.fromDegrees(180)));
     }
   }
 

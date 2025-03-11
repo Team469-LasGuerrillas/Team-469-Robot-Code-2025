@@ -6,12 +6,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.autons.Autons;
 
 public class Dashboard {
   public static final Field2d m_field = new Field2d();
   public static final Field2d m_visionField = new Field2d();
 
-  private static SendableChooser<Command> autoChooser;
+  private static SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   private static boolean isCompetition = false;
 
@@ -26,11 +27,14 @@ public class Dashboard {
     .withSize(7, 6)
     .withPosition(7, 0);
 
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-      (stream) -> isCompetition
-        ? stream.filter(auto -> auto.getName().startsWith("comp"))
-        : stream
-    );
+    // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+    //   (stream) -> isCompetition
+    //     ? stream.filter(auto -> auto.getName().startsWith("comp"))
+    //     : stream
+    // );
+
+    autoChooser.setDefaultOption("1 Piece Center", Autons.startD());
+    autoChooser.addOption("3 Piece Left", Autons.startEFF());
 
     tab
     .add("Auton Chooser", autoChooser)

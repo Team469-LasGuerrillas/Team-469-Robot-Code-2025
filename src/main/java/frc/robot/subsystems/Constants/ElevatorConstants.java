@@ -19,8 +19,8 @@ public class ElevatorConstants {
 
     public static final double MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES = 39.6; 
     public static final double CARRIAGE_HEIGHT = 6; // 7 inch Carriage Height + 1 inch Tolerance
-    public static final double GROUND_TO_CORAL_REST_POS_INCHES = 12;
-    public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 5;
+    public static final double GROUND_TO_CORAL_REST_POS_INCHES = 12.125;
+    public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 5.125;
 
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH = GROUND_TO_CORAL_REST_POS_INCHES + 5;
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW = GROUND_TO_CORAL_REST_POS_INCHES + 1.5;
@@ -57,16 +57,18 @@ public class ElevatorConstants {
     public static final double CORAL_PROCESSOR_POS = 16.469;
     public static final double CORAL_BARGE_POS = 88.5;
 
-    public static final double CORAL_VELOCITY = 60;
+    public static final double CORAL_VELOCITY = 10; // 60
     public static final double CORAL_SLOW_VELOCITY = 10;
     public static final double CORAL_ACCELERATION = 10000;
     public static final double CORAL_JERK = 0;
     
+    public static final double CORAL_FEEDFORWARDS_WHEN_ZERO = 0;
     public static final double CORAL_FEEDFORWARD_VOLTS_L0 = 0.4625;
     public static final double CORAL_FEEDFORWARD_VOLTS_L1 = 0.65;
     public static final double CORAL_FEEDFORWARD_VOLTS_L2 = 0.725; 
-    public static final double ALGAE_FEEDFORWARD_VOLTS = 0.35;  
+    public static final double ALGAE_FEEDFORWARD_VOLTS = 0.35;
 
+    public static final double CORAL_FEEDFORWARDS_HEIGHT_ZERO = CORAL_DEFAULT_POS + 2;
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L0 = 30.96;
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L1 = 61.99;
 
@@ -88,16 +90,16 @@ public class ElevatorConstants {
             new Slot0Configs()
                 .withKS(0)
                 .withKV(0)
-                .withKP(2)
+                .withKP(4)
                 .withKI(0)
-                .withKD(0.025)
+                .withKD(0.05)
             )
             .withSlot1(new Slot1Configs()
                 .withKS(0)
                 .withKV(0)
-                .withKP(2)
+                .withKP(3)
                 .withKI(0)
-                .withKD(0.025)
+                .withKD(0)
             );
 
     private static MotorConfigs coralElevatorMotorConfigs = 

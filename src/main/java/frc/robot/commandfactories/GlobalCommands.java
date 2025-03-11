@@ -104,7 +104,7 @@ public class GlobalCommands {
 
   public static Command coralRelease() {
     return Commands.deadline(
-      Commands.waitSeconds(1),
+      Commands.waitSeconds(0.5),
       CoralEndEffectorCommands.coralIntake(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
   }
 

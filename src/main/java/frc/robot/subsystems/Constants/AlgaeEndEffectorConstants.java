@@ -117,9 +117,9 @@ public class AlgaeEndEffectorConstants {
     new CANcoderConfiguration()
         .withMagnetSensor(
             new MagnetSensorConfigs()
-            .withAbsoluteSensorDiscontinuityPoint(1)
+            .withAbsoluteSensorDiscontinuityPoint(0.5)
             .withSensorDirection(SensorDirectionValue.Clockwise_Positive)
-            .withMagnetOffset(-0.25)
+            .withMagnetOffset(-0.246)
         );
     
     private static CancoderConfigs algaeWristCancoderConfigs = new CancoderConfigs()

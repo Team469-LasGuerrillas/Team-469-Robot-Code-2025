@@ -23,8 +23,8 @@ public class FieldLayout {
   public static final double FIELD_WIDTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldWidth();
   public static final double FIELD_LENGTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldLength();
 
-  public static final Pose2d humanPlayerBlue = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
-  public static final Pose2d humanPlayerRed = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
+  public static final Pose2d HUMAN_PLAYER_BLUE = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
+  public static final Pose2d HUMAN_PLAYER_RED = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
 
   public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
@@ -44,6 +44,7 @@ public class FieldLayout {
 
   public static final double HP_ZONE = 3.5;
 
+  // TODO: Check if Red Reef Positions are correct 
   public static HashMap<ReefPositions, Pose2d> reefPositionPoseRight = new HashMap<>() {{ 
     put(ReefPositions.ARB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(RIGHT_TRANSFORM));
     put(ReefPositions.BRB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(60))).transformBy(RIGHT_TRANSFORM));
@@ -51,12 +52,12 @@ public class FieldLayout {
     put(ReefPositions.DRB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(180))).transformBy(RIGHT_TRANSFORM));
     put(ReefPositions.ERB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(240))).transformBy(RIGHT_TRANSFORM));
     put(ReefPositions.FRB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(300))).transformBy(RIGHT_TRANSFORM));
-    put(ReefPositions.ARR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(RIGHT_TRANSFORM));
-    put(ReefPositions.BRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(60))).transformBy(RIGHT_TRANSFORM));
-    put(ReefPositions.CRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(120))).transformBy(RIGHT_TRANSFORM));
-    put(ReefPositions.DRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(180))).transformBy(RIGHT_TRANSFORM));
-    put(ReefPositions.ERR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(240))).transformBy(RIGHT_TRANSFORM));
-    put(ReefPositions.FRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(300))).transformBy(RIGHT_TRANSFORM));
+    put(ReefPositions.ARR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(180))).transformBy(RIGHT_TRANSFORM)); // 0
+    put(ReefPositions.BRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(240))).transformBy(RIGHT_TRANSFORM)); // 60
+    put(ReefPositions.CRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(300))).transformBy(RIGHT_TRANSFORM)); // 120
+    put(ReefPositions.DRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(RIGHT_TRANSFORM)); // 180
+    put(ReefPositions.ERR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(60))).transformBy(RIGHT_TRANSFORM)); // 240
+    put(ReefPositions.FRR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(120))).transformBy(RIGHT_TRANSFORM)); // 300
   }};
 
   public static HashMap<ReefPositions, Pose2d> reefPositionPoseLeft = new HashMap<>() {{
@@ -66,12 +67,12 @@ public class FieldLayout {
     put(ReefPositions.DLB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(180))).transformBy(LEFT_TRANSFORM));
     put(ReefPositions.ELB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(240))).transformBy(LEFT_TRANSFORM));
     put(ReefPositions.FLB, REEF_CENTER_BLUE.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(300))).transformBy(LEFT_TRANSFORM));
-    put(ReefPositions.ALR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(LEFT_TRANSFORM));
-    put(ReefPositions.BLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(60))).transformBy(LEFT_TRANSFORM));
-    put(ReefPositions.CLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(120))).transformBy(LEFT_TRANSFORM));
-    put(ReefPositions.DLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(180))).transformBy(LEFT_TRANSFORM));
-    put(ReefPositions.ELR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(240))).transformBy(LEFT_TRANSFORM));
-    put(ReefPositions.FLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(300))).transformBy(LEFT_TRANSFORM));
+    put(ReefPositions.ALR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(180))).transformBy(LEFT_TRANSFORM)); // 0
+    put(ReefPositions.BLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(240))).transformBy(LEFT_TRANSFORM)); // 60
+    put(ReefPositions.CLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(300))).transformBy(LEFT_TRANSFORM)); // 120
+    put(ReefPositions.DLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(0))).transformBy(LEFT_TRANSFORM)); // 180
+    put(ReefPositions.ELR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(60))).transformBy(LEFT_TRANSFORM)); // 240
+    put(ReefPositions.FLR, REEF_CENTER_RED.plus(GeomUtil.toTransform2d(Rotation2d.fromDegrees(120))).transformBy(LEFT_TRANSFORM)); // 300
   }};
 
   public static ReefPositions findClosestReefPoseLeft() {

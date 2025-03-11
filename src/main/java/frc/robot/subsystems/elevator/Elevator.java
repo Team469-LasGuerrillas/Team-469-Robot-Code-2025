@@ -72,7 +72,9 @@ public class Elevator extends SubsystemBase {
         if (coralRequestedHeight.getAsDouble() - coralElevatorInputs.unitPosition > 0) coralElevatorMotor.setSlot(0);
         else coralElevatorMotor.setSlot(1);
 
-        if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_FEEDFORWARDS_HEIGHT_L0) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L0;
+        if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_FEEDFORWARDS_HEIGHT_ZERO
+            && coralRequestedHeight.getAsDouble() == ElevatorConstants.CORAL_DEFAULT_POS) appliedFF = ElevatorConstants.CORAL_FEEDFORWARDS_WHEN_ZERO;
+        else if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_FEEDFORWARDS_HEIGHT_L0) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L0;
         else if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_FEEDFORWARDS_HEIGHT_L1) appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L1;
         else appliedFF = ElevatorConstants.CORAL_FEEDFORWARD_VOLTS_L2;
         
@@ -81,7 +83,7 @@ public class Elevator extends SubsystemBase {
         }
 
 
-        if (isAlgaeWristLegal() && isCoralWristLegal() && false) {
+        if (isAlgaeWristLegal() && isCoralWristLegal()) {
             double requestedVelocity = ElevatorConstants.CORAL_VELOCITY;
             if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER 
             && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER 

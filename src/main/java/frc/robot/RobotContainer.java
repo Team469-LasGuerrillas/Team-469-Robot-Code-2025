@@ -189,7 +189,7 @@ public class RobotContainer {
       GlobalCommands.algaeRelease()
     );
 
-    driver.rightBumper().whileTrue(
+    driver.rightBumper().onTrue(
       GlobalCommands.coralRelease()
     );
   }

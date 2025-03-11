@@ -21,11 +21,11 @@ public class VisionConstants {
   public static final double MULTITAG2_TRANSLATIONAL_FACTOR = 0.00469;
   public static final double MULITAG2_ROTATIONAL_FACTOR = 1.7976E26;
 
-  public static final double MEGATAG_TRANSLATIONAL_FACTOR = 3;
+  public static final double MEGATAG_TRANSLATIONAL_FACTOR = 2.5;
   public static final double MEGATAG_ROTATIONAL_STD = 0.0469;
 
-  public static final double MEGATAG2_TRANSLATIONAL_FACTOR = 2;
-  public static final double MEGATAG2_ROTATIONAL_FACTOR = 1.7976E26;
+  public static final double MEGATAG2_TRANSLATIONAL_FACTOR = 1.25;
+  public static final double MEGATAG2_ROTATIONAL_FACTOR = 1.7976E308;
 
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
   public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 0.469;

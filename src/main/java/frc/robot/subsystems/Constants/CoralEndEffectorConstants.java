@@ -27,8 +27,8 @@ import frc.robot.generated.TunerConstants;
 public class CoralEndEffectorConstants {
     
     /* SENSOR CANRANGE */
-    private static final double SIGNAL_STRENGTH_THRESHOLD = 10000;
-    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.06;
+    private static final double SIGNAL_STRENGTH_THRESHOLD = 2750;
+    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.08;
 
     private static CANrangeConfiguration canRangeConfig = new CANrangeConfiguration()
         .withFovParams(
@@ -50,7 +50,7 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L2_POS = 0.675;
     public static final double CORAL_L1_POS = 0.61;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.2075;
+    public static final double CORAL_HP_INTAKE_POS = 0.2;
     public static final double CORAL_WRIST_DEFAULT_POS = 0.3;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 

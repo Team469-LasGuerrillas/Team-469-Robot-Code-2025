@@ -29,8 +29,8 @@ public class AutonCommands {
             () -> Drive.getInstance().isOnTarget(
               reefPosition, 
               DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
-              DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR))
-          // GlobalCommands.coralL4()
+              DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
+          GlobalCommands.coralL4()
         )
       ),
       GlobalCommands.coralRelease()
@@ -39,8 +39,8 @@ public class AutonCommands {
 
   public static Command driveAndIntakeFromHumanPlayer() {
     Pose2d targetHPPose;
-    if (Station.isRed()) targetHPPose = FieldLayout.humanPlayerRed;
-    else targetHPPose = FieldLayout.humanPlayerBlue;
+    if (Station.isRed()) targetHPPose = FieldLayout.HUMAN_PLAYER_RED;
+    else targetHPPose = FieldLayout.HUMAN_PLAYER_BLUE;
 
     return Commands.deadline(
       Commands.waitUntil(

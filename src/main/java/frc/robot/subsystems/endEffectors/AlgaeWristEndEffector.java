@@ -56,6 +56,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
             && Elevator.getInstance().getRequestedAlgaeElevatorPosFromGroundInches() >= ElevatorConstants.MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT)
             || (Elevator.getInstance().getRequestedAlgaeElevatorPosFromGroundInches() == ElevatorConstants.ALGAE_GROUND_POS)
             || (Elevator.getInstance().getRequestedAlgaeElevatorPosFromGroundInches() == ElevatorConstants.ALGAE_PROCESSOR_POS)
+            || (Elevator.getInstance().getRequestedAlgaeElevatorPosFromGroundInches() == ElevatorConstants.ALGAE_DEFAULT_POS)
             || (!GeomUtil.isLookingAtReef() || !GeomUtil.isWithinReefRadius());
     }
 
