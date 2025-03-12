@@ -57,9 +57,9 @@ public class ElevatorConstants {
     public static final double CORAL_PROCESSOR_POS = 16.469;
     public static final double CORAL_BARGE_POS = 88.5;
 
-    public static final double CORAL_VELOCITY = 40; // 60
+    public static final double CORAL_VELOCITY = 60; // 60
     public static final double CORAL_SLOW_VELOCITY = 10;
-    public static final double CORAL_ACCELERATION = 10000;
+    public static final double CORAL_ACCELERATION = 30;
     public static final double CORAL_JERK = 0;
     
     public static final double CORAL_FEEDFORWARDS_WHEN_ZERO = 0;
@@ -141,7 +141,7 @@ public class ElevatorConstants {
             .withMotionMagic(
                 new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(60)
-                .withMotionMagicAcceleration(10000));
+                .withMotionMagicAcceleration(60));
 
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()

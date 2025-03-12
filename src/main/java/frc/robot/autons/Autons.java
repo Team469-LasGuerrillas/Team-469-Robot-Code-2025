@@ -31,7 +31,8 @@ public class Autons {
       AutonCommands.driveAndIntakeFromHumanPlayer(),
       AutonCommands.driveAndScoreL4ToReefPosition(FL),
       AutonCommands.driveAndIntakeFromHumanPlayer(),
-      AutonCommands.driveAndScoreL4ToReefPosition(FR)
+      AutonCommands.driveAndScoreL4ToReefPosition(FR),
+      AutonCommands.driveAndIntakeFromHumanPlayer()
     );
   }
 }

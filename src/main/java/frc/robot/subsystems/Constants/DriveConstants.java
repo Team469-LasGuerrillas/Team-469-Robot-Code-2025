@@ -15,8 +15,8 @@ public class DriveConstants {
   public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
-  public static final double MAX_LINEAR_ACCEL = 0.03;
-  public static final double MAX_ANGULAR_ACCEL = 3.5;
+  public static final double MAX_LINEAR_ACCEL = 0.06;
+  public static final double MAX_ANGULAR_ACCEL = 1;
 
   // Pathplanner PID constants
   public static final double PP_TRANSLATION_P = 9;

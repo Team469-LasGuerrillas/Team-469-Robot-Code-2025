@@ -172,7 +172,7 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    driver.a().whileTrue(Autons.startD());
+    driver.a().whileTrue(Autons.startEFF());
 
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
         DriveCommands.pidToClosestReefPoseRight()

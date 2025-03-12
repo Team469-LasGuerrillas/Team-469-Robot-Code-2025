@@ -23,8 +23,8 @@ public class GlobalCommands {
   public static Command humanPlayerIntake() {
     return Commands.parallel(
       CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE),
-      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_HP_INTAKE_POS),
-      ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_HUMAN_PLAYER_INTAKE_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_HP_INTAKE_POS)
+      // ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_HUMAN_PLAYER_INTAKE_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
     );
   }
 
