@@ -284,17 +284,6 @@ public class Drive extends SubsystemBase {
                 DriveConstants.PP_HEADING_I,
                 DriveConstants.PP_HEADING_D));
 
-    pppppp =
-    new PPHolonomicDriveController(
-        new PIDConstants(
-            69,
-            DriveConstants.PP_TRANSLATION_I,
-            DriveConstants.PP_TRANSLATION_D),
-        new PIDConstants(
-            DriveConstants.PP_HEADING_P,
-            DriveConstants.PP_HEADING_I,
-            DriveConstants.PP_HEADING_D));
-
     // Configure AutoBuilder for PathPlanner
     AutoBuilder.configure(
         this::getPose,
@@ -765,8 +754,8 @@ public class Drive extends SubsystemBase {
      isOnTargetLoopCount++;
     else isOnTargetLoopCount = 0;
 
-    System.out.println(isOnTarget(targetReefPosition, linearTolerance, headingToleranceDegrees));
-    
+    System.out.println("Drive on target: " + isOnTargetLoopCount);
+
     if (isOnTargetLoopCount >= numOfOnTargetLoops) return true;
     return false;
   }

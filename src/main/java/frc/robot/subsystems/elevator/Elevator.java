@@ -167,14 +167,18 @@ public class Elevator extends SubsystemBase {
         return algaeRequestedHeight.getAsDouble();
     }
 
-    public boolean isOnTarget() {
-        boolean isOnTargetCoral = ToleranceUtil.epsilonEquals(
+    public boolean isCoralOnTarget() {
+        boolean target = ToleranceUtil.epsilonEquals(
             coralRequestedHeight.getAsDouble(), coralElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
-        
-        boolean isOnTargetAlgae = ToleranceUtil.epsilonEquals(
-            algaeRequestedHeight.getAsDouble(), algaeElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
 
-        return isOnTargetCoral && isOnTargetAlgae;
+            System.out.println(target + " Setpoint: " + coralRequestedHeight.getAsDouble() + " Real: " + coralElevatorInputs.unitPosition);
+
+        return target;
+    }
+
+    public boolean isAlgaeOnTarget() {
+        return ToleranceUtil.epsilonEquals(
+            algaeRequestedHeight.getAsDouble(), algaeElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
     }
 
     // True: Closer to Algae L3; False: Closer to Algae L2

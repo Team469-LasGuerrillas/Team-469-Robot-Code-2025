@@ -24,10 +24,10 @@ public class ElevatorConstants {
 
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH = GROUND_TO_CORAL_REST_POS_INCHES + 5;
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW = GROUND_TO_CORAL_REST_POS_INCHES + 1.5;
-    public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = GROUND_TO_CORAL_REST_POS_INCHES + 7;
+    public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = GROUND_TO_CORAL_REST_POS_INCHES + 5;
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE = GROUND_TO_CORAL_REST_POS_INCHES + 3;
 
-    public static final double IS_ON_TARGET_THRESHOLD = 0.009;
+    public static final double IS_ON_TARGET_THRESHOLD = 0.25;
 
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerFxConfiguration = 
@@ -49,7 +49,7 @@ public class ElevatorConstants {
     /* CORAL ELEVATOR MOTOR */
     public static final double CORAL_DEFAULT_POS = GROUND_TO_CORAL_REST_POS_INCHES;
     public static final double CORAL_GROUND_INTAKE_POS = 1;
-    public static final double CORAL_HUMAN_PLAYER_INTAKE_POS = 4;
+    public static final double CORAL_HUMAN_PLAYER_INTAKE_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_L1_POS = 24;
     public static final double CORAL_L2_POS = 38;
     public static final double CORAL_L3_POS = 54.5;
@@ -57,7 +57,7 @@ public class ElevatorConstants {
     public static final double CORAL_PROCESSOR_POS = 16.469;
     public static final double CORAL_BARGE_POS = 88.5;
 
-    public static final double CORAL_VELOCITY = 10; // 60
+    public static final double CORAL_VELOCITY = 40; // 60
     public static final double CORAL_SLOW_VELOCITY = 10;
     public static final double CORAL_ACCELERATION = 10000;
     public static final double CORAL_JERK = 0;
@@ -140,7 +140,7 @@ public class ElevatorConstants {
                 .withKD(0))
             .withMotionMagic(
                 new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(10000)
+                .withMotionMagicCruiseVelocity(60)
                 .withMotionMagicAcceleration(10000));
 
     private static MotorConfigs algaeElevatorMotorConfigs = 

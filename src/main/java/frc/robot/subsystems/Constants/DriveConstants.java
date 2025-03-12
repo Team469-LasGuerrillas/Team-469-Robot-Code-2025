@@ -15,8 +15,8 @@ public class DriveConstants {
   public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
-  public static final double MAX_LINEAR_ACCEL = 7;
-  public static final double MAX_ANGULAR_ACCEL = MAX_LINEAR_ACCEL / 2;
+  public static final double MAX_LINEAR_ACCEL = 0.03;
+  public static final double MAX_ANGULAR_ACCEL = 3.5;
 
   // Pathplanner PID constants
   public static final double PP_TRANSLATION_P = 9;
@@ -27,7 +27,7 @@ public class DriveConstants {
   public static final double PP_HEADING_D = 0.0;
 
   // Heading Controller
-  public static final double HEADING_P = 4;
+  public static final double HEADING_P = 7;
   public static final double HEADING_I = 0.0;
   public static final double HEADING_D = 0.0;
 
@@ -35,20 +35,20 @@ public class DriveConstants {
   public static final double L1_HEADING_TOLERANCE_DEGREES = 5;
   public static final double HEADING_TOLERANCE_TO_SCORE_DEGREES = 1;
 
-  public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 5;
-  public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 5;
+  public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 45;
+  public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P = 4.25;
+  public static final double LINEAR_P = 4.75;
   public static final double LINEAR_I = 0.0;
-  public static final double LINEAR_D = 0.5;
+  public static final double LINEAR_D = 0.3;
 
   public static final double LINEAR_TOLERANCE_METERS = 0.005;
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.15;
   public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.02;
 
-  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 0.5;
-  public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.5;
+  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 3;
+  public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
   // Teleop driving constants
   public static final double STICK_DEADBAND = 0.01;

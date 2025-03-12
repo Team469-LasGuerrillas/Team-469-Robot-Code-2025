@@ -45,12 +45,12 @@ public class CoralEndEffectorConstants {
     public static SensorIOCANRange canRange = new SensorIOCANRange(canRangeConfig, 1);
 
     /* CORAL WRIST MOTOR */
-    public static final double CORAL_L4_POS = 0.675;
+    public static final double CORAL_L4_POS = 0.69;
     public static final double CORAL_L3_POS = 0.675;
     public static final double CORAL_L2_POS = 0.675;
     public static final double CORAL_L1_POS = 0.61;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.2;
+    public static final double CORAL_HP_INTAKE_POS = 0.195;
     public static final double CORAL_WRIST_DEFAULT_POS = 0.3;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 

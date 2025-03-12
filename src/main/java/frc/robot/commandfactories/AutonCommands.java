@@ -17,23 +17,28 @@ public class AutonCommands {
       Commands.deadline(
         Commands.waitUntil(
           () -> 
+            // Elevator.getInstance().isCoralOnTarget() &&
             Drive.getInstance().isOnTarget(
               reefPosition, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-              25)
-            && Elevator.getInstance().isOnTarget()), 
-        DriveCommands.pidToReefPose(reefPosition),
+              100)
+            ), 
+        DriveCommands.pidToReefPose(reefPosition), // Drive to reef
         Commands.sequence(
-          Commands.waitUntil(
+          Commands.waitUntil( // When we are "approximate" to the reef...
             () -> Drive.getInstance().isOnTarget(
               reefPosition, 
               DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
               DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
-          GlobalCommands.coralL4()
+          GlobalCommands.coralL4NoAlgae() // Raise the elevator
         )
-      ),
-      GlobalCommands.coralRelease()
+      ), // End deadline group (at this point we should be in scoring position)
+
+      Commands.deadline(
+        Commands.waitSeconds(0.25), //Do the following for 0.25 seconds
+        GlobalCommands.coralRelease(), // Score the coral
+        GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
     );
   }
 
@@ -44,9 +49,9 @@ public class AutonCommands {
 
     return Commands.deadline(
       Commands.waitUntil(
-        () -> CoralIntakeEndEffector.getInstance().hasCoral()),
-      DriveCommands.pidToPoint(() -> targetHPPose),
-        GlobalCommands.humanPlayerIntake()
+        () -> CoralIntakeEndEffector.getInstance().hasCoral()), // Run this group until we have a coral
+      DriveCommands.pidToPoint(() -> targetHPPose), // Drive to HP station
+      GlobalCommands.humanPlayerIntake() // Put elevator in HP load position
     );
   }
 }
