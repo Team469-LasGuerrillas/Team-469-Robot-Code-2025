@@ -218,11 +218,7 @@ public class RobotContainer {
     // operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
 
     operator.povRight().whileTrue(
-      Commands.parallel(
-        GlobalCommands.defaultCoralElevatorPosition(),
-        GlobalCommands.defaultCoralWristEndEffector(),
-        GlobalCommands.defaultCoralIntakeEndEffector()
-      )
+      ElevatorCommands.resetElevatorCommand()
     );
   }
 

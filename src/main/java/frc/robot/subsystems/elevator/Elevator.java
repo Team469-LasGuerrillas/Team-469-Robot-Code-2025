@@ -189,4 +189,10 @@ public class Elevator extends SubsystemBase {
         if (closestPose.getRotation().getDegrees() % 120 == 0) return true;
         return false;
     }
+
+    public void resetElevatorState() {
+        // TODO: Drive the stages down first!
+        coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);
+        algaeElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES);
+    }
 }

@@ -32,4 +32,8 @@ public class ElevatorCommands {
   public static Command setAlgaePosFromZero(DoubleSupplier algaePosition) {
     return Commands.startRun(() -> elevator.setAlgaePosFromZero(algaePosition), () -> elevator.setAlgaePosFromZero(algaePosition), elevator);
   }
+
+  public static Command resetElevatorCommand() {
+    return Commands.runOnce(() -> elevator.resetElevatorState(), elevator);
+  }
 }
