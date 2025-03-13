@@ -15,6 +15,7 @@ public class AlgaeEndEffectorCommands {
     private static CoralIntakeEndEffector coralIntakeEndEffector = CoralIntakeEndEffector.getInstance();
 
     public static Command algaeIntake(DoubleSupplier voltage) {
+        // return Commands.startRun(() -> algaeIntakeEndEffector.setVoltage(()->0), () -> algaeIntakeEndEffector.setVoltage(()->0), algaeIntakeEndEffector);
         return Commands.startRun(() -> algaeIntakeEndEffector.setVoltage(voltage), () -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector);
     }
 

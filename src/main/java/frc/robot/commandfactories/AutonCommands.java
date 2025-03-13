@@ -36,7 +36,7 @@ public class AutonCommands {
       ), // End deadline group (at this point we should be in scoring position)
 
       Commands.deadline(
-        Commands.waitSeconds(0.5), //Do the following for 0.25 seconds
+        Commands.waitSeconds(0.75), //Do the following for 0.25 seconds
         GlobalCommands.coralRelease(), // Score the coral
         GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
     );

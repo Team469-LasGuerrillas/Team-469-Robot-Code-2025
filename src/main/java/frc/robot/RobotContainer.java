@@ -211,11 +211,19 @@ public class RobotContainer {
 
     operator.a().whileTrue(GlobalCommands.coralL1());
 
-    operator.povUp().whileTrue(GlobalCommands.deploy());
+    // operator.povUp().whileTrue(GlobalCommands.deploy());
 
-    operator.povDown().whileTrue(GlobalCommands.fastRetract());
+    // operator.povDown().whileTrue(GlobalCommands.fastRetract());
 
-    operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
+    // operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
+
+    operator.povRight().whileTrue(
+      Commands.parallel(
+        GlobalCommands.defaultCoralElevatorPosition(),
+        GlobalCommands.defaultCoralWristEndEffector(),
+        GlobalCommands.defaultCoralIntakeEndEffector()
+      )
+    );
   }
 
   /**

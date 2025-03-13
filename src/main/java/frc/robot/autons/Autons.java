@@ -1,7 +1,5 @@
 package frc.robot.autons;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.util.Station;
@@ -25,6 +23,8 @@ public class Autons {
     if (Station.isRed()) FL = ReefPositions.FLR;
     ReefPositions FR = ReefPositions.FRB;
     if (Station.isRed()) FR = ReefPositions.FRR;
+    ReefPositions AL = ReefPositions.ALB;
+    if (Station.isRed()) FR = ReefPositions.ALR;
 
     return Commands.sequence(
       AutonCommands.driveAndScoreL4ToReefPosition(EL),
@@ -32,7 +32,8 @@ public class Autons {
       AutonCommands.driveAndScoreL4ToReefPosition(FL),
       AutonCommands.driveAndIntakeFromHumanPlayer(),
       AutonCommands.driveAndScoreL4ToReefPosition(FR),
-      AutonCommands.driveAndIntakeFromHumanPlayer()
+      AutonCommands.driveAndIntakeFromHumanPlayer(),
+      AutonCommands.driveAndScoreL4ToReefPosition(AL)
     );
   }
 }
