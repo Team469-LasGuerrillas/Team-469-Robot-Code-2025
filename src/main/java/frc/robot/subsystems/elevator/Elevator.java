@@ -195,4 +195,11 @@ public class Elevator extends SubsystemBase {
         coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);
         algaeElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES);
     }
+
+    // JCAO: DEAR GOD PLEASE KNOW WHAT YOU'RE DOING WHEN YOU USE THIS 
+    // IT COULD BE BAD
+    public void resetElevatorToHighState() {
+        coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES+24);
+        algaeElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES+24);
+    }
 }

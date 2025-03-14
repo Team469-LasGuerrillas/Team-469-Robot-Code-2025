@@ -203,13 +203,15 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
 
-    operator.y().whileTrue(GlobalCommands.coralL4());
+    operator.y().whileTrue(GlobalCommands.coralL4NoAlgae());
     
-    operator.b().whileTrue(GlobalCommands.coralL3());
+    operator.b().whileTrue(GlobalCommands.coralL3NoAlgae());
 
     operator.x().whileTrue(GlobalCommands.coralL2());
 
-    operator.a().whileTrue(GlobalCommands.coralL1());
+    // JCAO: Removed due to bug causing loss of coral wrist
+    // JCAO: Removed at detroit
+    //operator.a().whileTrue(GlobalCommands.coralL1());
 
     // operator.povUp().whileTrue(GlobalCommands.deploy());
 
@@ -220,6 +222,13 @@ public class RobotContainer {
     operator.povRight().whileTrue(
       ElevatorCommands.resetElevatorCommand()
     );
+
+    operator.povLeft().onTrue(
+      ElevatorCommands.resetElevatorHighCommand()
+    );
+
+    operator.rightStick().whileTrue(GlobalCommands.coralL3());
+    operator.leftStick().whileTrue(GlobalCommands.coralL4());
   }
 
   /**

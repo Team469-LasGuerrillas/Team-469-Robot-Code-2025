@@ -36,4 +36,9 @@ public class ElevatorCommands {
   public static Command resetElevatorCommand() {
     return Commands.runOnce(() -> elevator.resetElevatorState(), elevator);
   }
+
+  // JCAO: PLEASE USE WITH CAUTION
+  public static Command resetElevatorHighCommand() {
+    return Commands.runOnce(() -> elevator.resetElevatorToHighState(), elevator);
+  }
 }

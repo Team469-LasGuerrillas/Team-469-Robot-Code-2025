@@ -15,8 +15,8 @@ public class DriveConstants {
   public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
-  public static final double MAX_LINEAR_ACCEL = 0.06;
-  public static final double MAX_ANGULAR_ACCEL = 1;
+  public static final double MAX_LINEAR_ACCEL = 0.09;
+  public static final double MAX_ANGULAR_ACCEL = 0.5;
 
   // Pathplanner PID constants
   public static final double PP_TRANSLATION_P = 9;
@@ -35,11 +35,11 @@ public class DriveConstants {
   public static final double L1_HEADING_TOLERANCE_DEGREES = 5;
   public static final double HEADING_TOLERANCE_TO_SCORE_DEGREES = 1;
 
-  public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 45;
+  public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 70;
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P = 4.75;
+  public static final double LINEAR_P = 4.9;
   public static final double LINEAR_I = 0.0;
   public static final double LINEAR_D = 0.3;
 
@@ -47,11 +47,11 @@ public class DriveConstants {
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.15;
   public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.02;
 
-  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 3;
+  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 3.5;
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
   // Teleop driving constants
-  public static final double STICK_DEADBAND = 0.01;
+  public static final double STICK_DEADBAND = 0.006;
   public static final double TRIGGER_DEADBAND = 0.25;
   public static final double STICK_EXPO = 1;
 

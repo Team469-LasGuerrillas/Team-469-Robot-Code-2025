@@ -60,6 +60,14 @@ public class GlobalCommands {
 
   }
 
+  public static Command coralL3NoAlgae() {
+    return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralOnTarget() && coralWristEndEffector.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L3_POS),
+      ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L3_POS, () -> ElevatorConstants.ALGAE_L2_POS)
+    );
+
+  }
+
   public static Command coralL2() {
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralOnTarget() && coralWristEndEffector.isOnTarget());}),
       CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L2_POS),
@@ -69,7 +77,7 @@ public class GlobalCommands {
   }
 
   public static Command coralL1() {
-    // TODO: Remove false && in end condition check (JCAO: Forcing command to never end)
+    // TODO: Remove falsse && in end condition check (JCAO: Forcing command to never end)
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralOnTarget() && coralWristEndEffector.isOnTarget());}),
       CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS),
       ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L1_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
