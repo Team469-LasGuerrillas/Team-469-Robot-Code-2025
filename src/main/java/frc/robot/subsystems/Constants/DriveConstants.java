@@ -16,7 +16,7 @@ public class DriveConstants {
 
   // Pathfinding constants
   public static final double MAX_LINEAR_ACCEL = 0.09;
-  public static final double MAX_ANGULAR_ACCEL = 0.5;
+  public static final double MAX_ANGULAR_ACCEL = 0.25;
 
   // Pathplanner PID constants
   public static final double PP_TRANSLATION_P = 9;
@@ -39,7 +39,7 @@ public class DriveConstants {
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P = 4.9;
+  public static final double LINEAR_P = 5.25;
   public static final double LINEAR_I = 0.0;
   public static final double LINEAR_D = 0.3;
 
