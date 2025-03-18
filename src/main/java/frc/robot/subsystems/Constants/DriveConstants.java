@@ -39,7 +39,7 @@ public class DriveConstants {
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P = 5.25;
+  public static final double LINEAR_P = 10; // 5.25
   public static final double LINEAR_I = 0.0;
   public static final double LINEAR_D = 0.3;
 

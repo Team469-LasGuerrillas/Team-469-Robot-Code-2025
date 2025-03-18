@@ -113,7 +113,9 @@ public class GlobalCommands {
   }
 
   public static Command algaeRelease() {
-    return AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE);
+    return Commands.deadline(
+      Commands.waitSeconds(0.25),
+      AlgaeEndEffectorCommands.algaeIntake(() ->  AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE));
   }
 
   public static Command coralRelease() {

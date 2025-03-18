@@ -45,7 +45,7 @@ public class AlgaeEndEffectorConstants {
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
-    public static final double ALGAE_INTAKE_OUT_VOLTAGE = -12;
+    public static final double ALGAE_INTAKE_OUT_VOLTAGE = -10;
     public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_DEFAULT_VOLTAGE = 0;
 
@@ -70,7 +70,7 @@ public class AlgaeEndEffectorConstants {
     /* ALGAE WRIST MOTOR */
     public static final double ALGAE_WRIST_DEFAULT_POS = 0.03;
     public static final double ALGAE_WRIST_DEFAULT_POS_WA = 0.12;
-    public static final double ALGAE_WRIST_PROCESSOR_POS = 0.22;
+    public static final double ALGAE_WRIST_PROCESSOR_POS = 0.19;
     public static final double ALGAE_WRIST_BARGE_POS = 0.12;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
     public static final double ALGAE_WRIST_L2_L3 = 0.31;

@@ -23,7 +23,7 @@ public class ElevatorConstants {
     public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 5.125;
 
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH = GROUND_TO_CORAL_REST_POS_INCHES + 5;
-    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW = GROUND_TO_CORAL_REST_POS_INCHES + 1.5;
+    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW = GROUND_TO_CORAL_REST_POS_INCHES + 1.5 + 0.75; // 0.75 is for Reduced tolerance for flip -- @ Detroit
     public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = GROUND_TO_CORAL_REST_POS_INCHES + 5;
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE = GROUND_TO_CORAL_REST_POS_INCHES + 3;
 
@@ -116,8 +116,8 @@ public class ElevatorConstants {
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_PROCESSOR_POS = 9.469;
     public static final double ALGAE_DEFAULT_POS = GROUND_TO_ALGAE_REST_POS_INCHES;
-    public static final double ALGAE_L2_POS = 23.5;
-    public static final double ALGAE_L3_POS = 45;
+    public static final double ALGAE_L2_POS = 30.5;
+    public static final double ALGAE_L3_POS = 44;
     public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 11;
     public static final double ALGAE_GROUND_POS = 5;
 
