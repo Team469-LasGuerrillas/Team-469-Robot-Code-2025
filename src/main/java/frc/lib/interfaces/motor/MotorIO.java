@@ -62,5 +62,8 @@ public interface MotorIO {
   // PID slot
   public default void setSlot(int slot) {}
 
+  // Get velocity
+  public default double getVelocity() {return 0.0;};
+
   
 }
