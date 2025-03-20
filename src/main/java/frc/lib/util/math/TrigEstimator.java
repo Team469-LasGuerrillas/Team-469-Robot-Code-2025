@@ -16,7 +16,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.drive.Drive;
 
 public class TrigEstimator {
-    private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     public static Pose3d getTrigBasedEstimatedPose(double distance3d, double tx, double ty, double timestamp, Pose3d cameraPose, int tagId) {
         Optional<Pose2d> timestampedRobotPose = Drive.getInstance().getTimestampedPose(timestamp);

@@ -78,14 +78,14 @@ public class CoralEndEffectorConstants {
             new Slot0Configs() // TODO: PID Tuning
             .withKS(0)
             .withKV(0)
-            .withKP(75)
+            .withKP(100)
             .withKI(0)
             .withKD(0)
         ).withSlot1(
             new Slot1Configs() // TODO: PID Tuning
             .withKS(0)
             .withKV(0)
-            .withKP(75)
+            .withKP(100)
             .withKI(0)
             .withKD(0)
         )

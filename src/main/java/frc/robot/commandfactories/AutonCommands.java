@@ -17,12 +17,12 @@ public class AutonCommands {
       Commands.deadline(
         Commands.waitUntil(
           () -> 
-            // Elevator.getInstance().isCoralOnTarget() &&
+            // Elevator.getInstance().isCoralOnTarget() && This is a hacky fix to make elevator come down for some reason
             Drive.getInstance().isOnTarget(
               reefPosition, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-              25)
+              6)
             ),
         DriveCommands.pidToReefPose(reefPosition), // Drive to reef
         Commands.sequence(

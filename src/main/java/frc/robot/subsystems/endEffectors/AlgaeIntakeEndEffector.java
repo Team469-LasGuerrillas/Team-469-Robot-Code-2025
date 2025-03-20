@@ -49,10 +49,10 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
     }
 
     public void setVoltage(DoubleSupplier voltage) {
-        if (Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() == ElevatorConstants.CORAL_L3_POS
-             && CoralIntakeEndEffector.getInstance().hasCoral())
-                algaeIntakeMotor.setOpenLoopVoltage(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
-        else algaeIntakeMotor.setOpenLoopVoltage(voltage);
+        // if (Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() == ElevatorConstants.CORAL_L3_POS
+        //      && CoralIntakeEndEffector.getInstance().hasCoral())
+        //         algaeIntakeMotor.setOpenLoopVoltage(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
+        algaeIntakeMotor.setOpenLoopVoltage(voltage);
     }  
 
     @AutoLogOutput

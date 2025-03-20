@@ -203,9 +203,9 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
 
-    operator.y().whileTrue(GlobalCommands.coralL4NoAlgae());
+    operator.y().whileTrue(GlobalCommands.coralL4());
     
-    operator.b().whileTrue(GlobalCommands.coralL3NoAlgae());
+    operator.b().whileTrue(GlobalCommands.coralL3());
 
     operator.x().whileTrue(GlobalCommands.coralL2());
 

@@ -36,7 +36,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
   List<PhotonPipelineResult> cameraUnreadResults;
   
-  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
   PhotonPoseEstimator photonPoseEstimator;
 

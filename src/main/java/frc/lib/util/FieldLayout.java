@@ -20,8 +20,10 @@ public class FieldLayout {
     ALR, ARR, BLR, BRR, CLR, CRR, DLR, DRR, ELR, ERR, FLR, FRR
   };
 
-  public static final double FIELD_WIDTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldWidth();
-  public static final double FIELD_LENGTH = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape).getFieldLength();
+  private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+
+  public static final double FIELD_WIDTH = aprilTagFieldLayout.getFieldWidth();
+  public static final double FIELD_LENGTH = aprilTagFieldLayout.getFieldLength();
 
   public static final Pose2d HUMAN_PLAYER_BLUE = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
   public static final Pose2d HUMAN_PLAYER_RED = new Pose2d(FIELD_LENGTH - 1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(130 + 180));
@@ -30,8 +32,6 @@ public class FieldLayout {
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
   public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
-
-  private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
 

@@ -28,6 +28,14 @@ public class GlobalCommands {
     );
   }
 
+  public static Command hackyHumanPlayerIntake() {
+    return Commands.parallel(
+      CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_INTAKE_IN_VOLTAGE),
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_HP_INTAKE_POS),
+      ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_HUMAN_PLAYER_INTAKE_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
+    );
+  }
+
   public static Command algaeGroundIntake() {
     return Commands.deadline(
       Commands.waitUntil(() -> {return (false && elevator.isCoralOnTarget() && algaeWristEndEffector.isOnTarget());}),
