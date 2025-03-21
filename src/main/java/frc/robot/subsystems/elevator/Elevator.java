@@ -110,20 +110,19 @@ public class Elevator extends SubsystemBase {
         // THEN reset current position to the bottom
         if (coralRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES &&
             algaeRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES &&
-            Math.abs(coralElevatorMotor.getVelocity()) <= 0.05) // This number is just a guess (and can be moved to constants later)
+            Math.abs(coralElevatorInputs.velocityUnitsPerSecond) <= 0.05) // This number is just a guess (and can be moved to constants later)
         { 
-            if (loopsSinceLastReset >= 10) // Conditions met AND have been met for consecutive loops. Trigger automated reset
+            if (loopsSinceLastReset >= 25) // Conditions met AND have been met for consecutive loops. Trigger automated reset
             {
                 loopsSinceLastReset = 0;
                 coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);
                 algaeElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES);
-                System.out.println("Automated Elevator Reset Conditions Met. Resetting!");
             }
             else // Conditions met BUT have not been met for consecurive loops. Increment counter.
                 loopsSinceLastReset++;
             
         }
-        else
+        else 
             loopsSinceLastReset = 0; // Conditions not met, reset loop counter
     }
 

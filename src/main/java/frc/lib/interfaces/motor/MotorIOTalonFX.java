@@ -191,10 +191,4 @@ public class MotorIOTalonFX implements MotorIO {
   public void setSlot(int slot) {
     this.slot = slot;
   }
-
-  @Override
-  public double getVelocity() {
-    // JCAO: There might need to be a unit conversion here...
-    return talon.getVelocity().getValue().baseUnitMagnitude();
-  }
 }

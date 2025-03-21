@@ -25,8 +25,11 @@ public class FieldLayout {
   public static final double FIELD_WIDTH = aprilTagFieldLayout.getFieldWidth();
   public static final double FIELD_LENGTH = aprilTagFieldLayout.getFieldLength();
 
-  public static final Pose2d HUMAN_PLAYER_BLUE = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
-  public static final Pose2d HUMAN_PLAYER_RED = new Pose2d(FIELD_LENGTH - 1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(130 + 180));
+  public static final Pose2d HUMAN_PLAYER_BLUE_LEFT = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
+  public static final Pose2d HUMAN_PLAYER_RED_LEFT = new Pose2d(FIELD_LENGTH - 1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(130 + 180));
+
+  public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
+  public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.5, 7.35, Rotation2d.fromDegrees(-130 + 180));
 
   public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));

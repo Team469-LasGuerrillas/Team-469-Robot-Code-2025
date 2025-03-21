@@ -18,7 +18,7 @@ public interface MotorIO {
     public double appliedVolts = 0.0;
     public double currentStatorAmps = 0.0;
     public double currentSupplyAmps = 0.0;
-
+    
     public double positionError = 0.0;
 
     public double temperatureCelcius = 0.0;
@@ -61,9 +61,4 @@ public interface MotorIO {
 
   // PID slot
   public default void setSlot(int slot) {}
-
-  // Get velocity
-  public default double getVelocity() {return 0.0;};
-
-  
 }

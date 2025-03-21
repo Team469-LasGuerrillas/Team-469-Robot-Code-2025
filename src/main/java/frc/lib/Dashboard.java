@@ -32,7 +32,8 @@ public class Dashboard {
     // );
 
     autoChooser.setDefaultOption("1 Piece Center", Autons.startD());
-    autoChooser.addOption("3 Piece Left", Autons.startEFF());
+    autoChooser.addOption("3 Piece Left", Autons.threePieceLeft());
+    autoChooser.addOption("3 Piece Right", Autons.threePieceRight());
 
     tab
     .add("Auton Chooser", autoChooser)
