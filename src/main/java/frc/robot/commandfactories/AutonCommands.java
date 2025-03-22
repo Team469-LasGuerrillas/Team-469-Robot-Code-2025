@@ -22,7 +22,7 @@ public class AutonCommands {
               reefPosition, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-              6)
+              10)
             ),
         DriveCommands.pidToReefPose(reefPosition), // Drive to reef
         Commands.sequence(
@@ -36,17 +36,31 @@ public class AutonCommands {
       ), // End deadline group (at this point we should be in scoring position)
 
       Commands.deadline(
-        Commands.waitSeconds(0.75), //Do the following for 0.25 seconds
+        Commands.waitSeconds(0.5), //Do the following for 0.75 seconds
         GlobalCommands.coralRelease(), // Score the coral
         GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
     );
   }
 
-  public static Command driveAndIntakeFromHumanPlayer() {
+  public static Command driveAndIntakeFromHumanPlayerLeft() {
     System.out.println("The hp intake command has run.");
     Pose2d targetHPPose;
-    if (Station.isRed()) targetHPPose = FieldLayout.HUMAN_PLAYER_RED;
-    else targetHPPose = FieldLayout.HUMAN_PLAYER_BLUE;
+    if (Station.isRed()) targetHPPose = FieldLayout.HUMAN_PLAYER_RED_LEFT;
+    else targetHPPose = FieldLayout.HUMAN_PLAYER_BLUE_LEFT;
+
+    return Commands.deadline(
+      Commands.waitUntil(
+        () -> CoralIntakeEndEffector.getInstance().hasCoral()), // Run this group until we have a coral
+      DriveCommands.pidToPoint(() -> targetHPPose), // Drive to HP station
+      GlobalCommands.humanPlayerIntake() // Put elevator in HP load position
+    );
+  }
+
+  public static Command driveAndIntakeFromHumanPlayerRight() {
+    System.out.println("The hp intake command has run.");
+    Pose2d targetHPPose;
+    if (Station.isRed()) targetHPPose = FieldLayout.HUMAN_PLAYER_RED_RIGHT;
+    else targetHPPose = FieldLayout.HUMAN_PLAYER_BLUE_RIGHT;
 
     return Commands.deadline(
       Commands.waitUntil(

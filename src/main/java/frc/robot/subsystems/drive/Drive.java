@@ -716,6 +716,13 @@ public class Drive extends SubsystemBase {
     return poseEstimator.getCurrentPoseEstimate();
   }
 
+  @AutoLogOutput(key = "Odometry/TargetPose")
+  public Pose2d getTargetPose() {
+    if (linearController == null || headingController == null) return new Pose2d();
+
+    return linearController.getTargetPose();
+  }
+
   public boolean isOnTarget() {
     if (linearController == null || headingController == null) return false;
 

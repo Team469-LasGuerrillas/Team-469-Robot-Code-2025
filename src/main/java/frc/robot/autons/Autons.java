@@ -16,7 +16,7 @@ public class Autons {
     );
   }
 
-  public static Command startEFF() {
+  public static Command threePieceLeft() {
     ReefPositions EL = ReefPositions.ELB;
     if (Station.isRed()) EL = ReefPositions.ELR;
     ReefPositions FL = ReefPositions.FLB;
@@ -28,12 +28,33 @@ public class Autons {
 
     return Commands.sequence(
       AutonCommands.driveAndScoreL4ToReefPosition(EL),
-      AutonCommands.driveAndIntakeFromHumanPlayer(),
+      AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
       AutonCommands.driveAndScoreL4ToReefPosition(FL),
-      AutonCommands.driveAndIntakeFromHumanPlayer(),
+      AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
       AutonCommands.driveAndScoreL4ToReefPosition(FR),
-      AutonCommands.driveAndIntakeFromHumanPlayer(),
+      AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
       AutonCommands.driveAndScoreL4ToReefPosition(AL)
+    );
+  }
+
+  public static Command threePieceRight() {
+    ReefPositions CR = ReefPositions.CRB;
+    if (Station.isRed()) CR = ReefPositions.CRR;
+    ReefPositions BR = ReefPositions.BRB;
+    if (Station.isRed()) BR = ReefPositions.BRR;
+    ReefPositions BL = ReefPositions.BLB;
+    if (Station.isRed()) BL = ReefPositions.BLR;
+    ReefPositions AR = ReefPositions.ARB;
+    if (Station.isRed()) AR = ReefPositions.ARR;
+
+    return Commands.sequence(
+      AutonCommands.driveAndScoreL4ToReefPosition(CR),
+      AutonCommands.driveAndIntakeFromHumanPlayerRight(),
+      AutonCommands.driveAndScoreL4ToReefPosition(BR),
+      AutonCommands.driveAndIntakeFromHumanPlayerRight(),
+      AutonCommands.driveAndScoreL4ToReefPosition(BL),
+      AutonCommands.driveAndIntakeFromHumanPlayerRight(),
+      AutonCommands.driveAndScoreL4ToReefPosition(AR)
     );
   }
 }

@@ -26,7 +26,7 @@ public class AlgaeEndEffectorConstants {
 
     /* SENSOR CANRANGE */
     private static final double SIGNAL_STRENGTH_THRESHOLD = 4000;
-    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.15;
+    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.075;
 
     private static CANrangeConfiguration canRangeConfig = 
     new CANrangeConfiguration()
@@ -45,7 +45,7 @@ public class AlgaeEndEffectorConstants {
 
     /* ALGAE INTAKE MOTOR */
     public static final double ALGAE_INTAKE_IN_VOLTAGE = 12;
-    public static final double ALGAE_INTAKE_OUT_VOLTAGE = -10;
+    public static final double ALGAE_INTAKE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_BARGE_OUT_VOLTAGE = -12;
     public static final double ALGAE_INTAKE_DEFAULT_VOLTAGE = 0;
 

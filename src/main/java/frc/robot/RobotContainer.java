@@ -172,7 +172,7 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    driver.a().whileTrue(Autons.startEFF());
+    driver.a().whileTrue(Autons.threePieceLeft());
 
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
         DriveCommands.pidToClosestReefPoseRight()
@@ -203,12 +203,16 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
 
-    operator.y().whileTrue(GlobalCommands.coralL4());
+    operator.y().whileTrue(GlobalCommands.coralL4NoAlgae()); // Algae L3 + Coral L4
     
-    operator.b().whileTrue(GlobalCommands.coralL3());
+    operator.b().whileTrue(GlobalCommands.coralL3NoAlgae()); // Coral L3
 
-    operator.x().whileTrue(GlobalCommands.coralL2());
+    operator.x().whileTrue(GlobalCommands.coralL2()); // Coral L2
 
+    operator.a().whileTrue(GlobalCommands.coralL3()); // Algae L2
+
+    operator.povUp().whileTrue(GlobalCommands.coralL4()); // Coral L4
+    
     // JCAO: Removed due to bug causing loss of coral wrist
     // JCAO: Removed at detroit
     //operator.a().whileTrue(GlobalCommands.coralL1());
@@ -226,9 +230,6 @@ public class RobotContainer {
     operator.povLeft().onTrue(
       ElevatorCommands.resetElevatorHighCommand()
     );
-
-    operator.rightStick().whileTrue(GlobalCommands.coralL3());
-    operator.leftStick().whileTrue(GlobalCommands.coralL4());
   }
 
   /**
