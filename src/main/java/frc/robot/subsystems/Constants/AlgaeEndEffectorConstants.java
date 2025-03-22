@@ -26,7 +26,7 @@ public class AlgaeEndEffectorConstants {
 
     /* SENSOR CANRANGE */
     private static final double SIGNAL_STRENGTH_THRESHOLD = 4000;
-    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.15;
+    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.075;
 
     private static CANrangeConfiguration canRangeConfig = 
     new CANrangeConfiguration()

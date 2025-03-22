@@ -2,14 +2,14 @@ package frc.robot.subsystems.elevator;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
-import frc.lib.interfaces.motor.MotorIOTalonFX;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
@@ -110,6 +110,7 @@ public class Elevator extends SubsystemBase {
         // THEN reset current position to the bottom
         if (coralRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES &&
             algaeRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES &&
+            DriverStation.isEnabled() &&
             Math.abs(coralElevatorInputs.velocityUnitsPerSecond) <= 0.05) // This number is just a guess (and can be moved to constants later)
         { 
             if (loopsSinceLastReset >= 25) // Conditions met AND have been met for consecutive loops. Trigger automated reset
@@ -228,5 +229,10 @@ public class Elevator extends SubsystemBase {
     public void resetElevatorToHighState() {
         coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES+24);
         algaeElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES+24);
+    }
+
+    @AutoLogOutput
+    public int getLoopsSinceLastElevatorReset() {
+        return loopsSinceLastReset;
     }
 }

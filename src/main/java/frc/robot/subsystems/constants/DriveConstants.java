@@ -15,7 +15,7 @@ public class DriveConstants {
   public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
-  public static final double MAX_LINEAR_ACCEL = 0.09;
+  public static final double MAX_LINEAR_ACCEL = 0.1075; // 0.09
   public static final double MAX_ANGULAR_ACCEL = 0.125;
 
   // Pathplanner PID constants
@@ -47,7 +47,7 @@ public class DriveConstants {
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.15;
   public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.02;
 
-  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 2.5;
+  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 2.875;
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
   // Teleop driving constants
