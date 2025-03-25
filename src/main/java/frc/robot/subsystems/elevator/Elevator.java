@@ -110,6 +110,7 @@ public class Elevator extends SubsystemBase {
         // THEN reset current position to the bottom
         if (coralRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES &&
             algaeRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES &&
+            AlgaeWristEndEffector.getInstance().getRequestedPosition() != AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS &&
             DriverStation.isEnabled() &&
             Math.abs(coralElevatorInputs.velocityUnitsPerSecond) <= 0.05) // This number is just a guess (and can be moved to constants later)
         { 
@@ -179,6 +180,7 @@ public class Elevator extends SubsystemBase {
         return coralElevatorInputs.unitPosition;
     }
 
+    @AutoLogOutput
     public double getRequestedCoralElevatorPosFromGroundInches() {
         return coralRequestedHeight.getAsDouble();
     }
@@ -191,6 +193,7 @@ public class Elevator extends SubsystemBase {
             ? algaeElevatorInputs.unitPosition + algaePointOfReference : algaeElevatorInputs.unitPosition;
     }
 
+    @AutoLogOutput
     public double getRequestedAlgaeElevatorPosFromGroundInches() {
         return algaeRequestedHeight.getAsDouble();
     }

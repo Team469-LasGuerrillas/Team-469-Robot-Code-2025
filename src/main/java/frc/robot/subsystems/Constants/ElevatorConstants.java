@@ -54,7 +54,7 @@ public class ElevatorConstants {
     public static final double CORAL_L2_POS = 38;
     public static final double CORAL_L3_POS = 54.5;
     public static final double CORAL_L4_POS = 81;
-    public static final double CORAL_PROCESSOR_POS = 16.469;
+    public static final double CORAL_PROCESSOR_POS = CORAL_DEFAULT_POS; // 16.469
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
@@ -114,9 +114,9 @@ public class ElevatorConstants {
     public static MotorIOTalonFX coralElevatorMotor = new MotorIOTalonFX(coralElevatorMotorConfigs, coralElevatorFollowerMotor);
 
     /* ALGAE ELEVATOR MOTOR */
-    public static final double ALGAE_PROCESSOR_POS = 9.469;
     public static final double ALGAE_DEFAULT_POS = GROUND_TO_ALGAE_REST_POS_INCHES;
-    public static final double ALGAE_L2_POS = 30.5;
+    public static final double ALGAE_PROCESSOR_POS = ALGAE_DEFAULT_POS; // 9.469
+    public static final double ALGAE_L2_POS = 29.5;
     public static final double ALGAE_L3_POS = 44;
     public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 11;
     public static final double ALGAE_GROUND_POS = 5;

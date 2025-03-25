@@ -122,13 +122,13 @@ public class GlobalCommands {
 
   public static Command algaeRelease() {
     return Commands.deadline(
-      Commands.waitSeconds(0.25),
+      Commands.waitSeconds(2),
       AlgaeEndEffectorCommands.algaeIntake(() ->  AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE));
   }
 
   public static Command coralRelease() {
     return Commands.deadline(
-      Commands.waitSeconds(0.5),
+      Commands.waitSeconds(1),
       CoralEndEffectorCommands.coralIntake(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
   }
 

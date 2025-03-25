@@ -22,7 +22,7 @@ public class AutonCommands {
               reefPosition, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-              10)
+              25)
             ),
         DriveCommands.pidToReefPose(reefPosition), // Drive to reef
         Commands.sequence(

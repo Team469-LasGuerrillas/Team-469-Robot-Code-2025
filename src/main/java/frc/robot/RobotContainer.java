@@ -185,7 +185,7 @@ public class RobotContainer {
     driver.start().onTrue(
         Commands.runOnce(() -> drive.setPose(new Pose2d()), drive).ignoringDisable(true));
 
-    driver.leftBumper().whileTrue(
+    driver.leftBumper().onTrue(
       GlobalCommands.algaeRelease()
     );
 

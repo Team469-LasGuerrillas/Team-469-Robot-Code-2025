@@ -51,12 +51,12 @@ public class LinearController {
 
     xController.reset(
       Drive.getInstance().getPose().getX(), 
-      Drive.getInstance().fieldVelocity().dx
+      0 //Drive.getInstance().fieldVelocity().dx
     );
 
     yController.reset(
       Drive.getInstance().getPose().getY(), 
-      Drive.getInstance().fieldVelocity().dy
+      0 //Drive.getInstance().fieldVelocity().dy
     );
   }
 

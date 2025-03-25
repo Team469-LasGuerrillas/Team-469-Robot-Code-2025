@@ -54,7 +54,7 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_WRIST_DEFAULT_POS = 0.3;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 
-    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.502;
+    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.48;
     public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
     public static final double CORAL_BARGE_POS = CORAL_WRIST_FLIP_THRESHOLD_HIGH;
     public static final double IDLE_WRIST_THRESHOLD = 0.45;
@@ -123,7 +123,7 @@ public class CoralEndEffectorConstants {
     /* CORAL INTAKE MOTOR */
     public static final double CORAL_INTAKE_IN_VOLTAGE = -4.5;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
-    public static final double CORAL_DEFAULT_VOLTAGE = 0;
+    public static final double CORAL_DEFAULT_VOLTAGE = -0.25;
 
     private static TalonFXConfiguration coralIntakeMotorFxConfig = 
     new TalonFXConfiguration()

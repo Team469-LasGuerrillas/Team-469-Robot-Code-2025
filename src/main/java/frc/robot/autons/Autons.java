@@ -17,14 +17,14 @@ public class Autons {
   }
 
   public static Command threePieceLeft() {
-    ReefPositions EL = ReefPositions.ELB;
-    if (Station.isRed()) EL = ReefPositions.ELR;
+    ReefPositions EL = ReefPositions.ERB;
+    if (Station.isRed()) EL = ReefPositions.ERR;
     ReefPositions FL = ReefPositions.FLB;
     if (Station.isRed()) FL = ReefPositions.FLR;
     ReefPositions FR = ReefPositions.FRB;
     if (Station.isRed()) FR = ReefPositions.FRR;
     ReefPositions AL = ReefPositions.ALB;
-    if (Station.isRed()) FR = ReefPositions.ALR;
+    if (Station.isRed()) AL = ReefPositions.ALR;
 
     return Commands.sequence(
       AutonCommands.driveAndScoreL4ToReefPosition(EL),
@@ -38,8 +38,8 @@ public class Autons {
   }
 
   public static Command threePieceRight() {
-    ReefPositions CR = ReefPositions.CRB;
-    if (Station.isRed()) CR = ReefPositions.CRR;
+    ReefPositions CR = ReefPositions.CLB;
+    if (Station.isRed()) CR = ReefPositions.CLR;
     ReefPositions BR = ReefPositions.BRB;
     if (Station.isRed()) BR = ReefPositions.BRR;
     ReefPositions BL = ReefPositions.BLB;

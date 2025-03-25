@@ -2,6 +2,7 @@ package frc.robot.subsystems.endEffectors;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,6 +45,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
         algaeWristMotor.updateInputs(algaeWristInputs);
         Logger.processInputs("Algae Wrist", algaeWristInputs);
     
+        // TODO: UMMMMM SHOULDN'T THIS BE REQUESTED POSITION??????
         if (isPositionAllowed(getWristPosition()))
             algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), -Math.cos((requestedPosition.getAsDouble() - AlgaeEndEffectorConstants.ALGAE_WRIST_HORZIONTAL_POS) * Math.PI * 2) * AlgaeEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
     }
@@ -62,6 +64,11 @@ public class AlgaeWristEndEffector extends SubsystemBase {
 
     public void setPosition(DoubleSupplier position) {
         requestedPosition = position;
+    }
+
+    @AutoLogOutput
+    public double getRequestedPosition() {
+        return requestedPosition.getAsDouble();
     }
 
     public void setDefault() {
