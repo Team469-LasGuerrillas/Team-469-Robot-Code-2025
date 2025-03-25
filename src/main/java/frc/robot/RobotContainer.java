@@ -13,9 +13,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -27,9 +24,6 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.autons.Autons;
-import frc.robot.commandfactories.AlgaeEndEffectorCommands;
-import frc.robot.commandfactories.AutonCommands;
-import frc.robot.commandfactories.CoralEndEffectorCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.ElevatorCommands;
 import frc.robot.commandfactories.GlobalCommands;
@@ -40,7 +34,6 @@ import frc.robot.subsystems.constants.ClimbConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.subsystems.constants.SensorConstants;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;

@@ -52,20 +52,43 @@ public class GlobalCommands {
             ElevatorCommands.setDynamicL4Pos());
   }
 
+  public static Command coralL4AutoScore() {
+    return Commands.parallel(
+            CoralEndEffectorCommands.coralWristAutoScore(CoralEndEffectorConstants.CORAL_L4_POS),
+            AlgaeEndEffectorCommands.algaeIntakeAutoScore(AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWristAutoScore(AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
+            ElevatorCommands.setTargetPosFromZeroAutoScore(ElevatorConstants.CORAL_L4_POS, ElevatorConstants.ALGAE_L3_POS));
+  }
+
   public static Command coralL4NoAlgae() {
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralOnTarget() && coralWristEndEffector.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
             CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L4_POS),
             ElevatorCommands.setDynamicL4Pos());
   }
 
+  public static Command coralL4NoAlgaeAutoScore() {
+    return Commands.parallel(
+            CoralEndEffectorCommands.coralWristAutoScore(CoralEndEffectorConstants.CORAL_L4_POS),
+            AlgaeEndEffectorCommands.algaeIntakeAutoScore(AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWristAutoScore(AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
+            ElevatorCommands.setTargetPosFromZeroAutoScore(ElevatorConstants.CORAL_L4_POS, ElevatorConstants.ALGAE_L3_POS));
+  }
+
   public static Command coralL3() {
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralOnTarget() && coralWristEndEffector.isOnTarget() && algaeWristEndEffector.isOnTarget());}),
-      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L3_POS - 0.05),
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L3_POS),
       AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
       AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
       ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L3_POS, () -> ElevatorConstants.ALGAE_L2_POS)
     );
+  }
 
+  public static Command coralL3AutoScore() {
+    return Commands.parallel(
+            CoralEndEffectorCommands.coralWristAutoScore(CoralEndEffectorConstants.CORAL_L3_POS),
+            AlgaeEndEffectorCommands.algaeIntakeAutoScore(AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWristAutoScore(AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
+            ElevatorCommands.setTargetPosFromZeroAutoScore(ElevatorConstants.CORAL_L3_POS, ElevatorConstants.ALGAE_L2_POS));
   }
 
   public static Command coralL3NoAlgae() {
@@ -73,7 +96,14 @@ public class GlobalCommands {
       CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L3_POS),
       ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L3_POS, () -> ElevatorConstants.ALGAE_L2_POS)
     );
+  }
 
+  public static Command coralL3NoAlgaeAutoScore() {
+    return Commands.parallel(
+            CoralEndEffectorCommands.coralWristAutoScore(CoralEndEffectorConstants.CORAL_L3_POS),
+            AlgaeEndEffectorCommands.algaeIntakeAutoScore(AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWristAutoScore(AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
+            ElevatorCommands.setTargetPosFromZeroAutoScore(ElevatorConstants.CORAL_L3_POS, ElevatorConstants.ALGAE_L2_POS));
   }
 
   public static Command coralL2() {
@@ -81,7 +111,14 @@ public class GlobalCommands {
       CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L2_POS),
       ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
     );
+  }
 
+  public static Command coralL2AutoScore() {
+    return Commands.parallel(
+            CoralEndEffectorCommands.coralWristAutoScore(CoralEndEffectorConstants.CORAL_L2_POS),
+            AlgaeEndEffectorCommands.algaeIntakeAutoScore(AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeWristAutoScore(AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
+            ElevatorCommands.setTargetPosFromZeroAutoScore(ElevatorConstants.CORAL_L2_POS, ElevatorConstants.ALGAE_DEFAULT_POS));
   }
 
   public static Command coralL1() {

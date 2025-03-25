@@ -4,6 +4,8 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.lib.util.AutoScore;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.elevator.Elevator;
 
@@ -12,6 +14,13 @@ public class ElevatorCommands {
 
   public static Command setTargetPosFromZero(DoubleSupplier coralPosition, DoubleSupplier algaePosition) {
     return Commands.startRun(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition), () -> elevator.setTargetPosFromZero(coralPosition, algaePosition), elevator);
+  }
+
+  public static Command setTargetPosFromZeroAutoScore(double nextCoralPos, double nextAlgaePos) {
+    return Commands.run(() -> {
+      AutoScore.setNextCoralElevatorPos(nextCoralPos);
+      AutoScore.setNextAlgaeElevatorPos(nextAlgaePos);
+    }, new Subsystem[]{});
   }
 
   public static Command setDynamicL4Pos() {

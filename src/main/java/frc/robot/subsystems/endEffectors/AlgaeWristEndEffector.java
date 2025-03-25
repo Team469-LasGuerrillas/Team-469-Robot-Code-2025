@@ -5,7 +5,6 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
@@ -14,8 +13,6 @@ import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.subsystems.constants.SensorConstants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 
 public class AlgaeWristEndEffector extends SubsystemBase {

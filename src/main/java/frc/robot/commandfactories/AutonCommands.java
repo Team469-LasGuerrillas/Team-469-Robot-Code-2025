@@ -3,15 +3,52 @@ package frc.robot.commandfactories;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.lib.util.AutoScore;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.Station;
 import frc.lib.util.FieldLayout.ReefPositions;
+import frc.robot.subsystems.constants.AutonConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
 
 public class AutonCommands {
+  public static Command driveAndAutoScore(ReefPositions reefPosition) {
+    return Commands.deferredProxy(() -> Commands.sequence(
+      Commands.deadline(
+        Commands.waitUntil(
+          () -> 
+            // Elevator.getInstance().isCoralOnTarget() && This is a hacky fix to make elevator come down for some reason
+            Drive.getInstance().isOnTarget(
+              reefPosition, 
+              DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
+              DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
+              AutonConstants.NUM_OF_ON_TARGET_LOOPS)
+            ),
+        DriveCommands.pidToReefPose(reefPosition), // Drive to reef
+        Commands.sequence(
+          Commands.waitUntil( // When we are "approximate" to the reef...
+            () -> Drive.getInstance().isOnTarget(
+              reefPosition, 
+              DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
+              DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
+          CoralEndEffectorCommands.coralWrist(() -> AutoScore.nextCoralWristPos),
+          AlgaeEndEffectorCommands.algaeIntake(() -> AutoScore.nextAlgaeIntakeVol),
+          AlgaeEndEffectorCommands.algaeWrist(() -> AutoScore.nextAlgaeWristPos),
+          ElevatorCommands.setTargetPosFromZero(
+            () -> AutoScore.nextCoralElevatorPos,
+            () -> AutoScore.nextAlgaeElevatorPos)
+        )
+      ), // End deadline group (at this point we should be in scoring position)
+
+      Commands.deadline(
+        Commands.waitSeconds(AutonConstants.CORAL_RELEASE_TIME), //Do the following for 0.5 seconds
+        GlobalCommands.coralRelease(), // Score the coral
+        GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
+    ));
+  }
+
   public static Command driveAndScoreL4ToReefPosition(ReefPositions reefPosition) {
     return Commands.sequence(
       Commands.deadline(
@@ -22,7 +59,7 @@ public class AutonCommands {
               reefPosition, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-              25)
+              AutonConstants.NUM_OF_ON_TARGET_LOOPS)
             ),
         DriveCommands.pidToReefPose(reefPosition), // Drive to reef
         Commands.sequence(
@@ -36,7 +73,7 @@ public class AutonCommands {
       ), // End deadline group (at this point we should be in scoring position)
 
       Commands.deadline(
-        Commands.waitSeconds(0.5), //Do the following for 0.75 seconds
+        Commands.waitSeconds(AutonConstants.CORAL_RELEASE_TIME), //Do the following for 0.5 seconds
         GlobalCommands.coralRelease(), // Score the coral
         GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
     );

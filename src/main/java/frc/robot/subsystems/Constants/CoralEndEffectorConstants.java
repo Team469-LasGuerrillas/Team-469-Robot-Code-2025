@@ -1,7 +1,6 @@
 package frc.robot.subsystems.constants;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.CANrangeConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FovParamsConfigs;
@@ -12,7 +11,6 @@ import com.ctre.phoenix6.configs.ProximityParamsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.ToFParamsConfigs;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -20,7 +18,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.lib.interfaces.motor.CancoderConfigs;
 import frc.lib.interfaces.motor.MotorConfigs;
 import frc.lib.interfaces.motor.MotorIOTalonFX;
-import frc.lib.interfaces.sensor.SensorIOBeamBreak;
 import frc.lib.interfaces.sensor.SensorIOCANRange;
 import frc.robot.generated.TunerConstants;
 
@@ -46,7 +43,7 @@ public class CoralEndEffectorConstants {
 
     /* CORAL WRIST MOTOR */
     public static final double CORAL_L4_POS = 0.69;
-    public static final double CORAL_L3_POS = 0.675;
+    public static final double CORAL_L3_POS = 0.625;
     public static final double CORAL_L2_POS = 0.675;
     public static final double CORAL_L1_POS = 0.61;
     public static final double CORAL_GROUND_INTAKE_POS = 0;

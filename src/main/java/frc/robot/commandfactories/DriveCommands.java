@@ -129,4 +129,16 @@ public class DriveCommands {
       () -> pidToReefPose(FieldLayout.findClosestReefPoseRight())
     );
   }
+
+  public static Command autoScoreToReefPoseLeft() {
+    return Commands.deferredProxy(
+      () -> AutonCommands.driveAndAutoScore(FieldLayout.findClosestReefPoseLeft())
+    );
+  }
+
+  public static Command autoScoreToReefPoseRight() {
+    return Commands.deferredProxy(
+      () -> AutonCommands.driveAndAutoScore(FieldLayout.findClosestReefPoseRight())
+    );
+  }
 }
