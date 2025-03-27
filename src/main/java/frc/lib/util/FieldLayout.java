@@ -102,4 +102,8 @@ public class FieldLayout {
 
     return closestReefPosition;
   }
+
+  public static Pose2d reefPositionToPose2d(ReefPositions reefPosition) {
+    return reefPositionPoseLeft.getOrDefault(reefPosition, reefPositionPoseRight.get(reefPosition));
+  }
 }

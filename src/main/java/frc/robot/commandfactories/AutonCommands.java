@@ -78,6 +78,12 @@ public class AutonCommands {
         GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
     );
   }
+      
+  public static Command descoreAlgaeFromReefPosition(ReefPositions reefPosition) {
+    return Commands.sequence(
+      
+    );
+  }
 
   public static Command driveAndIntakeFromHumanPlayerLeft() {
     System.out.println("The hp intake command has run.");
