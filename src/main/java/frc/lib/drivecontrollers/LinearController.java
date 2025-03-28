@@ -97,4 +97,10 @@ public class LinearController {
   public Pose2d getTargetPose() {
     return goalPoseSupplier.get();
   }
+
+  public double getError() {
+    double xError = xController.getPositionError(); 
+    double yError = yController.getPositionError();
+    return Math.hypot(xError, yError);
+  }
 }

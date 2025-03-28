@@ -722,6 +722,12 @@ public class Drive extends SubsystemBase {
     return linearController.getTargetPose();
   }
 
+  public double getLinearControllerError() {
+    if (linearController == null) return 0;
+
+    return linearController.getError();
+  }
+
   public boolean isOnTarget() {
     if (linearController == null || headingController == null) return false;
 

@@ -17,32 +17,34 @@ import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 public class AutonCommands {
   public static Command driveAndAutoScore(ReefPositions reefPosition) {
     return Commands.deferredProxy(() -> Commands.sequence(
-      Commands.deadline(
-        Commands.waitUntil(
-          () -> 
-            // Elevator.getInstance().isCoralOnTarget() && This is a hacky fix to make elevator come down for some reason
-            Drive.getInstance().isOnTarget(
-              reefPosition, 
-              DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
-              DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-              AutonConstants.NUM_OF_ON_TARGET_LOOPS)
-            ),
-        DriveCommands.pidToReefPose(reefPosition), // Drive to reef
-        Commands.sequence(
-          Commands.waitUntil( // When we are "approximate" to the reef...
-            () -> Drive.getInstance().isOnTarget(
-              reefPosition, 
-              DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
-              DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
-          CoralEndEffectorCommands.coralWrist(() -> AutoScore.getNextCoralWristPos()),
-          AlgaeEndEffectorCommands.algaeIntake(() -> AutoScore.getNextAlgaeIntakeVol()),
-          AlgaeEndEffectorCommands.algaeWrist(() -> AutoScore.getNextAlgaeWristPos()),
-          ElevatorCommands.setTargetPosFromZero(
-            () -> AutoScore.getNextCoralElevatorPos(),
-            () -> AutoScore.getNextAlgaeElevatorPos())
-        )
-      ), // End deadline group (at this point we should be in scoring position)
-
+      Commands.race(
+        Commands.waitSeconds(AutonConstants.TIME_EXCEED),
+        Commands.deadline(
+          Commands.waitUntil(
+            () -> 
+              // Elevator.getInstance().isCoralOnTarget() && This is a hacky fix to make elevator come down for some reason
+              Drive.getInstance().isOnTarget(
+                reefPosition, 
+                DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
+                DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
+                AutonConstants.NUM_OF_ON_TARGET_LOOPS)
+              ),
+          DriveCommands.pidToReefPose(reefPosition), // Drive to reef
+          Commands.sequence(
+            Commands.waitUntil( // When we are "approximate" to the reef...
+              () -> Drive.getInstance().isOnTarget(
+                reefPosition, 
+                DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
+                DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
+            CoralEndEffectorCommands.coralWrist(() -> AutoScore.getNextCoralWristPos()),
+            AlgaeEndEffectorCommands.algaeIntake(() -> AutoScore.getNextAlgaeIntakeVol()),
+            AlgaeEndEffectorCommands.algaeWrist(() -> AutoScore.getNextAlgaeWristPos()),
+            ElevatorCommands.setTargetPosFromZero(
+              () -> AutoScore.getNextCoralElevatorPos(),
+              () -> AutoScore.getNextAlgaeElevatorPos())
+          )
+        ) // End deadline group (at this point we should be in scoring position)
+      ),
       Commands.deadline(
         Commands.waitSeconds(AutonConstants.CORAL_RELEASE_TIME), //Do the following for 0.5 seconds
         GlobalCommands.coralRelease(), // Score the coral
@@ -53,7 +55,7 @@ public class AutonCommands {
   public static Command driveAndScoreL4ToReefPosition(ReefPositions reefPosition) {
     return Commands.sequence(
       Commands.race(
-        Commands.waitSeconds(10),
+        Commands.waitSeconds(AutonConstants.TIME_EXCEED),
         Commands.deadline(
           Commands.waitUntil(
             () -> 

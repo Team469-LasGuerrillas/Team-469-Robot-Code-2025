@@ -14,13 +14,14 @@ public interface MotorIO {
     public boolean connected = false;
 
     public double velocityUnitsPerSecond = 0.0;
-    public double unitPosition = 0.0;
     public double appliedVolts = 0.0;
     public double currentStatorAmps = 0.0;
     public double currentSupplyAmps = 0.0;
-    
-    public double positionError = 0.0;
 
+    public double unitPosition = 0.0;
+    public double positionError = 0.0;
+    public double targetPosition = 0.0;
+    
     public double temperatureCelcius = 0.0;
     public int canbusId;
 

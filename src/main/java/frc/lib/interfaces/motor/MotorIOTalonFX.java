@@ -108,16 +108,18 @@ public class MotorIOTalonFX implements MotorIO {
   public void updateInputs(MotorIOInputs inputs) {
     BaseStatusSignal.refreshAll(signals);
 
-    inputs.unitPosition = rotorToUnits(positionSignal.getValueAsDouble());
     inputs.velocityUnitsPerSecond = rotorToUnits(velocitySignal.getValueAsDouble());
     inputs.appliedVolts = voltageSignal.getValueAsDouble();
     inputs.currentStatorAmps = currentStatorSignal.getValueAsDouble();
 
-    inputs.positionError = talon.getClosedLoopError().getValueAsDouble();
+    inputs.unitPosition = rotorToUnits(positionSignal.getValueAsDouble());
+    inputs.positionError = rotorToUnits(talon.getClosedLoopError().getValueAsDouble());
+    inputs.targetPosition = rotorToUnits(talon.getClosedLoopReference().getValueAsDouble());
 
     inputs.canbusId = mConfig.canId;
 
     inputs.cancoderPos = cancoder == null ? 0.0 : cancoder.getPosition().getValueAsDouble();
+
   }
 
   @Override

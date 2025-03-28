@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
@@ -19,6 +20,7 @@ import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
+import frc.robot.subsystems.drive.Drive;
 
 public class Elevator extends SubsystemBase {    
     private static Elevator instance;
@@ -92,12 +94,18 @@ public class Elevator extends SubsystemBase {
             && coralElevatorInputs.velocityUnitsPerSecond < 0
             ) 
                 requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;            
+            
+            double requestedHeightOffset = 0;
+            if (isReefRequestedHeight(coralRequestedHeight.getAsDouble()))
+                requestedHeightOffset += 
+                    Units.metersToInches(Drive.getInstance().getLinearControllerError()) 
+                    * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER;
 
             coralElevatorMotor.setDynamicMagicalPositionSetpoint(
-                coralRequestedHeight.getAsDouble(), appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
+                coralRequestedHeight.getAsDouble() + requestedHeightOffset, appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
             );
 
-            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
+            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight + requestedHeightOffset, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
 
         // Automated Self-reset
@@ -237,5 +245,14 @@ public class Elevator extends SubsystemBase {
     @AutoLogOutput
     public int getLoopsSinceLastElevatorReset() {
         return loopsSinceLastReset;
+    }
+
+    public boolean isReefRequestedHeight(double requestedHeight) {
+        if (requestedHeight == ElevatorConstants.CORAL_L1_POS
+            || requestedHeight == ElevatorConstants.CORAL_L2_POS
+            || requestedHeight == ElevatorConstants.CORAL_L3_POS
+            || requestedHeight == ElevatorConstants.CORAL_L4_POS) return true;
+        
+        return false;
     }
 }

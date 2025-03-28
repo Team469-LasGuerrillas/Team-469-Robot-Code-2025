@@ -75,6 +75,8 @@ public class ElevatorConstants {
     public static final double CORAL_SLOW_UPPER = 48;
     public static final double CORAL_SLOW_LOWER = 28;
 
+    public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1;
+    
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withMotorOutput(
