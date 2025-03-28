@@ -26,7 +26,7 @@ public class ClimbConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
-        .withStatorCurrentLimit(80));
+        .withStatorCurrentLimit(120));
 
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(10)

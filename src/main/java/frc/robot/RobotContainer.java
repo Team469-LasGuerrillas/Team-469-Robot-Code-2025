@@ -185,6 +185,12 @@ public class RobotContainer {
     driver.rightBumper().onTrue(
       GlobalCommands.coralRelease()
     );
+
+    driver.povRight().whileTrue(GlobalCommands.deploy());
+
+    driver.povDown().whileTrue(GlobalCommands.fastRetract());
+
+    driver.povLeft().whileTrue(GlobalCommands.slowRetract());
   }
 
   private void configureOperatorBindings() {
@@ -204,25 +210,19 @@ public class RobotContainer {
 
     operator.a().whileTrue(GlobalCommands.coralL3()); // Algae L2
 
-    operator.povUp().whileTrue(GlobalCommands.coralL4()); // Coral L4
+    // operator.povUp().whileTrue(GlobalCommands.coralL4()); // Coral L4
     
-    // JCAO: Removed due to bug causing loss of coral wrist
-    // JCAO: Removed at detroit
-    //operator.a().whileTrue(GlobalCommands.coralL1());
+    // // JCAO: Removed due to bug causing loss of coral wrist
+    // // JCAO: Removed at detroit
+    // //operator.a().whileTrue(GlobalCommands.coralL1());
 
-    // operator.povUp().whileTrue(GlobalCommands.deploy());
+    // operator.povRight().whileTrue(
+    //   ElevatorCommands.resetElevatorCommand()
+    // );
 
-    // operator.povDown().whileTrue(GlobalCommands.fastRetract());
-
-    // operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
-
-    operator.povRight().whileTrue(
-      ElevatorCommands.resetElevatorCommand()
-    );
-
-    operator.povLeft().onTrue(
-      ElevatorCommands.resetElevatorHighCommand()
-    );
+    // operator.povLeft().onTrue(
+    //   ElevatorCommands.resetElevatorHighCommand()
+    // );
   }
 
   /**

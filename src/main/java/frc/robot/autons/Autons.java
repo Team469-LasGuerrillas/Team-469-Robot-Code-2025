@@ -21,9 +21,10 @@ public class Autons {
     if (Station.isRed()) targetReefPosition = ReefPositions.DLR;
     
     return Commands.sequence(
-      AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition)
+      AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition),
+      AutonCommands.descoreAlgaeFromReefPosition(targetReefPosition),
+      AutonCommands.scoreAlgaeInBarge()
     );
-
   }
 
   public static Command threePieceLeft() {
