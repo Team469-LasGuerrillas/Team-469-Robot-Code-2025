@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
+import frc.lib.util.AutoScore;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
@@ -38,6 +39,9 @@ public class Elevator extends SubsystemBase {
     private DoubleSupplier algaeRequestedHeight = () -> ElevatorConstants.ALGAE_DEFAULT_POS;
 
     private int loopsSinceLastReset = 0;
+
+    double coralRequestedVelocity;
+    double coralRequestedAcceleration;
 
     private Elevator(MotorIO coralElevatorMotor, MotorIO coralElevatorMotorFollower, MotorIO algaeElevatorMotor) {
         this.coralElevatorMotor = coralElevatorMotor;
@@ -88,15 +92,19 @@ public class Elevator extends SubsystemBase {
 
 
         if (isAlgaeWristLegal() && isCoralWristLegal()) {
-            double requestedVelocity = ElevatorConstants.CORAL_VELOCITY;
+            coralRequestedVelocity = ElevatorConstants.CORAL_VELOCITY;
+            coralRequestedAcceleration = ElevatorConstants.CORAL_ACCELERATION;
+
             if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER 
             && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER 
-            && coralElevatorInputs.velocityUnitsPerSecond < 0
-            ) 
-                requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;            
-
+            && coralElevatorInputs.velocityUnitsPerSecond <= 0
+            ) {
+                coralRequestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY; 
+                coralRequestedAcceleration = ElevatorConstants.CORAL_SLOW_ACCELERATION;   
+            }        
+            
             coralElevatorMotor.setDynamicMagicalPositionSetpoint(
-                coralRequestedHeight.getAsDouble(), appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
+                coralRequestedHeight.getAsDouble(), appliedFF, coralRequestedVelocity, coralRequestedAcceleration, ElevatorConstants.CORAL_JERK
             );
 
             algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
@@ -200,15 +208,15 @@ public class Elevator extends SubsystemBase {
         return algaeRequestedHeight.getAsDouble();
     }
 
+    @AutoLogOutput
     public boolean isCoralOnTarget() {
         boolean target = ToleranceUtil.epsilonEquals(
             coralRequestedHeight.getAsDouble(), coralElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
 
-            System.out.println(target + " Setpoint: " + coralRequestedHeight.getAsDouble() + " Real: " + coralElevatorInputs.unitPosition);
-
         return target;
     }
 
+    @AutoLogOutput
     public boolean isAlgaeOnTarget() {
         return ToleranceUtil.epsilonEquals(
             algaeRequestedHeight.getAsDouble(), algaeElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
@@ -246,10 +254,26 @@ public class Elevator extends SubsystemBase {
         double dynamicElevatorHeight = targetElevatorHeight 
             + (Drive.getInstance().getErrorFromLinearControllerTarget() 
             * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER);
-            
+
         return ToleranceUtil.clamp(
             dynamicElevatorHeight, 
             targetElevatorHeight - ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE,
             targetElevatorHeight + ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE);
+    }
+
+    @AutoLogOutput
+    public double getRequestedCoralVelocity() { return coralRequestedVelocity; }
+
+    @AutoLogOutput
+    public double getRequestedCoralAcceleration() { return coralRequestedAcceleration; }
+
+    @AutoLogOutput
+    public double getNextCoralElevatorPosition() {
+        return AutoScore.getNextCoralElevatorPos().getAsDouble();
+    }
+
+    @AutoLogOutput
+    public double getNextAlgaeElevatorPosition() {
+        return AutoScore.getNextAlgaeElevatorPos().getAsDouble();
     }
 }

@@ -43,19 +43,19 @@ public class CoralEndEffectorConstants {
 
     /* CORAL WRIST MOTOR */
     public static final double CORAL_L4_POS = 0.69;
-    public static final double CORAL_L3_POS = 0.625;
+    public static final double CORAL_L3_POS = 0.675;
     public static final double CORAL_L2_POS = 0.675;
     public static final double CORAL_L1_POS = 0.61;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.136; // 0.203 // 0.132
-    public static final double CORAL_WRIST_DEFAULT_POS = 0.3;
+    public static final double CORAL_HP_INTAKE_POS = 0.14; // 0.136
+    public static final double CORAL_WRIST_DEFAULT_POS = 0.4;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 
-    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.48;
+    public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.5;
     public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
     public static final double CORAL_BARGE_POS = CORAL_WRIST_FLIP_THRESHOLD_HIGH;
     public static final double IDLE_WRIST_THRESHOLD = 0.45;
-    public static final double IS_ON_TARGET_THRESHOLD = 0.002;
+    public static final double IS_ON_TARGET_THRESHOLD = 0.015;
     public static final double HORIZONTAL_POSITION = 0.045;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1.4;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL = 3.25;
@@ -82,14 +82,15 @@ public class CoralEndEffectorConstants {
             new Slot1Configs() // TODO: PID Tuning
             .withKS(0)
             .withKV(0)
-            .withKP(100)
+            .withKP(125)
             .withKI(0)
             .withKD(0)
         )
         .withMotionMagic(
             new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(80)
-            .withMotionMagicAcceleration(5)); // 90
+            .withMotionMagicAcceleration(24)
+            .withMotionMagicJerk(100));
 
     private static MotorConfigs coralWristMotorConfigs = new MotorConfigs()
         .withCanId(15)
@@ -120,13 +121,14 @@ public class CoralEndEffectorConstants {
     /* CORAL INTAKE MOTOR */
     public static final double CORAL_INTAKE_IN_VOLTAGE = -4.5;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
-    public static final double CORAL_DEFAULT_VOLTAGE = -0.25;
+    public static final double CORAL_DEFAULT_VOLTAGE = 0;
+    public static final double CORAL_FINAL_RETAINING_VOLTAGE = -2;
 
     private static TalonFXConfiguration coralIntakeMotorFxConfig = 
     new TalonFXConfiguration()
         .withMotorOutput(
             new MotorOutputConfigs()
-                .withInverted(InvertedValue.Clockwise_Positive)
+                .withInverted(InvertedValue.CounterClockwise_Positive)
                 .withNeutralMode(NeutralModeValue.Coast)
         )
         .withCurrentLimits(

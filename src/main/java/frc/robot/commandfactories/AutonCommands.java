@@ -8,6 +8,7 @@ import frc.lib.util.FieldLayout;
 import frc.lib.util.Station;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.robot.subsystems.constants.AutonConstants;
+import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
@@ -37,20 +38,32 @@ public class AutonCommands {
               () -> Drive.getInstance().isOnTarget(
                 reefPosition, 
                 DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
-                DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
-            CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
-            AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
-            AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
-            ElevatorCommands.setTargetPosFromZero(
-              AutoScore.getNextCoralElevatorPos(),
-              AutoScore.getNextAlgaeElevatorPos())
+                DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)
+            ),
+            Commands.parallel(
+              CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
+              AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
+              AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+              CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_FINAL_RETAINING_VOLTAGE),
+              ElevatorCommands.setTargetPosFromZero(
+                AutoScore.getNextCoralElevatorPos(),
+                AutoScore.getNextAlgaeElevatorPos()
+              )
+            )
           )
-        ) // End deadline group (at this point we should be in scoring position)
+        ) 
       ),
       Commands.deadline(
         Commands.waitSeconds(AutonConstants.CORAL_RELEASE_TIME), //Do the following for 0.5 seconds
         GlobalCommands.coralRelease(), // Score the coral
-        GlobalCommands.coralL4NoAlgae()) // Keep the elevator up
+        CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
+        AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
+        AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+        ElevatorCommands.setTargetPosFromZero(
+          AutoScore.getNextCoralElevatorPos(),
+          AutoScore.getNextAlgaeElevatorPos()
+        )
+      )
     ));
   }
 

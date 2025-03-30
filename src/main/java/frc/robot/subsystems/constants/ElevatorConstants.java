@@ -58,8 +58,10 @@ public class ElevatorConstants {
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 20;
-    public static final double CORAL_ACCELERATION = 150;
+    public static final double CORAL_SLOW_VELOCITY = 10;
+    public static final double CORAL_ACCELERATION = 350; // 350 250
+
+    public static final double CORAL_SLOW_ACCELERATION = 469469469469469469469469469.0;
     public static final double CORAL_JERK = 0;
     
     public static final double CORAL_FEEDFORWARDS_WHEN_ZERO = 0;
@@ -73,10 +75,10 @@ public class ElevatorConstants {
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L1 = 61.99;
 
     public static final double CORAL_SLOW_UPPER = 53;
-    public static final double CORAL_SLOW_LOWER = 28;
+    public static final double CORAL_SLOW_LOWER = 26;
 
     public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1;
-    public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 4.69;
+    public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 0; // 4.69
     
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
@@ -88,7 +90,7 @@ public class ElevatorConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(60))
+            .withStatorCurrentLimit(100))
               .withSlot0(
             new Slot0Configs()
                 .withKS(0)

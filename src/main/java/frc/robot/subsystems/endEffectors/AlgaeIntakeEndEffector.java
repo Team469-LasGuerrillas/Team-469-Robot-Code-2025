@@ -11,6 +11,7 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
+import frc.lib.util.AutoScore;
 import frc.robot.subsystems.constants.SensorConstants;
 
 public class AlgaeIntakeEndEffector extends SubsystemBase {
@@ -63,5 +64,10 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
     public boolean hasAlgae() {
         if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_MIN_ALGAE_VALUE) return true;
         return false;
+    }
+
+    @AutoLogOutput
+    public double getNextAlgaeIntakeVoltage() {
+        return AutoScore.getNextAlgaeIntakeVol().getAsDouble();
     }
 }

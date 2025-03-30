@@ -2,12 +2,14 @@ package frc.robot.subsystems.endEffectors;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
+import frc.lib.util.AutoScore;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
@@ -84,10 +86,16 @@ public class CoralWristEndEffector extends SubsystemBase {
         return coralWristInputs.unitPosition;
     }
 
+    @AutoLogOutput
     public boolean isOnTarget() {
         return ToleranceUtil.epsilonEquals(
             requestedPosition.getAsDouble(), 
             coralWristInputs.unitPosition, 
             CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+
+    @AutoLogOutput
+    public double getNextCoralWristPosition() {
+        return AutoScore.getNextCoralWristPos().getAsDouble();
     }
 }

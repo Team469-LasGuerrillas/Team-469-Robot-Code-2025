@@ -4,6 +4,10 @@ import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
+import com.ctre.phoenix.Logger;
+
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 
@@ -15,7 +19,7 @@ public class AutoScore {
     private static DoubleSupplier nextAlgaeElevatorPos = () -> ElevatorConstants.ALGAE_L3_POS;
 
     public static void setNextCoralWristPos(DoubleSupplier newCoralWristPos) { 
-        nextCoralElevatorPos = newCoralWristPos; 
+        nextCoralWristPos = newCoralWristPos; 
     }
     public static DoubleSupplier getNextCoralWristPos() { return nextCoralWristPos; }
 

@@ -101,7 +101,7 @@ public class AlgaeEndEffectorConstants {
         .withMotionMagic(
             new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(80)
-            .withMotionMagicAcceleration(90));
+            .withMotionMagicAcceleration(15));
 
     private static MotorConfigs algaeWristMotorConfigs = new MotorConfigs()    
         .withCanId(14)
