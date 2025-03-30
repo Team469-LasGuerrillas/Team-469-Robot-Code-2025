@@ -58,8 +58,8 @@ public class ElevatorConstants {
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 10;
-    public static final double CORAL_ACCELERATION = 100;
+    public static final double CORAL_SLOW_VELOCITY = 20;
+    public static final double CORAL_ACCELERATION = 150;
     public static final double CORAL_JERK = 0;
     
     public static final double CORAL_FEEDFORWARDS_WHEN_ZERO = 0;
@@ -72,10 +72,11 @@ public class ElevatorConstants {
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L0 = 30.96;
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L1 = 61.99;
 
-    public static final double CORAL_SLOW_UPPER = 48;
+    public static final double CORAL_SLOW_UPPER = 53;
     public static final double CORAL_SLOW_LOWER = 28;
 
     public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1;
+    public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 4.69;
     
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
@@ -143,7 +144,7 @@ public class ElevatorConstants {
             .withMotionMagic(
                 new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(100)
-                .withMotionMagicAcceleration(100));
+                .withMotionMagicAcceleration(150));
 
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()

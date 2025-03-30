@@ -94,18 +94,12 @@ public class Elevator extends SubsystemBase {
             && coralElevatorInputs.velocityUnitsPerSecond < 0
             ) 
                 requestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY;            
-            
-            double requestedHeightOffset = 0;
-            if (isReefRequestedHeight(coralRequestedHeight.getAsDouble()))
-                requestedHeightOffset += 
-                    Units.metersToInches(Drive.getInstance().getLinearControllerError()) 
-                    * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER;
 
             coralElevatorMotor.setDynamicMagicalPositionSetpoint(
-                coralRequestedHeight.getAsDouble() + requestedHeightOffset, appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
+                coralRequestedHeight.getAsDouble(), appliedFF, requestedVelocity, ElevatorConstants.CORAL_ACCELERATION, ElevatorConstants.CORAL_JERK
             );
 
-            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight + requestedHeightOffset, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
+            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
 
         // Automated Self-reset
@@ -247,12 +241,15 @@ public class Elevator extends SubsystemBase {
         return loopsSinceLastReset;
     }
 
-    public boolean isReefRequestedHeight(double requestedHeight) {
-        if (requestedHeight == ElevatorConstants.CORAL_L1_POS
-            || requestedHeight == ElevatorConstants.CORAL_L2_POS
-            || requestedHeight == ElevatorConstants.CORAL_L3_POS
-            || requestedHeight == ElevatorConstants.CORAL_L4_POS) return true;
-        
-        return false;
+    @AutoLogOutput
+    public double getDynamicElevatorHeight(double targetElevatorHeight) {
+        double dynamicElevatorHeight = targetElevatorHeight 
+            + (Drive.getInstance().getErrorFromLinearControllerTarget() 
+            * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER);
+            
+        return ToleranceUtil.clamp(
+            dynamicElevatorHeight, 
+            targetElevatorHeight - ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE,
+            targetElevatorHeight + ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE);
     }
 }

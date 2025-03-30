@@ -89,7 +89,7 @@ public class CoralEndEffectorConstants {
         .withMotionMagic(
             new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(80)
-            .withMotionMagicAcceleration(90));
+            .withMotionMagicAcceleration(5)); // 90
 
     private static MotorConfigs coralWristMotorConfigs = new MotorConfigs()
         .withCanId(15)

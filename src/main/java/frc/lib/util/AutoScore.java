@@ -1,38 +1,41 @@
 package frc.lib.util;
 
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
+
+import java.util.function.DoubleSupplier;
+
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 
 public class AutoScore {
-    private static double nextCoralWristPos = CoralEndEffectorConstants.CORAL_L4_POS;
-    private static double nextAlgaeWristPos = AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS;
-    private static double nextAlgaeIntakeVol = AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE;
-    private static double nextCoralElevatorPos = ElevatorConstants.CORAL_L4_POS;
-    private static double nextAlgaeElevatorPos = ElevatorConstants.ALGAE_L3_POS;
+    private static DoubleSupplier nextCoralWristPos = () -> CoralEndEffectorConstants.CORAL_L4_POS;
+    private static DoubleSupplier nextAlgaeWristPos = () -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS;
+    private static DoubleSupplier nextAlgaeIntakeVol = () -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE;
+    private static DoubleSupplier nextCoralElevatorPos = () -> ElevatorConstants.CORAL_L4_POS;
+    private static DoubleSupplier nextAlgaeElevatorPos = () -> ElevatorConstants.ALGAE_L3_POS;
 
-    public static void setNextCoralWristPos(double newCoralWristPos) { 
+    public static void setNextCoralWristPos(DoubleSupplier newCoralWristPos) { 
         nextCoralElevatorPos = newCoralWristPos; 
     }
-    public static double getNextCoralWristPos() { return nextCoralWristPos; }
+    public static DoubleSupplier getNextCoralWristPos() { return nextCoralWristPos; }
 
-    public static void setNextAlgaeWristPos(double newAlgaeWristPos) { 
+    public static void setNextAlgaeWristPos(DoubleSupplier newAlgaeWristPos) { 
         nextAlgaeWristPos = newAlgaeWristPos; 
     }
-    public static double getNextAlgaeWristPos() { return nextAlgaeWristPos; }
+    public static DoubleSupplier getNextAlgaeWristPos() { return nextAlgaeWristPos; }
 
-    public static void setNextAlgaeIntakeVol(double newAlgaeIntakeVol) { 
+    public static void setNextAlgaeIntakeVol(DoubleSupplier newAlgaeIntakeVol) { 
         nextAlgaeIntakeVol = newAlgaeIntakeVol; 
     }
-    public static double getNextAlgaeIntakeVol() { return nextAlgaeIntakeVol; }
+    public static DoubleSupplier getNextAlgaeIntakeVol() { return nextAlgaeIntakeVol; }
 
-    public static void setNextCoralElevatorPos(double newCoralElevatorPos) { 
+    public static void setNextCoralElevatorPos(DoubleSupplier newCoralElevatorPos) { 
         nextCoralElevatorPos = newCoralElevatorPos; 
     }
-    public static double getNextCoralElevatorPos() { return nextCoralElevatorPos; }
+    public static DoubleSupplier getNextCoralElevatorPos() { return nextCoralElevatorPos; }
 
-    public static void setNextAlgaeElevatorPos(double newAlgaeElevatorPos) { 
+    public static void setNextAlgaeElevatorPos(DoubleSupplier newAlgaeElevatorPos) { 
         nextAlgaeElevatorPos = newAlgaeElevatorPos; 
     }
-    public static double getNextAlgaeElevatorPos() { return nextAlgaeElevatorPos; }
+    public static DoubleSupplier getNextAlgaeElevatorPos() { return nextAlgaeElevatorPos; }
 }

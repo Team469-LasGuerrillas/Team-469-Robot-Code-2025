@@ -50,6 +50,8 @@ public class DriveConstants {
   public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 2.875;
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
+  public static final double FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER = 50;
+  
   // Teleop driving constants
   public static final double STICK_DEADBAND = 0.006;
   public static final double TRIGGER_DEADBAND = 0.25;

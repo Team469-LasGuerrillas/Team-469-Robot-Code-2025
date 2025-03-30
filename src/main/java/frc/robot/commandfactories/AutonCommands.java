@@ -12,6 +12,7 @@ import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
+import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 
 public class AutonCommands {
@@ -22,13 +23,14 @@ public class AutonCommands {
         Commands.deadline(
           Commands.waitUntil(
             () -> 
-              // Elevator.getInstance().isCoralOnTarget() && This is a hacky fix to make elevator come down for some reason
+              Elevator.getInstance().isCoralOnTarget() &&
+              CoralWristEndEffector.getInstance().isOnTarget() &&
               Drive.getInstance().isOnTarget(
                 reefPosition, 
                 DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
                 DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
                 AutonConstants.NUM_OF_ON_TARGET_LOOPS)
-              ),
+          ),
           DriveCommands.pidToReefPose(reefPosition), // Drive to reef
           Commands.sequence(
             Commands.waitUntil( // When we are "approximate" to the reef...
@@ -36,12 +38,12 @@ public class AutonCommands {
                 reefPosition, 
                 DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
                 DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)),
-            CoralEndEffectorCommands.coralWrist(() -> AutoScore.getNextCoralWristPos()),
-            AlgaeEndEffectorCommands.algaeIntake(() -> AutoScore.getNextAlgaeIntakeVol()),
-            AlgaeEndEffectorCommands.algaeWrist(() -> AutoScore.getNextAlgaeWristPos()),
+            CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
+            AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
+            AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
             ElevatorCommands.setTargetPosFromZero(
-              () -> AutoScore.getNextCoralElevatorPos(),
-              () -> AutoScore.getNextAlgaeElevatorPos())
+              AutoScore.getNextCoralElevatorPos(),
+              AutoScore.getNextAlgaeElevatorPos())
           )
         ) // End deadline group (at this point we should be in scoring position)
       ),

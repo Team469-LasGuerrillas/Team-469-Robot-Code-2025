@@ -45,6 +45,7 @@ import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
+import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -63,12 +64,13 @@ public class RobotContainer {
   private final CoralIntakeEndEffector coralIntakeEndEffector;
   private final Climb climb;
   private final Elevator elevator;
+  private final LEDSubsystem led;
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
   private final Vision arducamOne;
   private final Vision arducamTwo;
-
+  
   // Controller
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -108,6 +110,8 @@ public class RobotContainer {
                 arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
                 arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
         
+              led = new LEDSubsystem();
+
                 break;
         
               default:
@@ -139,6 +143,8 @@ public class RobotContainer {
                     arducamOne = new Vision(new VisionIO() {});
                     arducamTwo = new Vision(new VisionIO() {});
           
+                led = new LEDSubsystem();
+
                 break;
             }
 
@@ -147,8 +153,6 @@ public class RobotContainer {
       configureDefaultBindings();
       configureDriverBindings();
       configureOperatorBindings();
-
-      // registerNamedCommands();
   }
         
   private void configureDefaultBindings() {
@@ -190,7 +194,7 @@ public class RobotContainer {
 
     driver.povDown().whileTrue(GlobalCommands.fastRetract());
 
-    driver.povLeft().whileTrue(GlobalCommands.slowRetract());
+    driver.povLeft().whileTrue(GlobalCommands.slowReset());
   }
 
   private void configureOperatorBindings() {
@@ -210,19 +214,26 @@ public class RobotContainer {
 
     operator.a().whileTrue(GlobalCommands.coralL3()); // Algae L2
 
-    // operator.povUp().whileTrue(GlobalCommands.coralL4()); // Coral L4
+    operator.povUp().whileTrue(GlobalCommands.coralL4()); // Coral L4
     
+    operator.povRight().whileTrue(
+      ElevatorCommands.resetElevatorCommand()
+    );
+
+    operator.povLeft().onTrue(
+      ElevatorCommands.resetElevatorHighCommand()
+    );
+
+    operator.back().whileTrue(GlobalCommands.deploy());
+
+    operator.start().whileTrue(GlobalCommands.fastRetract());
+
+    operator.povDown().whileTrue(GlobalCommands.slowReset());
+
     // // JCAO: Removed due to bug causing loss of coral wrist
     // // JCAO: Removed at detroit
     // //operator.a().whileTrue(GlobalCommands.coralL1());
 
-    // operator.povRight().whileTrue(
-    //   ElevatorCommands.resetElevatorCommand()
-    // );
-
-    // operator.povLeft().onTrue(
-    //   ElevatorCommands.resetElevatorHighCommand()
-    // );
   }
 
   /**

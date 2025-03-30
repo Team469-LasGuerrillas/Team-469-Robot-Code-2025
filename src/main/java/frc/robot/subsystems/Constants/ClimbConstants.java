@@ -13,7 +13,7 @@ import frc.lib.interfaces.motor.MotorConfigs;
 public class ClimbConstants {
 
     /*CLIMB MOTOR */
-    public static final double SLOW_RETRACT = -2;
+    public static final double SLOW_RESET = -2;
     public static final double FAST_RETRACT = 12;
     public static final double DEPLOY = 1;
 
@@ -26,7 +26,7 @@ public class ClimbConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
-        .withStatorCurrentLimit(120));
+        .withStatorCurrentLimit(400));
 
     private static MotorConfigs climbMotorConfigs = new MotorConfigs()
         .withCanId(10)

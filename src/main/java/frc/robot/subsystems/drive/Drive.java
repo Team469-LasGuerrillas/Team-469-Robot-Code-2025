@@ -728,6 +728,21 @@ public class Drive extends SubsystemBase {
     return linearController.getError();
   }
 
+  public double getErrorFromLinearControllerTarget() {
+    double robotDistanceFromReefCenter;
+    if (Station.isRed()) 
+      robotDistanceFromReefCenter = FieldLayout.REEF_CENTER_RED
+        .getTranslation().getDistance(getPose().getTranslation());
+    else robotDistanceFromReefCenter = FieldLayout.REEF_CENTER_BLUE
+      .getTranslation().getDistance(getPose().getTranslation());
+    
+    double targetDistanceFromReefCenter;
+    if (linearController == null) targetDistanceFromReefCenter = robotDistanceFromReefCenter;
+    else targetDistanceFromReefCenter = linearController.getTargetDistanceFromReefCenter();
+
+    return robotDistanceFromReefCenter - targetDistanceFromReefCenter;
+  }
+
   public boolean isOnTarget() {
     if (linearController == null || headingController == null) return false;
 
