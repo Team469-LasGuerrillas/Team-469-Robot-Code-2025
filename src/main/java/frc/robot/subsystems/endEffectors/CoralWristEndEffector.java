@@ -48,6 +48,9 @@ public class CoralWristEndEffector extends SubsystemBase {
         double appliedFF = CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL;
         coralWristMotor.setSlot(0);
 
+        if (isCoralWristOnTarget()) isOnTargetLoopCount++;
+        else isOnTargetLoopCount = 0;
+
         if (CoralIntakeEndEffector.getInstance().hasCoral()) {
             appliedFF = CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL;
             coralWristMotor.setSlot(1);
@@ -97,11 +100,7 @@ public class CoralWristEndEffector extends SubsystemBase {
     }
 
     public boolean isCoralWristOnTarget(double numOfOnTargetLoops) {
-        if (isCoralWristOnTarget()) isOnTargetLoopCount++;
-        else isOnTargetLoopCount = 0;
-
-        if (isOnTargetLoopCount >= numOfOnTargetLoops) return true;
-        return false;
+        return isOnTargetLoopCount >= numOfOnTargetLoops;
     }
 
     @AutoLogOutput

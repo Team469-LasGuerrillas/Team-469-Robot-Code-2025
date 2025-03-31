@@ -112,6 +112,9 @@ public class Elevator extends SubsystemBase {
             algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
 
+        if (isCoralElevatorOnTarget()) isOnTargetLoopCount++;
+        else isOnTargetLoopCount = 0;
+
         // Automated Self-reset
         // Requires further testing
         // Logic:
@@ -219,11 +222,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean isCoralElevatorOnTarget(double numOfOnTargetLoops) {
-        if (isCoralElevatorOnTarget()) isOnTargetLoopCount++;
-        else isOnTargetLoopCount = 0;
-
-        if (isOnTargetLoopCount >= numOfOnTargetLoops) return true;
-        return false;
+        return isOnTargetLoopCount >= numOfOnTargetLoops;
     }
 
     @AutoLogOutput
