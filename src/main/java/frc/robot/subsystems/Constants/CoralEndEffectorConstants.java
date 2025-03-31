@@ -60,6 +60,8 @@ public class CoralEndEffectorConstants {
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1.4;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL = 3.25;
     
+    public static final double NUM_OF_ON_TARGET_LOOPS = 5;
+    
     private static TalonFXConfiguration coralWristMotorFxConfig = 
     new TalonFXConfiguration()
         .withMotorOutput(

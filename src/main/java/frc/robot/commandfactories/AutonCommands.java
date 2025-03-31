@@ -10,6 +10,7 @@ import frc.lib.util.FieldLayout.ReefPositions;
 import frc.robot.subsystems.constants.AutonConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
+import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
@@ -24,13 +25,17 @@ public class AutonCommands {
         Commands.deadline(
           Commands.waitUntil(
             () -> 
-              Elevator.getInstance().isCoralOnTarget() &&
-              CoralWristEndEffector.getInstance().isOnTarget() &&
-              Drive.getInstance().isOnTarget(
-                reefPosition, 
-                DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
-                DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
-                AutonConstants.NUM_OF_ON_TARGET_LOOPS)
+              Elevator.getInstance()
+                .isCoralElevatorOnTarget(ElevatorConstants.NUM_OF_ON_TARGET_LOOPS) 
+              && CoralWristEndEffector.getInstance()
+                .isCoralWristOnTarget(CoralEndEffectorConstants.NUM_OF_ON_TARGET_LOOPS) 
+              && Drive.getInstance()
+                .isOnTarget(
+                  reefPosition, 
+                  DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
+                  DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES,
+                  AutonConstants.NUM_OF_ON_TARGET_LOOPS
+                )
           ),
           DriveCommands.pidToReefPose(reefPosition), // Drive to reef
           Commands.sequence(
@@ -109,8 +114,8 @@ public class AutonCommands {
               transformedReefPose, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES)
-          && Elevator.getInstance().isCoralOnTarget()
-          && Elevator.getInstance().isAlgaeOnTarget()
+          && Elevator.getInstance().isCoralElevatorOnTarget()
+          && Elevator.getInstance().isAlgaeElevatorOnTarget()
         ),
         DriveCommands.pidToPoint(() -> transformedReefPose),
         GlobalCommands.coralL3NoAlgae() 
@@ -118,8 +123,8 @@ public class AutonCommands {
       Commands.deadline( // Set Algae Position
         Commands.waitUntil(
           () -> AlgaeWristEndEffector.getInstance().isOnTarget()
-          && Elevator.getInstance().isCoralOnTarget()
-          && Elevator.getInstance().isAlgaeOnTarget()
+          && Elevator.getInstance().isCoralElevatorOnTarget()
+          && Elevator.getInstance().isAlgaeElevatorOnTarget()
         ), 
         GlobalCommands.coralL3()
       ),
@@ -129,8 +134,8 @@ public class AutonCommands {
               reefPosition, 
               DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
               DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES)
-          && Elevator.getInstance().isCoralOnTarget()
-          && Elevator.getInstance().isAlgaeOnTarget()
+          && Elevator.getInstance().isCoralElevatorOnTarget()
+          && Elevator.getInstance().isAlgaeElevatorOnTarget()
         ),
         DriveCommands.pidToReefPose(reefPosition),
         GlobalCommands.coralL3() 
@@ -155,8 +160,8 @@ public class AutonCommands {
       ),
       Commands.deadline( // Raise elevator
         Commands.waitUntil(
-          () -> Elevator.getInstance().isCoralOnTarget()
-          && Elevator.getInstance().isAlgaeOnTarget()
+          () -> Elevator.getInstance().isCoralElevatorOnTarget()
+          && Elevator.getInstance().isAlgaeElevatorOnTarget()
         ),
         GlobalCommands.algaeBarge()
       ),

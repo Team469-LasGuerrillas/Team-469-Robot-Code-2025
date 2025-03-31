@@ -23,6 +23,8 @@ public class CoralWristEndEffector extends SubsystemBase {
 
     private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS;
 
+    double isOnTargetLoopCount = 0;
+
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;
         this.coralWristMotor.setCurrentPosition(0);
@@ -87,11 +89,19 @@ public class CoralWristEndEffector extends SubsystemBase {
     }
 
     @AutoLogOutput
-    public boolean isOnTarget() {
+    public boolean isCoralWristOnTarget() {
         return ToleranceUtil.epsilonEquals(
             requestedPosition.getAsDouble(), 
             coralWristInputs.unitPosition, 
             CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+
+    public boolean isCoralWristOnTarget(double numOfOnTargetLoops) {
+        if (isCoralWristOnTarget()) isOnTargetLoopCount++;
+        else isOnTargetLoopCount = 0;
+
+        if (isOnTargetLoopCount >= numOfOnTargetLoops) return true;
+        return false;
     }
 
     @AutoLogOutput

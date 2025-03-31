@@ -80,6 +80,8 @@ public class ElevatorConstants {
     public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1;
     public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 0; // 4.69
     
+    public static final double NUM_OF_ON_TARGET_LOOPS = 5;
+    
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
     .withMotorOutput(
