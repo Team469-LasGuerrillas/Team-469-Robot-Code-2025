@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -19,6 +20,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.lib.util.hardware.CTREUtil;
+import frc.robot.util.Music;
 
 public class MotorIOTalonFX implements MotorIO {
   protected TalonFX talon;
@@ -45,6 +47,8 @@ public class MotorIOTalonFX implements MotorIO {
 
   public MotorIOTalonFX(MotorConfigs config, MotorIOTalonFX... followerMotors) {
     this.mConfig = config;
+    config.fxConfig.Audio.AllowMusicDurDisable = true;
+
     talon = new TalonFX(config.canId, config.canBus);
 
     CTREUtil.applyConfiguration(talon, config.fxConfig);
@@ -63,13 +67,17 @@ public class MotorIOTalonFX implements MotorIO {
         () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, signals), talon.getDeviceID());
     CTREUtil.tryUntilOK(() -> talon.optimizeBusUtilization(), talon.getDeviceID());
 
+    Music.addInstrument(talon);
+
     for (int i = 0; i < followerMotors.length; i++) {
       followerMotors[i].talon.setControl(new StrictFollower(talon.getDeviceID()));
+      Music.addInstrument(followerMotors[i].talon);
     }
   }
 
   public MotorIOTalonFX(MotorConfigs mConfig, CancoderConfigs ccConfig) {
     this.mConfig = mConfig;
+    mConfig.fxConfig.Audio.AllowMusicDurDisable = true;
 
     talon = new TalonFX(mConfig.canId, mConfig.canBus);
     cancoder = new CANcoder(ccConfig.canId, ccConfig.canBus);
@@ -90,6 +98,8 @@ public class MotorIOTalonFX implements MotorIO {
     CTREUtil.tryUntilOK(
       () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, signals), talon.getDeviceID());
     CTREUtil.tryUntilOK(() -> talon.optimizeBusUtilization(), talon.getDeviceID());
+
+    Music.addInstrument(talon);
   }
 
   private double rotorToUnits(double rotor) {

@@ -101,8 +101,8 @@ public class FieldLayout {
       double currentDistance = Math.abs(currentPose.getTranslation().getDistance(entry.getValue().getTranslation()));
       double currentRotationRadians = Math.abs(currentPose.getRotation().minus(entry.getValue().getRotation()).getRadians());
 
-      double currentMagnitudeOfChange = Math.sqrt(1 * Math.pow(currentDistance, 2) + Math.pow((1 / RADIANS_PER_METER_EQUIVALENCE) * currentRotationRadians, 2));
-      
+      double currentMagnitudeOfChange = Math.hypot(currentDistance, (1 / RADIANS_PER_METER_EQUIVALENCE) * currentRotationRadians);
+
       if (currentMagnitudeOfChange < smallestMagnitudeOfChange) {
         smallestMagnitudeOfChange = currentMagnitudeOfChange;
         closestReefPosition = entry.getKey();
