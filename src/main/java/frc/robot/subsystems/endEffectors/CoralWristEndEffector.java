@@ -100,7 +100,7 @@ public class CoralWristEndEffector extends SubsystemBase {
     }
 
     public boolean isCoralWristOnTarget(double numOfOnTargetLoops) {
-        return isOnTargetLoopCount >= numOfOnTargetLoops;
+        return isOnTargetLoopCount > numOfOnTargetLoops;
     }
 
     @AutoLogOutput

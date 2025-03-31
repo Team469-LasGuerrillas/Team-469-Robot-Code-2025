@@ -222,7 +222,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean isCoralElevatorOnTarget(double numOfOnTargetLoops) {
-        return isOnTargetLoopCount >= numOfOnTargetLoops;
+        return isOnTargetLoopCount > numOfOnTargetLoops;
     }
 
     @AutoLogOutput
