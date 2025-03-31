@@ -34,6 +34,8 @@ public class FieldLayout {
   public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
+  public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 3;
+
   public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
@@ -88,14 +90,18 @@ public class FieldLayout {
 
   private static ReefPositions findClosestReefPose(HashMap<ReefPositions, Pose2d> reefPositionPose) {
     Pose2d currentPose = Drive.getInstance().getPose();
-    double shortestDistance = 999999999999999.0;
+    double smallestMagnitudeOfChange = 99999999999.0;
+
     ReefPositions closestReefPosition = ReefPositions.ALB;
 
     for (Map.Entry<ReefPositions, Pose2d> entry : reefPositionPose.entrySet()) {
       double currentDistance = Math.abs(currentPose.getTranslation().getDistance(entry.getValue().getTranslation()));
+      double currentRotationRadians = Math.abs(currentPose.getRotation().minus(entry.getValue().getRotation()).getRadians());
 
-      if (currentDistance < shortestDistance) {
-        shortestDistance = currentDistance;
+      double currentMagnitudeOfChange = Math.sqrt(1 * Math.pow(currentDistance, 2) + Math.pow((1 / RADIANS_PER_METER_EQUIVALENCE) * currentRotationRadians, 2));
+      
+      if (currentMagnitudeOfChange < smallestMagnitudeOfChange) {
+        smallestMagnitudeOfChange = currentMagnitudeOfChange;
         closestReefPosition = entry.getKey();
       }
     }
