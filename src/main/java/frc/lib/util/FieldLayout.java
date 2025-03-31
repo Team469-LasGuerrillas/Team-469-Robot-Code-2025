@@ -22,14 +22,17 @@ public class FieldLayout {
 
   private static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
-  public static final double FIELD_WIDTH = aprilTagFieldLayout.getFieldWidth();
-  public static final double FIELD_LENGTH = aprilTagFieldLayout.getFieldLength();
+  public static final double FIELD_WIDTH = aprilTagFieldLayout.getFieldWidth(); // Y
+  public static final double FIELD_LENGTH = aprilTagFieldLayout.getFieldLength(); // X
 
   public static final Pose2d HUMAN_PLAYER_BLUE_LEFT = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
   public static final Pose2d HUMAN_PLAYER_RED_LEFT = new Pose2d(FIELD_LENGTH - 1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(130 + 180));
 
   public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
   public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.5, 7.35, Rotation2d.fromDegrees(-130 + 180));
+
+  public static final Pose2d BARGE_POSITION_RED = new Pose2d(FIELD_LENGTH/2 + 1.5, FIELD_WIDTH/2 - 3, Rotation2d.fromDegrees(90));
+  public static final Pose2d BARGE_POSITION_BLUE = new Pose2d(FIELD_LENGTH/2 - 1.5, FIELD_WIDTH/2 + 3, Rotation2d.fromDegrees(-90));
 
   public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
@@ -107,5 +110,9 @@ public class FieldLayout {
     }
 
     return closestReefPosition;
+  }
+
+  public static Pose2d reefPositionToPose2d(ReefPositions reefPosition) {
+    return reefPositionPoseLeft.getOrDefault(reefPosition, reefPositionPoseRight.get(reefPosition));
   }
 }

@@ -7,12 +7,23 @@ import frc.lib.util.FieldLayout.ReefPositions;
 import frc.robot.commandfactories.AutonCommands;
 
 public class Autons {
-  public static Command startD() {
+  public static Command centerOnePiece() {
     ReefPositions targetReefPosition = ReefPositions.DLB;
     if (Station.isRed()) targetReefPosition = ReefPositions.DLR;
     
     return Commands.sequence(
       AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition)
+    );
+  }
+
+  public static Command centerOnePiecePlusAlgae() {
+    ReefPositions targetReefPosition = ReefPositions.DLB;
+    if (Station.isRed()) targetReefPosition = ReefPositions.DLR;
+    
+    return Commands.sequence(
+      AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition),
+      AutonCommands.descoreAlgaeFromReefPosition(targetReefPosition),
+      AutonCommands.scoreAlgaeInBarge()
     );
   }
 

@@ -40,8 +40,8 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-left",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-11.683), Units.inchesToMeters(2.811), Units.inchesToMeters(5.975)), // 5.599 in cad
-          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(220))
+          new Translation3d(Units.inchesToMeters(-11.984), Units.inchesToMeters(4.982), Units.inchesToMeters(6.046 - 0.125)), // minus an eighth for carpet squish
+          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(215))
         )
       );
   
@@ -49,8 +49,8 @@ public class VisionConstants {
       VisionIOLimelight.getInstance(
         "limelight-right",
         new Pose3d(
-          new Translation3d(Units.inchesToMeters(-11.683), Units.inchesToMeters(-2.811), Units.inchesToMeters(5.975)),
-          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(-220))
+          new Translation3d(Units.inchesToMeters(-11.984), Units.inchesToMeters(-4.982), Units.inchesToMeters(6.046 - 0.125)),
+          new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(25), Units.degreesToRadians(-215))
         )
       );
 

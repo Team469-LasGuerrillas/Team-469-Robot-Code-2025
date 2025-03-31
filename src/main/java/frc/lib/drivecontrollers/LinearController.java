@@ -7,6 +7,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.lib.util.FieldLayout;
+import frc.lib.util.Station;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -51,12 +53,12 @@ public class LinearController {
 
     xController.reset(
       Drive.getInstance().getPose().getX(), 
-      0 //Drive.getInstance().fieldVelocity().dx
+      Drive.getInstance().fieldVelocity().dx * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
     );
 
     yController.reset(
       Drive.getInstance().getPose().getY(), 
-      0 //Drive.getInstance().fieldVelocity().dy
+      Drive.getInstance().fieldVelocity().dy * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
     );
   }
 
@@ -96,5 +98,23 @@ public class LinearController {
 
   public Pose2d getTargetPose() {
     return goalPoseSupplier.get();
+  }
+
+  public double getError() {
+    double xError = xController.getPositionError(); 
+    double yError = yController.getPositionError();
+    return Math.hypot(xError, yError);
+  }
+
+  public double getTargetDistanceFromReefCenter() {
+    double xError;
+    if (Station.isRed()) xError = Math.abs(FieldLayout.REEF_CENTER_RED.getX() - xController.getGoal().position);
+    else xError = Math.abs(FieldLayout.REEF_CENTER_BLUE.getX() - xController.getGoal().position);
+
+    double yError;
+    if (Station.isRed()) yError = Math.abs(FieldLayout.REEF_CENTER_RED.getY() - yController.getGoal().position);
+    else yError = Math.abs(FieldLayout.REEF_CENTER_BLUE.getY() - yController.getGoal().position);
+
+    return Math.hypot(xError, yError);
   }
 }

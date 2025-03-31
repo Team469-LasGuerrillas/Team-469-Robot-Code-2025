@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
-import frc.lib.interfaces.sensor.SensorIOBeamBreak;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
 import frc.lib.interfaces.sensor.SensorIO;
 

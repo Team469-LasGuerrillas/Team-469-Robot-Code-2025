@@ -2,14 +2,14 @@ package frc.robot.subsystems.endEffectors;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
+import frc.lib.util.AutoScore;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
@@ -22,6 +22,8 @@ public class CoralWristEndEffector extends SubsystemBase {
     MotorIOInputsAutoLogged coralWristInputs = new MotorIOInputsAutoLogged();
 
     private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS;
+
+    double isOnTargetLoopCount = 0;
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;
@@ -45,6 +47,9 @@ public class CoralWristEndEffector extends SubsystemBase {
 
         double appliedFF = CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL;
         coralWristMotor.setSlot(0);
+
+        if (isCoralWristOnTarget()) isOnTargetLoopCount++;
+        else isOnTargetLoopCount = 0;
 
         if (CoralIntakeEndEffector.getInstance().hasCoral()) {
             appliedFF = CoralEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL;
@@ -86,10 +91,20 @@ public class CoralWristEndEffector extends SubsystemBase {
         return coralWristInputs.unitPosition;
     }
 
-    public boolean isOnTarget() {
+    @AutoLogOutput
+    public boolean isCoralWristOnTarget() {
         return ToleranceUtil.epsilonEquals(
             requestedPosition.getAsDouble(), 
             coralWristInputs.unitPosition, 
             CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+
+    public boolean isCoralWristOnTarget(double numOfOnTargetLoops) {
+        return isOnTargetLoopCount > numOfOnTargetLoops;
+    }
+
+    @AutoLogOutput
+    public double getNextCoralWristPosition() {
+        return AutoScore.getNextCoralWristPos().getAsDouble();
     }
 }

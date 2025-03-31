@@ -31,7 +31,7 @@ public class Dashboard {
     //     : stream
     // );
 
-    autoChooser.setDefaultOption("1 Piece Center", Autons.startD());
+    autoChooser.setDefaultOption("1 Piece Center", Autons.centerOnePiece());
     autoChooser.addOption("3 Piece Left", Autons.threePieceLeft());
     autoChooser.addOption("3 Piece Right", Autons.threePieceRight());
 

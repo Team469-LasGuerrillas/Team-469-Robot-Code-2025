@@ -5,17 +5,15 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
+import frc.lib.util.AutoScore;
 import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.subsystems.constants.SensorConstants;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 
 public class AlgaeWristEndEffector extends SubsystemBase {
@@ -46,7 +44,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
         Logger.processInputs("Algae Wrist", algaeWristInputs);
     
         // TODO: UMMMMM SHOULDN'T THIS BE REQUESTED POSITION??????
-        if (isPositionAllowed(getWristPosition()))
+        if (isPositionAllowed(requestedPosition.getAsDouble()))
             algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), -Math.cos((requestedPosition.getAsDouble() - AlgaeEndEffectorConstants.ALGAE_WRIST_HORZIONTAL_POS) * Math.PI * 2) * AlgaeEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
     }
 
@@ -81,11 +79,17 @@ public class AlgaeWristEndEffector extends SubsystemBase {
         return algaeWristInputs.unitPosition;
     }
 
+    @AutoLogOutput
     public boolean isOnTarget() {
         return ToleranceUtil.epsilonEquals(
             requestedPosition.getAsDouble(), 
             algaeWristInputs.unitPosition, 
             AlgaeEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+
+    @AutoLogOutput
+    public double getNextAlgaeWristPosition() {
+        return AutoScore.getNextAlgaeWristPos().getAsDouble();
     }
 }
 

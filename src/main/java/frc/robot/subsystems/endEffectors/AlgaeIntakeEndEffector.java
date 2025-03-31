@@ -11,10 +11,8 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
-import frc.robot.subsystems.constants.CoralEndEffectorConstants;
-import frc.robot.subsystems.constants.ElevatorConstants;
+import frc.lib.util.AutoScore;
 import frc.robot.subsystems.constants.SensorConstants;
-import frc.robot.subsystems.elevator.Elevator;
 
 public class AlgaeIntakeEndEffector extends SubsystemBase {
     private static AlgaeIntakeEndEffector instance;
@@ -66,5 +64,10 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
     public boolean hasAlgae() {
         if (CANRangeInputs.distance < SensorConstants.CAN_RANGE_MIN_ALGAE_VALUE) return true;
         return false;
+    }
+
+    @AutoLogOutput
+    public double getNextAlgaeIntakeVoltage() {
+        return AutoScore.getNextAlgaeIntakeVol().getAsDouble();
     }
 }

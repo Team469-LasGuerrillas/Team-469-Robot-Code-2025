@@ -5,9 +5,6 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.hardware.CANrange;
-
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.interfaces.motor.MotorIO;
@@ -16,7 +13,6 @@ import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
 import frc.lib.util.FieldLayout;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
-import frc.robot.subsystems.constants.SensorConstants;
 import frc.robot.subsystems.drive.Drive;
 
 public class CoralIntakeEndEffector extends SubsystemBase {

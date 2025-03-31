@@ -14,6 +14,7 @@ import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.elevator.Elevator;
 
 public class DriveCommands {
   public static Command acceptTeleopFieldOriented(CommandXboxController controller, boolean isDefault) {
@@ -95,26 +96,21 @@ public class DriveCommands {
   }
 
   public static Command pidToReefPose(ReefPositions position) {
-    Pose2d poseRight = FieldLayout.reefPositionPoseRight.get(position);
-    Pose2d poseLeft = FieldLayout.reefPositionPoseLeft.get(position);
-    Pose2d realPose;
+    Pose2d reefPose = FieldLayout.reefPositionToPose2d(position);
 
-    if (poseRight != null) {
-      realPose = poseRight;
-    } else {
-      realPose = poseLeft;
-    }
-
-    return pidToPoint(() -> realPose);
+    return pidToPoint(() -> reefPose);
 
     // return Commands.sequence(
     //   Commands.deadline(
     //     Commands.waitUntil(
-    //       () -> Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
+    //       () -> (
+    //         Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
+    //         && Elevator.getInstance().isCoralOnTarget()
+    //         )
     //     ),
-    //     pidToPoint(() -> realPose.transformBy(FieldLayout.L1_TRANSFORM))
+    //     pidToPoint(() -> reefPose.transformBy(FieldLayout.L1_TRANSFORM))
     //   ),
-    //   pidToPoint(() -> realPose)
+    //   pidToPoint(() -> reefPose)
     // );
   }
 
@@ -127,6 +123,18 @@ public class DriveCommands {
   public static Command pidToClosestReefPoseRight() {
     return Commands.deferredProxy(
       () -> pidToReefPose(FieldLayout.findClosestReefPoseRight())
+    );
+  }
+
+  public static Command autoScoreToClosestReefPoseLeft() {
+    return Commands.deferredProxy(
+      () -> AutonCommands.driveAndAutoScore(FieldLayout.findClosestReefPoseLeft())
+    );
+  }
+
+  public static Command autoScoreToClosestReefPoseRight() {
+    return Commands.deferredProxy(
+      () -> AutonCommands.driveAndAutoScore(FieldLayout.findClosestReefPoseRight())
     );
   }
 }

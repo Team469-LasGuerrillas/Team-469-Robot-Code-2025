@@ -62,7 +62,6 @@ import frc.lib.drivecontrollers.FieldRobotSpeedsConversion;
 import frc.lib.drivecontrollers.HeadingController;
 import frc.lib.drivecontrollers.LinearController;
 import frc.lib.drivecontrollers.TeleopDriveController;
-import frc.lib.interfaces.vision.VisionIO.PoseObservation;
 import frc.lib.util.Clock;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.MonkeyState;
@@ -721,6 +720,27 @@ public class Drive extends SubsystemBase {
     if (linearController == null || headingController == null) return new Pose2d();
 
     return linearController.getTargetPose();
+  }
+
+  public double getLinearControllerError() {
+    if (linearController == null) return 0;
+
+    return linearController.getError();
+  }
+
+  public double getErrorFromLinearControllerTarget() {
+    double robotDistanceFromReefCenter;
+    if (Station.isRed()) 
+      robotDistanceFromReefCenter = FieldLayout.REEF_CENTER_RED
+        .getTranslation().getDistance(getPose().getTranslation());
+    else robotDistanceFromReefCenter = FieldLayout.REEF_CENTER_BLUE
+      .getTranslation().getDistance(getPose().getTranslation());
+    
+    double targetDistanceFromReefCenter;
+    if (linearController == null) targetDistanceFromReefCenter = robotDistanceFromReefCenter;
+    else targetDistanceFromReefCenter = linearController.getTargetDistanceFromReefCenter();
+
+    return robotDistanceFromReefCenter - targetDistanceFromReefCenter;
   }
 
   public boolean isOnTarget() {

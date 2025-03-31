@@ -13,9 +13,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -27,9 +24,6 @@ import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
 import frc.robot.autons.Autons;
-import frc.robot.commandfactories.AlgaeEndEffectorCommands;
-import frc.robot.commandfactories.AutonCommands;
-import frc.robot.commandfactories.CoralEndEffectorCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.ElevatorCommands;
 import frc.robot.commandfactories.GlobalCommands;
@@ -40,7 +34,6 @@ import frc.robot.subsystems.constants.ClimbConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
-import frc.robot.subsystems.constants.SensorConstants;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -52,6 +45,7 @@ import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
+import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.vision.Vision;
 
 
@@ -70,12 +64,13 @@ public class RobotContainer {
   private final CoralIntakeEndEffector coralIntakeEndEffector;
   private final Climb climb;
   private final Elevator elevator;
+  private final LEDSubsystem led;
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
   private final Vision arducamOne;
   private final Vision arducamTwo;
-
+  
   // Controller
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -115,6 +110,8 @@ public class RobotContainer {
                 arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
                 arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
         
+              led = new LEDSubsystem();
+
                 break;
         
               default:
@@ -146,6 +143,8 @@ public class RobotContainer {
                     arducamOne = new Vision(new VisionIO() {});
                     arducamTwo = new Vision(new VisionIO() {});
           
+                led = new LEDSubsystem();
+
                 break;
             }
 
@@ -154,8 +153,6 @@ public class RobotContainer {
       configureDefaultBindings();
       configureDriverBindings();
       configureOperatorBindings();
-
-      // registerNamedCommands();
   }
         
   private void configureDefaultBindings() {
@@ -175,11 +172,11 @@ public class RobotContainer {
     driver.a().whileTrue(Autons.threePieceLeft());
 
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-        DriveCommands.pidToClosestReefPoseRight()
+        DriveCommands.autoScoreToClosestReefPoseRight()
     );
 
     driver.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-        DriveCommands.pidToClosestReefPoseLeft()
+        DriveCommands.autoScoreToClosestReefPoseLeft()
     );
 
     driver.start().onTrue(
@@ -192,6 +189,12 @@ public class RobotContainer {
     driver.rightBumper().onTrue(
       GlobalCommands.coralRelease()
     );
+
+    driver.povRight().whileTrue(GlobalCommands.deploy());
+
+    driver.povDown().whileTrue(GlobalCommands.fastRetract());
+
+    driver.povLeft().whileTrue(GlobalCommands.slowReset());
   }
 
   private void configureOperatorBindings() {
@@ -203,26 +206,18 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(GlobalCommands.algaeProcessor());
 
-    operator.y().whileTrue(GlobalCommands.coralL4NoAlgae()); // Algae L3 + Coral L4
+    operator.y().whileTrue(GlobalCommands.coralL4NoAlgaeAutoScore()); // Algae L3 + Coral L4
     
-    operator.b().whileTrue(GlobalCommands.coralL3NoAlgae()); // Coral L3
+    operator.b().whileTrue(GlobalCommands.coralL3NoAlgaeAutoScore()); // Coral L3
 
     operator.x().whileTrue(GlobalCommands.coralL2()); // Coral L2
 
-    operator.a().whileTrue(GlobalCommands.coralL3()); // Algae L2
+    // operator.a().whileTrue(GlobalCommands.coralL3AutoScore()); // Algae L2
 
-    operator.povUp().whileTrue(GlobalCommands.coralL4()); // Coral L4
+    operator.a().whileTrue(GlobalCommands.coralL2AutoScore());
+
+    operator.povUp().whileTrue(GlobalCommands.coralL4AutoScore()); // Coral L4
     
-    // JCAO: Removed due to bug causing loss of coral wrist
-    // JCAO: Removed at detroit
-    //operator.a().whileTrue(GlobalCommands.coralL1());
-
-    // operator.povUp().whileTrue(GlobalCommands.deploy());
-
-    // operator.povDown().whileTrue(GlobalCommands.fastRetract());
-
-    // operator.povLeft().or(operator.povRight()).whileTrue(GlobalCommands.slowRetract());
-
     operator.povRight().whileTrue(
       ElevatorCommands.resetElevatorCommand()
     );
@@ -230,6 +225,17 @@ public class RobotContainer {
     operator.povLeft().onTrue(
       ElevatorCommands.resetElevatorHighCommand()
     );
+
+    operator.back().whileTrue(GlobalCommands.deploy());
+
+    operator.start().whileTrue(GlobalCommands.fastRetract());
+
+    operator.povDown().whileTrue(GlobalCommands.slowReset());
+
+    // // JCAO: Removed due to bug causing loss of coral wrist
+    // // JCAO: Removed at detroit
+    // //operator.a().whileTrue(GlobalCommands.coralL1());
+
   }
 
   /**
