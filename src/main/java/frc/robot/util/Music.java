@@ -25,6 +25,6 @@ public class Music {
     }
 
     public static void addInstrument(ParentDevice instrument) {
-        music.addInstrument(instrument);
+        music.addInstrument(instrument, 0);
     }
 }
