@@ -25,7 +25,7 @@ public class CoralEndEffectorConstants {
     
     /* SENSOR CANRANGE */
     private static final double SIGNAL_STRENGTH_THRESHOLD = 2750;
-    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.08;
+    private static final double PROXIMITY_DETECTION_THRESHOLD_METERS = 0.09;
 
     private static CANrangeConfiguration canRangeConfig = new CANrangeConfiguration()
         .withFovParams(
@@ -47,7 +47,7 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L2_POS = 0.675;
     public static final double CORAL_L1_POS = 0.61;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.14; // 0.136
+    public static final double CORAL_HP_INTAKE_POS = 0.136; // 0.136
     public static final double CORAL_WRIST_DEFAULT_POS = 0.4;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 
@@ -55,12 +55,12 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
     public static final double CORAL_BARGE_POS = CORAL_WRIST_FLIP_THRESHOLD_HIGH;
     public static final double IDLE_WRIST_THRESHOLD = 0.45;
-    public static final double IS_ON_TARGET_THRESHOLD = 0.015;
+    public static final double IS_ON_TARGET_THRESHOLD = 0.019;
     public static final double HORIZONTAL_POSITION = 0.045;
-    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1.4;
+    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL = 3.25;
     
-    public static final double NUM_OF_ON_TARGET_LOOPS = 5;
+    public static final int NUM_OF_ON_TARGET_LOOPS = 7;
     
     private static TalonFXConfiguration coralWristMotorFxConfig = 
     new TalonFXConfiguration()
@@ -77,14 +77,14 @@ public class CoralEndEffectorConstants {
             new Slot0Configs() // TODO: PID Tuning
             .withKS(0)
             .withKV(0)
-            .withKP(100)
+            .withKP(200)
             .withKI(0)
             .withKD(0)
         ).withSlot1(
             new Slot1Configs() // TODO: PID Tuning
             .withKS(0)
             .withKV(0)
-            .withKP(125)
+            .withKP(217)
             .withKI(0)
             .withKD(0)
         )
@@ -121,10 +121,10 @@ public class CoralEndEffectorConstants {
     public static MotorIOTalonFX coralWristMotor = new MotorIOTalonFX(coralWristMotorConfigs, coralWristCancoderConfigs);
 
     /* CORAL INTAKE MOTOR */
-    public static final double CORAL_INTAKE_IN_VOLTAGE = -4.5;
+    public static final double CORAL_INTAKE_IN_VOLTAGE = -4.69;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
-    public static final double CORAL_DEFAULT_VOLTAGE = 0;
-    public static final double CORAL_FINAL_RETAINING_VOLTAGE = -2;
+    public static final double CORAL_DEFAULT_VOLTAGE = -2;
+    public static final double CORAL_FINAL_RETAINING_VOLTAGE = -4.69;
 
     private static TalonFXConfiguration coralIntakeMotorFxConfig = 
     new TalonFXConfiguration()

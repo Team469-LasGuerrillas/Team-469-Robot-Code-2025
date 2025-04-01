@@ -74,7 +74,7 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_WRIST_BARGE_POS = 0.12;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
     public static final double ALGAE_WRIST_L2_L3 = 0.31;
-    public static final double IS_ON_TARGET_THRESHOLD = 0.002;
+    public static final double IS_ON_TARGET_THRESHOLD = 0.01;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
     public static final double ALGAE_WRIST_HORZIONTAL_POS = 0.23;
     public static final double ALGAE_EXTENSION_THRESHOLD = 0.15;

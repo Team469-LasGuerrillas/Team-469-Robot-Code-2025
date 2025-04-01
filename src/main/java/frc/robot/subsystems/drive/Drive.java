@@ -166,7 +166,7 @@ public class Drive extends SubsystemBase {
 
   private PathfindingCommand pathfindingCommand;
 
-  public double isOnTargetLoopCount = 0;
+  public int isOnTargetLoopCount = 0;
 
   // TunerConstants doesn't include these constants, so they are declared locally
   static final double ODOMETRY_FREQUENCY =
@@ -776,7 +776,7 @@ public class Drive extends SubsystemBase {
     return isOnTarget(targetPose, linearTolerance, headingToleranceDegrees);
   }
 
-  public boolean isOnTarget(ReefPositions targetReefPosition, double linearTolerance, double headingToleranceDegrees, double numOfOnTargetLoops) {
+  public boolean isOnTarget(ReefPositions targetReefPosition, double linearTolerance, double headingToleranceDegrees, int numOfOnTargetLoops) {
     if (isOnTarget(targetReefPosition, linearTolerance, headingToleranceDegrees))
      isOnTargetLoopCount++;
     else isOnTargetLoopCount = 0;

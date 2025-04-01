@@ -43,7 +43,7 @@ public class Elevator extends SubsystemBase {
     double coralRequestedVelocity;
     double coralRequestedAcceleration;
 
-    double isOnTargetLoopCount = 0;
+    int isOnTargetLoopCount = 0;
 
     private Elevator(MotorIO coralElevatorMotor, MotorIO coralElevatorMotorFollower, MotorIO algaeElevatorMotor) {
         this.coralElevatorMotor = coralElevatorMotor;
@@ -215,13 +215,17 @@ public class Elevator extends SubsystemBase {
 
     @AutoLogOutput
     public boolean isCoralElevatorOnTarget() {
+        return isCoralElevatorOnTarget(ElevatorConstants.IS_ON_TARGET_THRESHOLD);
+    }
+
+    public boolean isCoralElevatorOnTarget(double tolerance) {
         boolean target = ToleranceUtil.epsilonEquals(
-            coralRequestedHeight.getAsDouble(), coralElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
+            coralRequestedHeight.getAsDouble(), coralElevatorInputs.unitPosition, tolerance);
 
         return target;
     }
 
-    public boolean isCoralElevatorOnTarget(double numOfOnTargetLoops) {
+    public boolean isCoralElevatorOnTarget(int numOfOnTargetLoops) {
         return isOnTargetLoopCount > numOfOnTargetLoops;
     }
 

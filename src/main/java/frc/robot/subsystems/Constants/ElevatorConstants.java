@@ -28,6 +28,7 @@ public class ElevatorConstants {
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE = GROUND_TO_CORAL_REST_POS_INCHES + 3;
 
     public static final double IS_ON_TARGET_THRESHOLD = 0.25;
+    public static final double IS_ON_TARGET_HUGE = 10;
 
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerFxConfiguration = 
@@ -58,7 +59,7 @@ public class ElevatorConstants {
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 10;
+    public static final double CORAL_SLOW_VELOCITY = 20;
     public static final double CORAL_ACCELERATION = 350; // 350 250
 
     public static final double CORAL_SLOW_ACCELERATION = 469469469469469469469469469.0;
@@ -80,7 +81,7 @@ public class ElevatorConstants {
     public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1;
     public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 0; // 4.69
     
-    public static final double NUM_OF_ON_TARGET_LOOPS = 5;
+    public static final int NUM_OF_ON_TARGET_LOOPS = 5;
     
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()

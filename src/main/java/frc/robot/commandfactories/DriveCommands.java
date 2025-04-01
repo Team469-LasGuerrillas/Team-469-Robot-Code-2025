@@ -13,8 +13,10 @@ import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
 import frc.robot.subsystems.constants.DriveConstants;
+import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 
 public class DriveCommands {
   public static Command acceptTeleopFieldOriented(CommandXboxController controller, boolean isDefault) {
@@ -98,20 +100,21 @@ public class DriveCommands {
   public static Command pidToReefPose(ReefPositions position) {
     Pose2d reefPose = FieldLayout.reefPositionToPose2d(position);
 
-    return pidToPoint(() -> reefPose);
+    // return pidToPoint(() -> reefPose);
 
-    // return Commands.sequence(
-    //   Commands.deadline(
-    //     Commands.waitUntil(
-    //       () -> (
-    //         Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
-    //         && Elevator.getInstance().isCoralOnTarget()
-    //         )
-    //     ),
-    //     pidToPoint(() -> reefPose.transformBy(FieldLayout.L1_TRANSFORM))
-    //   ),
-    //   pidToPoint(() -> reefPose)
-    // );
+    return Commands.sequence(
+      Commands.deadline(
+        Commands.waitUntil(
+          () -> (
+            Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
+            && Elevator.getInstance().isCoralElevatorOnTarget(ElevatorConstants.IS_ON_TARGET_HUGE)
+            && AlgaeWristEndEffector.getInstance().isOnTarget()
+            )
+        ),
+        pidToPoint(() -> reefPose.transformBy(FieldLayout.L1_TRANSFORM))
+      ),
+      pidToPoint(() -> reefPose)
+    );
   }
 
   public static Command pidToClosestReefPoseLeft() {

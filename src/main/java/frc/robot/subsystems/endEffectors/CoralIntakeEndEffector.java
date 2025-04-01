@@ -72,6 +72,11 @@ public class CoralIntakeEndEffector extends SubsystemBase {
     public void setVoltage(DoubleSupplier voltage) {
         requestedVoltage = voltage;
     }   
+
+    public void setDefault() {
+        if (hasCoral()) setVoltage(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
+        else setVoltage(() -> 0);
+    }
     
     @AutoLogOutput
     public boolean hasCoral() {

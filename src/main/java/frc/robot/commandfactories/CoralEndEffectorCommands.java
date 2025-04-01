@@ -18,7 +18,7 @@ public class CoralEndEffectorCommands {
     }
 
     public static Command coralIntakeDefault() {
-        return Commands.startRun(() -> coralIntakeEndEffector.setAutoIntake(), () -> coralIntakeEndEffector.setAutoIntake(), coralIntakeEndEffector);
+        return Commands.startRun(() -> coralIntakeEndEffector.setDefault(), () -> coralIntakeEndEffector.setDefault(), coralIntakeEndEffector);
     }
 
     public static Command coralWrist(DoubleSupplier position) {

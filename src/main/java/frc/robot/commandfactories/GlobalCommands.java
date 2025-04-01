@@ -69,7 +69,7 @@ public class GlobalCommands {
   public static Command coralL4NoAlgaeAutoScore() {
     return Commands.parallel(
             CoralEndEffectorCommands.coralWristAutoScore(() -> CoralEndEffectorConstants.CORAL_L4_POS),
-            AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
+            AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
             AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
             ElevatorCommands.setTargetPosFromZeroAutoScore(
               () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.CORAL_L4_POS), 
@@ -203,7 +203,7 @@ public class GlobalCommands {
   }
   
   public static Command defaultCoralIntakeEndEffector() {
-    return CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
+    return CoralEndEffectorCommands.coralIntakeDefault();
   }
 
   public static Command defaultAlgaeIntakeEndEffector() {

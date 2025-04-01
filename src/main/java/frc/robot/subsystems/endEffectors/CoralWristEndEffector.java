@@ -23,7 +23,7 @@ public class CoralWristEndEffector extends SubsystemBase {
 
     private DoubleSupplier requestedPosition = () -> CoralEndEffectorConstants.CORAL_WRIST_DEFAULT_POS;
 
-    double isOnTargetLoopCount = 0;
+    int isOnTargetLoopCount = 0;
 
     public CoralWristEndEffector(MotorIO coralWristMotor) {
         this.coralWristMotor = coralWristMotor;
@@ -64,15 +64,15 @@ public class CoralWristEndEffector extends SubsystemBase {
     }
 
     private double getClosestAllowedPosition(double targetPosition) {
-        if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH
+        if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() <= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE
+            && targetPosition > CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD) {
+            return CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD;
+        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH;
         } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
-        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() <= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE
-            && targetPosition > CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD) {
-            return CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD;
         } else {
             return targetPosition;
         }
@@ -99,7 +99,7 @@ public class CoralWristEndEffector extends SubsystemBase {
             CoralEndEffectorConstants.IS_ON_TARGET_THRESHOLD);
     }
 
-    public boolean isCoralWristOnTarget(double numOfOnTargetLoops) {
+    public boolean isCoralWristOnTarget(int numOfOnTargetLoops) {
         return isOnTargetLoopCount > numOfOnTargetLoops;
     }
 

@@ -40,6 +40,7 @@ public class FieldLayout {
   public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 3;
 
   public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
+  public static Transform2d L2_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
 

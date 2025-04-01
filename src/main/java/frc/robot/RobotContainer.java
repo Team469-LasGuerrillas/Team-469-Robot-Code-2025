@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.Orchestra;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -47,6 +49,7 @@ import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.util.Music;
 
 
 /**
