@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.Music;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -111,7 +112,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {Music.stop();}
 
   /** This function is called periodically when disabled. */
   @Override
@@ -144,6 +145,9 @@ public class Robot extends LoggedRobot {
     }
 
     Drive.getInstance().setTeleopMode();
+
+    Music.loadSong("fein.chrp");
+    Music.play();
   }
 
   /** This function is called periodically during operator control. */

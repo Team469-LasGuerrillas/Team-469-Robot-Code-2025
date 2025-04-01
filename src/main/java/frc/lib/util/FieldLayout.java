@@ -37,7 +37,7 @@ public class FieldLayout {
   public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
   public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
-  public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 3;
+  public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 4.69;
 
   public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
   public static Transform2d L2_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());

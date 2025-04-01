@@ -36,6 +36,7 @@ public class LinearController {
             ),
             0.02);
     xController.setTolerance(DriveConstants.LINEAR_TOLERANCE_METERS);
+    xController.setIZone(DriveConstants.I_ZONE_METERS);
 
     yController =
     new ProfiledPIDController(
@@ -48,6 +49,8 @@ public class LinearController {
         ),
         0.02);
     yController.setTolerance(DriveConstants.LINEAR_TOLERANCE_METERS);
+    yController.setIZone(DriveConstants.I_ZONE_METERS);
+
 
     this.goalPoseSupplier = goalPoseSupplier;
 

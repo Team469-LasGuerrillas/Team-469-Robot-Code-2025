@@ -679,7 +679,7 @@ public class Drive extends SubsystemBase {
 
   /** Puts speeds into a twist datatype */
   public Twist2d getRobotRelativeVelocity() {
-    return getChassisSpeeds().toTwist2d(1);
+    return getChassisSpeeds().toTwist2d(0.02);
   }
 
   /** Field relative velocity */
