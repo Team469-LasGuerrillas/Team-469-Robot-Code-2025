@@ -42,4 +42,12 @@ public class AutoScore {
         nextAlgaeElevatorPos = newAlgaeElevatorPos; 
     }
     public static DoubleSupplier getNextAlgaeElevatorPos() { return nextAlgaeElevatorPos; }
+
+    public static void resetAutoScoreToL4() {
+        setNextCoralWristPos(() -> CoralEndEffectorConstants.CORAL_L4_POS);
+        setNextAlgaeWristPos(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS);
+        setNextAlgaeIntakeVol(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE);
+        setNextCoralElevatorPos(() -> ElevatorConstants.CORAL_L4_POS);
+        setNextAlgaeElevatorPos(() -> ElevatorConstants.ALGAE_L3_POS);
+    }
 }

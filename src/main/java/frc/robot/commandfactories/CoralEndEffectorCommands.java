@@ -17,6 +17,10 @@ public class CoralEndEffectorCommands {
         return Commands.startRun(() -> coralIntakeEndEffector.setVoltage(voltage), () -> coralIntakeEndEffector.setVoltage(voltage), coralIntakeEndEffector);
     }
 
+    public static Command coralIntakeNoRequire(DoubleSupplier voltage) {
+        return Commands.startRun(() -> coralIntakeEndEffector.setVoltage(voltage), () -> coralIntakeEndEffector.setVoltage(voltage), new Subsystem[]{});
+    }
+
     public static Command coralIntakeDefault() {
         return Commands.startRun(() -> coralIntakeEndEffector.setDefault(), () -> coralIntakeEndEffector.setDefault(), coralIntakeEndEffector);
     }

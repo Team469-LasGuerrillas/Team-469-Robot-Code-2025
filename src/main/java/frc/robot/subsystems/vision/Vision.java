@@ -4,6 +4,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Dashboard;
 import frc.lib.interfaces.vision.VisionIO;
@@ -15,11 +17,13 @@ import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.VisionConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.LimelightHelpers;
 import frc.lib.interfaces.vision.VisionIOInputsAutoLogged;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -38,6 +42,10 @@ public class Vision extends SubsystemBase {
     io.setTagFiltersOverride(VisionConstants.REEF_TAG_IDS);
   }
 
+  int snapshotCount = 1;
+
+  double megatagDifference = 0;
+
   @Override
   public void periodic() {
     setRobotYaw();
@@ -48,6 +56,11 @@ public class Vision extends SubsystemBase {
     List<PoseObservation> robotPosesRejected = new LinkedList<>();
     
     boolean isOldReefOnlyTime = Clock.time() - lastGoodReefUpdateTime > VisionConstants.LAST_GOOD_UPDATE_TIME_THRESHOLD;
+
+    // if (Math.round(Timer.getFPGATimestamp()) % 5 == 0) {
+    //   LimelightHelpers.takeSnapshot(getCameraName(), "Image: " + snapshotCount);
+    //   snapshotCount++;
+    // }
 
     if (isOldReefOnlyTime) {
       onlyReefUpdateGlobal = false;
@@ -129,6 +142,9 @@ public class Vision extends SubsystemBase {
           robotPosesAccepted.add(observation);
           // System.out.println("ACCEPTING!!! " + getCameraName() + " Tag Type: " + observation.type() + " Tag Count: " + observation.tagCount() + " ambiguity: " + observation.ambiguity() + " z: " + observation.pose().getZ() + "STDS: " + observation.stdDevs());
           
+          megatagDifference = inputs.poseObservations[0].pose().getTranslation().getDistance(
+                              inputs.poseObservations[1].pose().getTranslation());
+          
           targetCount = observation.tagCount();
 
           boolean updateYaw =
@@ -195,4 +211,8 @@ public class Vision extends SubsystemBase {
     return false;
   }
 
+  @AutoLogOutput
+  public double getMegatagDifference() {
+    return megatagDifference;
+  }
 }

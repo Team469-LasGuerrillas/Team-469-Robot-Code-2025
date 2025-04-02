@@ -2,6 +2,7 @@ package frc.robot.autons;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.lib.util.AutoScore;
 import frc.lib.util.Station;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.robot.commandfactories.AutonCommands;
@@ -11,15 +12,17 @@ public class Autons {
     ReefPositions targetReefPosition = ReefPositions.DLB;
     if (Station.isRed()) targetReefPosition = ReefPositions.DLR;
     
+    AutoScore.resetAutoScoreToL4();
+
     return Commands.sequence(
-      AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition)
+      AutonCommands.driveAndAutoScoreInAuton(targetReefPosition)
     );
   }
 
   public static Command centerOnePiecePlusAlgae() {
     ReefPositions targetReefPosition = ReefPositions.DLB;
     if (Station.isRed()) targetReefPosition = ReefPositions.DLR;
-    
+        
     return Commands.sequence(
       AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition),
       AutonCommands.descoreAlgaeFromReefPosition(targetReefPosition),
@@ -37,14 +40,16 @@ public class Autons {
     ReefPositions AL = ReefPositions.ALB;
     if (Station.isRed()) AL = ReefPositions.ALR;
 
+    AutoScore.resetAutoScoreToL4();
+
     return Commands.sequence(
-      AutonCommands.driveAndScoreL4ToReefPosition(EL),
+      AutonCommands.driveAndAutoScoreInAuton(EL),
       AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
-      AutonCommands.driveAndScoreL4ToReefPosition(FL),
+      AutonCommands.driveAndAutoScoreInAuton(FL),
       AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
-      AutonCommands.driveAndScoreL4ToReefPosition(FR),
+      AutonCommands.driveAndAutoScoreInAuton(FR),
       AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
-      AutonCommands.driveAndScoreL4ToReefPosition(AL)
+      AutonCommands.driveAndAutoScoreInAuton(AL)
     );
   }
 
@@ -58,14 +63,16 @@ public class Autons {
     ReefPositions AR = ReefPositions.ARB;
     if (Station.isRed()) AR = ReefPositions.ARR;
 
+    AutoScore.resetAutoScoreToL4();
+
     return Commands.sequence(
-      AutonCommands.driveAndScoreL4ToReefPosition(CR),
+      AutonCommands.driveAndAutoScoreInAuton(CR),
       AutonCommands.driveAndIntakeFromHumanPlayerRight(),
-      AutonCommands.driveAndScoreL4ToReefPosition(BR),
+      AutonCommands.driveAndAutoScoreInAuton(BR),
       AutonCommands.driveAndIntakeFromHumanPlayerRight(),
-      AutonCommands.driveAndScoreL4ToReefPosition(BL),
+      AutonCommands.driveAndAutoScoreInAuton(BL),
       AutonCommands.driveAndIntakeFromHumanPlayerRight(),
-      AutonCommands.driveAndScoreL4ToReefPosition(AR)
+      AutonCommands.driveAndAutoScoreInAuton(AR)
     );
   }
 }

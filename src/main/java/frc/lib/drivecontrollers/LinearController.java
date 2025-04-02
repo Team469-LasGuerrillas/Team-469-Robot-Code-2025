@@ -20,16 +20,34 @@ public class LinearController {
   private final Supplier<Pose2d> goalPoseSupplier;
 
   double maxLinearVelocity = DriveConstants.TELEOP_MAX_LINEAR_VELOCITY;
-  double maxLinearAcceleration = DriveConstants.MAX_LINEAR_ACCEL;
+  double maxLinearAcceleration = DriveConstants.MAX_LINEAR_ACCEL_FINE;
 
   ChassisSpeeds outputLinearSpeeds;
 
-  public LinearController(Supplier<Pose2d> goalPoseSupplier) {
+  public LinearController(Supplier<Pose2d> goalPoseSupplier, boolean runFineStep) {
+    double pValue;
+    double iValue;
+    double dValue;
+    double maxLinearAcceleration;
+
+    if (runFineStep) {
+      pValue = DriveConstants.LINEAR_P_FINE;
+      iValue = DriveConstants.LINEAR_I_FINE;
+      dValue = DriveConstants.LINEAR_D_FINE;
+      maxLinearAcceleration = DriveConstants.MAX_LINEAR_ACCEL_FINE;
+    }
+    else {
+      pValue = DriveConstants.LINEAR_P_GROSS;
+      iValue = DriveConstants.LINEAR_I_GROSS;
+      dValue = DriveConstants.LINEAR_D_GROSS;
+      maxLinearAcceleration = DriveConstants.MAX_LINEAR_ACCEL_GROSS;
+    }
+
     xController =
         new ProfiledPIDController(
-            DriveConstants.LINEAR_P,
-            DriveConstants.LINEAR_I,
-            DriveConstants.LINEAR_D,
+            pValue,
+            iValue,
+            dValue,
             new TrapezoidProfile.Constraints(
               maxLinearVelocity,
               maxLinearAcceleration
@@ -40,9 +58,9 @@ public class LinearController {
 
     yController =
     new ProfiledPIDController(
-        DriveConstants.LINEAR_P,
-        DriveConstants.LINEAR_I,
-        DriveConstants.LINEAR_D,
+        pValue,
+        iValue,
+        dValue,
         new TrapezoidProfile.Constraints(
           maxLinearVelocity,
           maxLinearAcceleration
@@ -50,7 +68,6 @@ public class LinearController {
         0.02);
     yController.setTolerance(DriveConstants.LINEAR_TOLERANCE_METERS);
     yController.setIZone(DriveConstants.I_ZONE_METERS);
-
 
     this.goalPoseSupplier = goalPoseSupplier;
 

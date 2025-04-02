@@ -97,6 +97,10 @@ public class Elevator extends SubsystemBase {
             coralRequestedVelocity = ElevatorConstants.CORAL_VELOCITY;
             coralRequestedAcceleration = ElevatorConstants.CORAL_ACCELERATION;
 
+            if (coralElevatorInputs.velocityUnitsPerSecond <= 0) {
+                coralRequestedAcceleration = ElevatorConstants.CORAL_DOWN_ACCELERATION;
+            }
+
             if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER 
             && coralElevatorInputs.unitPosition > ElevatorConstants.CORAL_SLOW_LOWER 
             && coralElevatorInputs.velocityUnitsPerSecond <= 0
@@ -104,9 +108,14 @@ public class Elevator extends SubsystemBase {
                 coralRequestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY; 
                 coralRequestedAcceleration = ElevatorConstants.CORAL_SLOW_ACCELERATION;   
             }        
-            
+            double dynamicOffset = 0;
+            // if (isReefRequestedHeight()) 
+            //     dynamicOffset = coralRequestedHeight.getAsDouble()
+            //     + (Units.metersToInches(Drive.getInstance().getErrorFromLinearControllerTargetMeters()) 
+            //     * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER);
+
             coralElevatorMotor.setDynamicMagicalPositionSetpoint(
-                coralRequestedHeight.getAsDouble(), appliedFF, coralRequestedVelocity, coralRequestedAcceleration, ElevatorConstants.CORAL_JERK
+                coralRequestedHeight.getAsDouble() + dynamicOffset, appliedFF, coralRequestedVelocity, coralRequestedAcceleration, ElevatorConstants.CORAL_JERK
             );
 
             algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
@@ -265,13 +274,19 @@ public class Elevator extends SubsystemBase {
     @AutoLogOutput
     public double getDynamicElevatorHeight(double targetElevatorHeight) {
         double dynamicElevatorHeight = targetElevatorHeight 
-            + (Drive.getInstance().getErrorFromLinearControllerTarget() 
+            + (Units.metersToInches(Drive.getInstance().getErrorFromLinearControllerTargetMeters()) 
             * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER);
 
         return ToleranceUtil.clamp(
             dynamicElevatorHeight, 
             targetElevatorHeight - ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE,
             targetElevatorHeight + ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE);
+    }
+
+    public boolean isReefRequestedHeight() {
+        return coralRequestedHeight.getAsDouble() == ElevatorConstants.CORAL_L2_POS
+            || coralRequestedHeight.getAsDouble() == ElevatorConstants.CORAL_L3_POS
+            || coralRequestedHeight.getAsDouble() == ElevatorConstants.CORAL_L4_POS;
     }
 
     @AutoLogOutput

@@ -16,7 +16,8 @@ public class DriveConstants {
   public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
-  public static final double MAX_LINEAR_ACCEL = 0.1075; // 0.09
+  public static final double MAX_LINEAR_ACCEL_FINE = 0.2; // 0.09
+  public static final double MAX_LINEAR_ACCEL_GROSS = 0.16; // 0.09
   public static final double MAX_ANGULAR_ACCEL = 0.125;
 
   // Pathplanner PID constants
@@ -32,24 +33,28 @@ public class DriveConstants {
   public static final double HEADING_I = 0.0;
   public static final double HEADING_D = 0.0;
 
-  public static final double HEADING_TOLERANCE_DEGREES = 0.5;
+  public static final double HEADING_TOLERANCE_DEGREES = 0.4;
   public static final double L1_HEADING_TOLERANCE_DEGREES = 10;
-  public static final double HEADING_TOLERANCE_TO_SCORE_DEGREES = 3;
+  public static final double HEADING_TOLERANCE_TO_SCORE_DEGREES = 1.5;
 
-  public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 50;
+  public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 90;
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P = 7.25; // 10
-  public static final double LINEAR_I = 0.7;
-  public static final double LINEAR_D = 0; // 0.3
+  public static final double LINEAR_P_FINE = 3.5; // 7.25
+  public static final double LINEAR_I_FINE = 0;
+  public static final double LINEAR_D_FINE = 0; // 0.3
+
+  public static final double LINEAR_P_GROSS = 4.5; // 7.25
+  public static final double LINEAR_I_GROSS = 0;
+  public static final double LINEAR_D_GROSS = 0; // 0.3
 
   public static final double LINEAR_TOLERANCE_METERS = 0.005;
-  public static final double L1_LINEAR_TOLERANCE_METERS = 0.25;
-  public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.04;
-  public static final double I_ZONE_METERS = 0.5;
+  public static final double L1_LINEAR_TOLERANCE_METERS = 0.1;
+  public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.025;
+  public static final double I_ZONE_METERS = 0.1;
 
-  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 1.469;
+  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 2;
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
   public static final double FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER = 1;

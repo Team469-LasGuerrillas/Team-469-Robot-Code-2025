@@ -10,12 +10,12 @@ public class LEDSubsystem extends SubsystemBase{
     private CANdleConfiguration ledConfig = new CANdleConfiguration();
 
     public LEDSubsystem() {
-        ledConfig.brightnessScalar = 1;
+        ledConfig.brightnessScalar = 0.25;
         LED.configAllSettings(ledConfig);
     }
 
     @Override
     public void periodic() {
-        LED.setLEDs(255, 255, 255);
+        LED.setLEDs(0, 255, 10);
     }
 }

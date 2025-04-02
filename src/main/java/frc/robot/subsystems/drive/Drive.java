@@ -199,7 +199,7 @@ public class Drive extends SubsystemBase {
   private static final PathConstraints CONSTRAINTS =
       new PathConstraints(
           DriveConstants.TELEOP_MAX_LINEAR_VELOCITY,
-          DriveConstants.MAX_LINEAR_ACCEL,
+          DriveConstants.MAX_LINEAR_ACCEL_FINE,
           DriveConstants.TELEOP_MAX_ANGULAR_VELOCITY,
           DriveConstants.MAX_ANGULAR_ACCEL);
 
@@ -527,7 +527,11 @@ public class Drive extends SubsystemBase {
   }
 
   public void setPIDToPointGoal(Supplier<Pose2d> pose) {
-    linearController = new LinearController(pose);
+    setPIDToPointGoal(pose, false);
+  }
+
+  public void setPIDToPointGoal(Supplier<Pose2d> pose, boolean runFineStep) {
+    linearController = new LinearController(pose, runFineStep);
     headingController = new HeadingController(() -> pose.get().getRotation());
     currentDriveMode = DriveMode.PID_TO_POINT;
   }
@@ -539,7 +543,7 @@ public class Drive extends SubsystemBase {
 
   public void setAimAssist(Pose2d pose, double aimAssistWeight) {
     this.aimAssistWeight = aimAssistWeight;
-    linearController = new LinearController(() -> pose);
+    linearController = new LinearController(() -> pose, false);
     headingController = new HeadingController(() -> pose.getRotation());
     currentDriveMode = DriveMode.AIMASSIST;
   }
@@ -728,7 +732,8 @@ public class Drive extends SubsystemBase {
     return linearController.getError();
   }
 
-  public double getErrorFromLinearControllerTarget() {
+  @AutoLogOutput
+  public double getErrorFromLinearControllerTargetMeters() {
     double robotDistanceFromReefCenter;
     if (Station.isRed()) 
       robotDistanceFromReefCenter = FieldLayout.REEF_CENTER_RED

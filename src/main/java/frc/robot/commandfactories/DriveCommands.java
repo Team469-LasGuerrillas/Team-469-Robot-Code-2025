@@ -2,9 +2,12 @@ package frc.robot.commandfactories;
 
 import java.util.function.Supplier;
 
+import javax.xml.crypto.dsig.Transform;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -12,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
+import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -97,10 +101,23 @@ public class DriveCommands {
       () -> Drive.getInstance().clearMode());
   }
 
+  public static Command pidToPoint(Supplier<Pose2d> pose, boolean runFineStep) {
+    return Commands.startEnd(
+      () -> Drive.getInstance().setPIDToPointGoal(pose, runFineStep),
+      () -> Drive.getInstance().clearMode());
+  }
+
   public static Command pidToReefPose(ReefPositions position) {
     Pose2d reefPose = FieldLayout.reefPositionToPose2d(position);
 
     // return pidToPoint(() -> reefPose);
+    final Transform2d newTransform;
+
+    if (AlgaeWristEndEffector.getInstance().getRequestedPosition() == AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3) {
+      newTransform = FieldLayout.ALGAE_TRANSFORM;
+    } else {
+      newTransform = FieldLayout.L1_TRANSFORM;
+    }
 
     return Commands.sequence(
       Commands.deadline(
@@ -111,9 +128,9 @@ public class DriveCommands {
             && AlgaeWristEndEffector.getInstance().isOnTarget()
             )
         ),
-        pidToPoint(() -> reefPose.transformBy(FieldLayout.L1_TRANSFORM))
+        pidToPoint(() -> reefPose.transformBy(newTransform), false)
       ),
-      pidToPoint(() -> reefPose)
+      pidToPoint(() -> reefPose, true)
     );
   }
 

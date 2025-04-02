@@ -25,22 +25,23 @@ public class FieldLayout {
   public static final double FIELD_WIDTH = aprilTagFieldLayout.getFieldWidth(); // Y
   public static final double FIELD_LENGTH = aprilTagFieldLayout.getFieldLength(); // X
 
-  public static final Pose2d HUMAN_PLAYER_BLUE_LEFT = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
-  public static final Pose2d HUMAN_PLAYER_RED_LEFT = new Pose2d(FIELD_LENGTH - 1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(130 + 180));
+  public static final Pose2d HUMAN_PLAYER_BLUE_LEFT = new Pose2d(1.55, 7.4, Rotation2d.fromDegrees(130));
+  public static final Pose2d HUMAN_PLAYER_RED_LEFT = new Pose2d(FIELD_LENGTH - 1.55, FIELD_WIDTH - 7.4, Rotation2d.fromDegrees(130 + 180));
 
-  public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
-  public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.5, 7.35, Rotation2d.fromDegrees(-130 + 180));
+  public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.55, FIELD_WIDTH - 7.4, Rotation2d.fromDegrees(-130));
+  public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.55, 7.4, Rotation2d.fromDegrees(-130 + 180));
 
   public static final Pose2d BARGE_POSITION_RED = new Pose2d(FIELD_LENGTH/2 + 1.5, FIELD_WIDTH/2 - 3, Rotation2d.fromDegrees(90));
   public static final Pose2d BARGE_POSITION_BLUE = new Pose2d(FIELD_LENGTH/2 - 1.5, FIELD_WIDTH/2 + 3, Rotation2d.fromDegrees(-90));
 
-  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
-  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.35, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
+  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.33, Units.inchesToMeters(6.5) - 0.02, new Rotation2d(Math.PI));
+  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.33, Units.inchesToMeters(-6.5) - 0.02, new Rotation2d(Math.PI));
 
   public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 4.69;
 
   public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
-  public static Transform2d L2_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
+  public static Transform2d L2_TRANSFORM = new Transform2d(0.4, 0, new Rotation2d());
+  public static Transform2d ALGAE_TRANSFORM = new Transform2d(0.7, 0, new Rotation2d());
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
 

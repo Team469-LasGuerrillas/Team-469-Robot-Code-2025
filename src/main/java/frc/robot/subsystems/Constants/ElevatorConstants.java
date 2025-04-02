@@ -28,7 +28,7 @@ public class ElevatorConstants {
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE = GROUND_TO_CORAL_REST_POS_INCHES + 3;
 
     public static final double IS_ON_TARGET_THRESHOLD = 0.25;
-    public static final double IS_ON_TARGET_HUGE = 10;
+    public static final double IS_ON_TARGET_HUGE = 20;
 
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerFxConfiguration = 
@@ -59,11 +59,12 @@ public class ElevatorConstants {
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 20;
-    public static final double CORAL_ACCELERATION = 350; // 350 250
+    public static final double CORAL_SLOW_VELOCITY = 12;
+    public static final double CORAL_ACCELERATION = 330; // 350 250
+    public static final double CORAL_DOWN_ACCELERATION = 75; // 350 250
 
     public static final double CORAL_SLOW_ACCELERATION = 469469469469469469469469469.0;
-    public static final double CORAL_JERK = 0;
+    public static final double CORAL_JERK = 4000;
     
     public static final double CORAL_FEEDFORWARDS_WHEN_ZERO = 0;
     public static final double CORAL_FEEDFORWARD_VOLTS_L0 = 0.4625;
@@ -78,8 +79,8 @@ public class ElevatorConstants {
     public static final double CORAL_SLOW_UPPER = 53;
     public static final double CORAL_SLOW_LOWER = 26;
 
-    public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1;
-    public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 0; // 4.69
+    public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 5;
+    public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 4.69; // 4.69
     
     public static final int NUM_OF_ON_TARGET_LOOPS = 5;
     
@@ -100,12 +101,12 @@ public class ElevatorConstants {
                 .withKV(0)
                 .withKP(4)
                 .withKI(0)
-                .withKD(0.1)
+                .withKD(0.2)
             )
             .withSlot1(new Slot1Configs()
                 .withKS(0)
                 .withKV(0)
-                .withKP(3)
+                .withKP(3.5)
                 .withKI(0)
                 .withKD(0)
             );
@@ -126,7 +127,7 @@ public class ElevatorConstants {
     public static final double ALGAE_PROCESSOR_POS = ALGAE_DEFAULT_POS; // 9.469
     public static final double ALGAE_L2_POS = 29.5;
     public static final double ALGAE_L3_POS = 44;
-    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 11;
+    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 13;
     public static final double ALGAE_GROUND_POS = 5;
 
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =

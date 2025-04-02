@@ -151,11 +151,11 @@ public class RobotContainer {
                 break;
             }
 
-    Dashboard.addWidgets(shuffleboardTab);
-        
-      configureDefaultBindings();
-      configureDriverBindings();
-      configureOperatorBindings();
+            configureDefaultBindings();
+            configureDriverBindings();
+            configureOperatorBindings();
+
+            Dashboard.addWidgets(shuffleboardTab);
   }
         
   private void configureDefaultBindings() {
@@ -190,7 +190,7 @@ public class RobotContainer {
     );
 
     driver.rightBumper().onTrue(
-      GlobalCommands.coralRelease()
+      GlobalCommands.coralReleaseNoRequire()
     );
 
     driver.povRight().whileTrue(GlobalCommands.deploy());
@@ -213,11 +213,9 @@ public class RobotContainer {
     
     operator.b().whileTrue(GlobalCommands.coralL3NoAlgaeAutoScore()); // Coral L3
 
-    operator.x().whileTrue(GlobalCommands.coralL2()); // Coral L2
+    operator.x().whileTrue(GlobalCommands.coralL2AutoScore()); // Coral L2
 
-    // operator.a().whileTrue(GlobalCommands.coralL3AutoScore()); // Algae L2
-
-    operator.a().whileTrue(GlobalCommands.coralL2AutoScore());
+    operator.a().whileTrue(GlobalCommands.coralL3()); // Algae L2
 
     operator.povUp().whileTrue(GlobalCommands.coralL4AutoScore()); // Coral L4
     
@@ -229,11 +227,11 @@ public class RobotContainer {
       ElevatorCommands.resetElevatorHighCommand()
     );
 
-    operator.back().whileTrue(GlobalCommands.deploy());
+    operator.back().whileTrue(GlobalCommands.coralL4());
 
-    operator.start().whileTrue(GlobalCommands.fastRetract());
+    operator.start().whileTrue(GlobalCommands.coralL2());
 
-    operator.povDown().whileTrue(GlobalCommands.slowReset());
+    operator.povDown().whileTrue(GlobalCommands.coralL3());
 
     // // JCAO: Removed due to bug causing loss of coral wrist
     // // JCAO: Removed at detroit

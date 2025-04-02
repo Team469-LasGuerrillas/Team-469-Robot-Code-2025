@@ -146,8 +146,8 @@ public class Robot extends LoggedRobot {
 
     Drive.getInstance().setTeleopMode();
 
-    Music.loadSong("fein.chrp");
-    Music.play();
+    // Music.loadSong("fein.chrp");
+    // Music.play();
   }
 
   /** This function is called periodically during operator control. */

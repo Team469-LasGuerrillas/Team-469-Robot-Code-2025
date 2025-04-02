@@ -1,5 +1,7 @@
 package frc.robot.commandfactories;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
@@ -54,8 +56,8 @@ public class GlobalCommands {
             AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
             AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
             ElevatorCommands.setTargetPosFromZeroAutoScore(
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.CORAL_L4_POS), 
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.ALGAE_L3_POS)
+              () -> ElevatorConstants.CORAL_L4_POS, 
+              () -> ElevatorConstants.ALGAE_L3_POS
             )
           );
   }
@@ -67,15 +69,18 @@ public class GlobalCommands {
   }
 
   public static Command coralL4NoAlgaeAutoScore() {
-    return Commands.parallel(
+    return Commands.deferredProxy(
+      () -> 
+      Commands.parallel(
             CoralEndEffectorCommands.coralWristAutoScore(() -> CoralEndEffectorConstants.CORAL_L4_POS),
             AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
             AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
             ElevatorCommands.setTargetPosFromZeroAutoScore(
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.CORAL_L4_POS), 
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.ALGAE_L3_POS)
+              () -> ElevatorConstants.CORAL_L4_POS, 
+              () -> ElevatorConstants.ALGAE_L3_POS
             )
-          );
+      )
+    );
   }
 
   public static Command coralL3() {
@@ -93,8 +98,8 @@ public class GlobalCommands {
             AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE),
             AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3),
             ElevatorCommands.setTargetPosFromZeroAutoScore(
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.CORAL_L3_POS), 
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.ALGAE_L2_POS)
+              () -> ElevatorConstants.CORAL_L3_POS, 
+              () -> ElevatorConstants.ALGAE_L2_POS
             )
           );
   }
@@ -112,8 +117,8 @@ public class GlobalCommands {
             AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
             AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
             ElevatorCommands.setTargetPosFromZeroAutoScore(
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.CORAL_L3_POS), 
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.ALGAE_L2_POS)
+              () -> ElevatorConstants.CORAL_L3_POS, 
+              () -> ElevatorConstants.ALGAE_L2_POS
             )
           );
   }
@@ -131,8 +136,8 @@ public class GlobalCommands {
             AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
             AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_DEFAULT_POS),
             ElevatorCommands.setTargetPosFromZeroAutoScore(
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.CORAL_L2_POS), 
-              () -> Elevator.getInstance().getDynamicElevatorHeight(ElevatorConstants.ALGAE_DEFAULT_POS)
+              () -> ElevatorConstants.CORAL_L2_POS, 
+              () -> ElevatorConstants.ALGAE_DEFAULT_POS
             )
           );
   }
@@ -181,8 +186,14 @@ public class GlobalCommands {
 
   public static Command coralRelease() {
     return Commands.deadline(
-      Commands.waitSeconds(1),
+      Commands.waitSeconds(0.375),
       CoralEndEffectorCommands.coralIntake(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
+  }
+
+  public static Command coralReleaseNoRequire() {
+    return Commands.deadline(
+      Commands.waitSeconds(1),
+      CoralEndEffectorCommands.coralIntakeNoRequire(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
   }
 
   /* DEFAULT POSITIONS */

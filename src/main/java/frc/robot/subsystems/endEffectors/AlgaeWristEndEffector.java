@@ -44,7 +44,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
         Logger.processInputs("Algae Wrist", algaeWristInputs);
     
         // TODO: UMMMMM SHOULDN'T THIS BE REQUESTED POSITION??????
-        if (isPositionAllowed(requestedPosition.getAsDouble()))
+        if (isPositionAllowed(algaeWristInputs.unitPosition))
             algaeWristMotor.setMagicalPositionSetpoint(requestedPosition.getAsDouble(), -Math.cos((requestedPosition.getAsDouble() - AlgaeEndEffectorConstants.ALGAE_WRIST_HORZIONTAL_POS) * Math.PI * 2) * AlgaeEndEffectorConstants.VOLTAGE_TO_MAINTAIN_HORIZONTAL);
     }
 
