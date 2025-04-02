@@ -681,18 +681,14 @@ public class Drive extends SubsystemBase {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
-  /** Puts speeds into a twist datatype */
-  public Twist2d getRobotRelativeVelocity() {
-    return getChassisSpeeds().toTwist2d(0.02);
+  @AutoLogOutput(key = "SwerveChassisSpeeds/Field")
+  public ChassisSpeeds getFieldVelocity() {
+    return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation());
   }
 
   /** Field relative velocity */
   public Twist2d fieldVelocity() {
-    Translation2d linearFieldVelocity =
-        new Translation2d(getRobotRelativeVelocity().dx, getRobotRelativeVelocity().dy)
-            .rotateBy(getRotation());
-    return new Twist2d(
-        linearFieldVelocity.getX(), linearFieldVelocity.getY(), getRobotRelativeVelocity().dtheta);
+    return getFieldVelocity().toTwist2d(1);
   }
 
   /** Returns the position of each module in radians. */
