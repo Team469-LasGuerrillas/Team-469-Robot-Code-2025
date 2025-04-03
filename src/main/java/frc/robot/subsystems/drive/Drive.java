@@ -112,6 +112,9 @@ public class Drive extends SubsystemBase {
     COAST
   }
 
+  Pose2d lastGoodKnownPose = new Pose2d();
+  int poseResetCounter = 0;
+
   class DriveState implements MonkeyState {
     public Pose3d robotPose;
     public DriveMode driveMode;
@@ -466,8 +469,21 @@ public class Drive extends SubsystemBase {
     state.driveMode = currentDriveMode;
     state.addState(Clock.time());
 
+    Pose2d currentPose = getPose();
+    if (currentPose.getX() != currentPose.getX() 
+        || currentPose.getY() != currentPose.getY()
+        || currentPose.getRotation().getRadians() != currentPose.getRotation().getRadians()) {
+        setPose(lastGoodKnownPose);
+        poseResetCounter++;
+    }
+    else {
+      lastGoodKnownPose = currentPose;
+    }
   }
 
+  @AutoLogOutput
+  public double getPoseResetCounter() { return poseResetCounter; }
+  
   private Command followPathInternal(PathPlannerPath path) {
     return new FollowPathCommand(
         path,
