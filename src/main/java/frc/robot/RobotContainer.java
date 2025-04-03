@@ -227,11 +227,11 @@ public class RobotContainer {
       ElevatorCommands.resetElevatorHighCommand()
     );
 
-    operator.back().whileTrue(GlobalCommands.coralL4());
+    operator.back().whileTrue(GlobalCommands.coralL2());
 
-    operator.start().whileTrue(GlobalCommands.coralL2());
+    operator.start().whileTrue(GlobalCommands.coralL3());
 
-    operator.povDown().whileTrue(GlobalCommands.coralL3());
+    operator.povDown().whileTrue(GlobalCommands.coralL4());
 
     // // JCAO: Removed due to bug causing loss of coral wrist
     // // JCAO: Removed at detroit

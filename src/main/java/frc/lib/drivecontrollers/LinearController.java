@@ -73,12 +73,12 @@ public class LinearController {
 
     xController.reset(
       Drive.getInstance().getPose().getX(), 
-      Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
+      0 // Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
     );
 
     yController.reset(
       Drive.getInstance().getPose().getY(), 
-      Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
+      0// Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
     );
   }
 

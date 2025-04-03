@@ -16,8 +16,8 @@ public class DriveConstants {
   public static final double WHEEL_COF = 1.5;
 
   // Pathfinding constants
-  public static final double MAX_LINEAR_ACCEL_FINE = 0.2; // 0.09
-  public static final double MAX_LINEAR_ACCEL_GROSS = 0.16; // 0.09
+  public static final double MAX_LINEAR_ACCEL_FINE = 0.4; // 0.09
+  public static final double MAX_LINEAR_ACCEL_GROSS = 0.23; // 0.16
   public static final double MAX_ANGULAR_ACCEL = 0.125;
 
   // Pathplanner PID constants
@@ -29,7 +29,7 @@ public class DriveConstants {
   public static final double PP_HEADING_D = 0.0;
 
   // Heading Controller
-  public static final double HEADING_P = 7;
+  public static final double HEADING_P = 4;
   public static final double HEADING_I = 0.0;
   public static final double HEADING_D = 0.0;
 
@@ -41,13 +41,13 @@ public class DriveConstants {
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P_FINE = 3.5; // 7.25
-  public static final double LINEAR_I_FINE = 0;
+  public static final double LINEAR_P_FINE = 4.5; // 7.25
+  public static final double LINEAR_I_FINE = 0.7;
   public static final double LINEAR_D_FINE = 0; // 0.3
 
   public static final double LINEAR_P_GROSS = 4.5; // 7.25
   public static final double LINEAR_I_GROSS = 0;
-  public static final double LINEAR_D_GROSS = 0; // 0.3
+  public static final double LINEAR_D_GROSS = 2.75; // 0.3
 
   public static final double LINEAR_TOLERANCE_METERS = 0.005;
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.1;

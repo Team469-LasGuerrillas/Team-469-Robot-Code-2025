@@ -94,7 +94,7 @@ public class Vision extends SubsystemBase {
         || observation.pose().getY()
             >= Units.feetToMeters(26);
 
-        boolean hasFastAngularVel = Math.abs(Drive.getInstance().getRobotRelativeVelocity().dtheta) > VisionConstants.MAX_YAW_RATE;
+        boolean hasFastAngularVel = Math.abs(Drive.getInstance().getFieldVelocity().omegaRadiansPerSecond) > VisionConstants.MAX_YAW_RATE;
 
         boolean rejectPose = 
           hasNoTags ||
@@ -201,7 +201,7 @@ public class Vision extends SubsystemBase {
   }
 
   public void setRobotYaw() {
-    io.setRobotRotationUpdate(Drive.getInstance().getRotation(), new Rotation2d(Drive.getInstance().getRobotRelativeVelocity().dtheta));
+    io.setRobotRotationUpdate(Drive.getInstance().getRotation(), new Rotation2d(Drive.getInstance().getFieldVelocity().omegaRadiansPerSecond));
   }
 
   public boolean isReefId(int id) {

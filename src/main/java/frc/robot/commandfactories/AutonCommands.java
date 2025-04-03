@@ -250,14 +250,14 @@ public class AutonCommands {
         AlgaeEndEffectorCommands.algaeWristDefault(),
         ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_DEFAULT_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
       );
-  }
+}
 
   public static Command driveAndIntakeFromHumanPlayerRight() {
     Pose2d targetHPPose;
     if (Station.isRed()) targetHPPose = FieldLayout.HUMAN_PLAYER_RED_RIGHT;
     else targetHPPose = FieldLayout.HUMAN_PLAYER_BLUE_RIGHT;
 
-    return
+    return 
       Commands.deadline(
         Commands.waitUntil(
           () -> CoralIntakeEndEffector.getInstance().hasCoral()), // Run this group until we have a coral
