@@ -59,7 +59,7 @@ public class ElevatorConstants {
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 12;
+    public static final double CORAL_SLOW_VELOCITY = 25;
     public static final double CORAL_ACCELERATION = 330; // 350 250
     public static final double CORAL_DOWN_ACCELERATION = 75; // 350 250
 

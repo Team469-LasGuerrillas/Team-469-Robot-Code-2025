@@ -229,7 +229,7 @@ public class RobotContainer {
 
     operator.back().whileTrue(GlobalCommands.coralL2());
 
-    operator.start().whileTrue(GlobalCommands.coralL3());
+    operator.start().whileTrue(GlobalCommands.coralL3NoAlgae());
 
     operator.povDown().whileTrue(GlobalCommands.coralL4());
 

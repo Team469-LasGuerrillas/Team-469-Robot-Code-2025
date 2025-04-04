@@ -31,7 +31,9 @@ public class HeadingController {
     this.goalHeadingSupplier = goalHeadingSupplier;
 
     controller.reset(
-        Drive.getInstance().getRotation().getRadians(), Drive.getInstance().fieldVelocity().dtheta);
+        Drive.getInstance().getRotation().getRadians(), 
+        0 //Drive.getInstance().fieldVelocity().dtheta
+      );
   }
 
   public double update() {

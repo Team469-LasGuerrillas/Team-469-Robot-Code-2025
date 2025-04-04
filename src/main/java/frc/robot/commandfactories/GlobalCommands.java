@@ -181,7 +181,7 @@ public class GlobalCommands {
   public static Command algaeRelease() {
     return Commands.deadline(
       Commands.waitSeconds(2),
-      AlgaeEndEffectorCommands.algaeIntake(() ->  AlgaeEndEffectorConstants.ALGAE_INTAKE_OUT_VOLTAGE));
+      AlgaeEndEffectorCommands.algaeDynamicIntakeOut());
   }
 
   public static Command coralRelease() {

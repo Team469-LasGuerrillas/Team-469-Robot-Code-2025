@@ -25,11 +25,11 @@ public class FieldLayout {
   public static final double FIELD_WIDTH = aprilTagFieldLayout.getFieldWidth(); // Y
   public static final double FIELD_LENGTH = aprilTagFieldLayout.getFieldLength(); // X
 
-  public static final Pose2d HUMAN_PLAYER_BLUE_LEFT = new Pose2d(1.57, 7.15, Rotation2d.fromDegrees(130));
-  public static final Pose2d HUMAN_PLAYER_RED_LEFT = new Pose2d(FIELD_LENGTH - 1.57, FIELD_WIDTH - 7.15, Rotation2d.fromDegrees(130 + 180));
+  public static final Pose2d HUMAN_PLAYER_BLUE_LEFT = new Pose2d(1.5, 7.35, Rotation2d.fromDegrees(130));
+  public static final Pose2d HUMAN_PLAYER_RED_LEFT = new Pose2d(FIELD_LENGTH - 1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(130 + 180));
 
-  public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.57, FIELD_WIDTH - 7.15, Rotation2d.fromDegrees(-130));
-  public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.57, 7.15, Rotation2d.fromDegrees(-130 + 180));
+  public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
+  public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.5, 7.35, Rotation2d.fromDegrees(-130 + 180));
 
   public static final Pose2d BARGE_POSITION_RED = new Pose2d(FIELD_LENGTH/2 + 1.5, FIELD_WIDTH/2 - 3, Rotation2d.fromDegrees(90));
   public static final Pose2d BARGE_POSITION_BLUE = new Pose2d(FIELD_LENGTH/2 - 1.5, FIELD_WIDTH/2 + 3, Rotation2d.fromDegrees(-90));

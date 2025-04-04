@@ -19,6 +19,10 @@ public class AlgaeEndEffectorCommands {
         return Commands.startRun(() -> algaeIntakeEndEffector.setVoltage(voltage), () -> algaeIntakeEndEffector.setVoltage(voltage), algaeIntakeEndEffector);
     }
 
+    public static Command algaeDynamicIntakeOut() {
+        return Commands.startRun(() -> algaeIntakeEndEffector.setDynamicOutVoltage(), () -> algaeIntakeEndEffector.setDynamicOutVoltage(), algaeIntakeEndEffector);
+    }
+
     public static Command algaeWrist(DoubleSupplier position) {
         return Commands.startRun(() -> algaeWristEndEffector.setPosition(position), () -> algaeWristEndEffector.setPosition(position), algaeWristEndEffector);
     }

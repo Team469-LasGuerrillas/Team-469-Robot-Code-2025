@@ -12,6 +12,7 @@ import frc.lib.interfaces.motor.MotorIOInputsAutoLogged;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.sensor.SensorIOInputsAutoLogged;
 import frc.lib.util.AutoScore;
+import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.SensorConstants;
 
 public class AlgaeIntakeEndEffector extends SubsystemBase {
@@ -52,6 +53,13 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
         //         algaeIntakeMotor.setOpenLoopVoltage(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
         algaeIntakeMotor.setOpenLoopVoltage(voltage);
     }  
+
+    public void setDynamicOutVoltage() {
+        if (AlgaeWristEndEffector.getInstance().getRequestedPosition() 
+            == AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS)
+                setVoltage(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_PROCESSOR_OUT_VOLTAGE);
+        else setVoltage(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_BARGE_OUT_VOLTAGE);
+    }
 
     @AutoLogOutput
     public boolean isSeeingAlgae() {
