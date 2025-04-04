@@ -132,9 +132,9 @@ public class Elevator extends SubsystemBase {
         // AND the requested position hasn't been changed recently
         // AND a reset hasn't happened recently
         // THEN reset current position to the bottom
-        if (coralElevatorInputs.targetPosition == ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES &&
-            algaeElevatorInputs.targetPosition == ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES &&
-            algaeElevatorInputs.targetPosition != AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS &&
+        if (coralRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES &&
+            algaeRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES &&
+            algaeRequestedHeight.getAsDouble() != AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS &&
             DriverStation.isEnabled() &&
             Math.abs(coralElevatorInputs.velocityUnitsPerSecond) <= 0.05) // This number is just a guess (and can be moved to constants later)
         { 
