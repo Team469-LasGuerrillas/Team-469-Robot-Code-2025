@@ -132,13 +132,24 @@ public class Elevator extends SubsystemBase {
         // AND the requested position hasn't been changed recently
         // AND a reset hasn't happened recently
         // THEN reset current position to the bottom
-        if (coralRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES &&
-            algaeRequestedHeight.getAsDouble() == ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES &&
-            algaeRequestedHeight.getAsDouble() != AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS &&
+        double coralDistanceFromReset = Math.abs(coralElevatorInputs.targetPosition - ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);
+        double algaeDistanceFromReset = Math.abs(algaeElevatorInputs.targetPosition - ElevatorConstants.GROUND_TO_ALGAE_REST_POS_INCHES);
+        double elevatorSpeed = Math.abs(coralElevatorInputs.velocityUnitsPerSecond);
+
+        //System.out.println("Coral from reset: " + coralDistanceFromReset + ". Algae from reset: " + algaeDistanceFromReset
+        //   + ". Elevator Speed: " + elevatorSpeed);
+
+        Logger.recordOutput("Elevator/coralDistanceFromReset", coralDistanceFromReset);
+        Logger.recordOutput("Elevator/algaeDistanceFromReset", algaeDistanceFromReset);
+        Logger.recordOutput("Elevator/elevatorSpeed", elevatorSpeed);
+
+        if (coralDistanceFromReset < 0.25 &&
+            algaeDistanceFromReset < 0.25 &&
+            //algaeElevatorInputs.targetPosition != AlgaeEndEffectorConstants.ALGAE_WRIST_PROCESSOR_POS &&
             DriverStation.isEnabled() &&
-            Math.abs(coralElevatorInputs.velocityUnitsPerSecond) <= 0.05) // This number is just a guess (and can be moved to constants later)
+            elevatorSpeed <= 0.05) // This number is just a guess (and can be moved to constants later)
         { 
-            if (loopsSinceLastReset >= 25) // Conditions met AND have been met for consecutive loops. Trigger automated reset
+            if (loopsSinceLastReset >= 5) // Conditions met AND have been met for consecutive loops. Trigger automated reset
             {
                 loopsSinceLastReset = 0;
                 coralElevatorMotor.setCurrentPosition(ElevatorConstants.GROUND_TO_CORAL_REST_POS_INCHES);

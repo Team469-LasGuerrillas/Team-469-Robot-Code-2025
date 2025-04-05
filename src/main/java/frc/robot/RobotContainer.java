@@ -215,7 +215,7 @@ public class RobotContainer {
 
     operator.x().whileTrue(GlobalCommands.coralL2AutoScore()); // Coral L2
 
-    operator.a().whileTrue(GlobalCommands.coralL3()); // Algae L2
+    operator.a().whileTrue(GlobalCommands.coralL3AutoScore()); // Algae L2
 
     operator.povUp().whileTrue(GlobalCommands.coralL4AutoScore()); // Coral L4
     

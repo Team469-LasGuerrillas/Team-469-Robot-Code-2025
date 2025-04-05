@@ -34,8 +34,8 @@ public class FieldLayout {
   public static final Pose2d BARGE_POSITION_RED = new Pose2d(FIELD_LENGTH/2 + 1.5, FIELD_WIDTH/2 - 3, Rotation2d.fromDegrees(90));
   public static final Pose2d BARGE_POSITION_BLUE = new Pose2d(FIELD_LENGTH/2 - 1.5, FIELD_WIDTH/2 + 3, Rotation2d.fromDegrees(-90));
 
-  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.33, Units.inchesToMeters(6.5) - 0.02, new Rotation2d(Math.PI));
-  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.33, Units.inchesToMeters(-6.5) - 0.02, new Rotation2d(Math.PI));
+  public static Transform2d LEFT_TRANSFORM = new Transform2d(-1.33, Units.inchesToMeters(6.5), new Rotation2d(Math.PI));
+  public static Transform2d RIGHT_TRANSFORM = new Transform2d(-1.33, Units.inchesToMeters(-6.5), new Rotation2d(Math.PI));
 
   public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 4.69;
 

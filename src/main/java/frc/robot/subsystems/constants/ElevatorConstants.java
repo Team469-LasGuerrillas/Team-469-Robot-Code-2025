@@ -59,9 +59,9 @@ public class ElevatorConstants {
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 25;
+    public static final double CORAL_SLOW_VELOCITY = 35;
     public static final double CORAL_ACCELERATION = 330; // 350 250
-    public static final double CORAL_DOWN_ACCELERATION = 75; // 350 250
+    public static final double CORAL_DOWN_ACCELERATION = 110; // 350 250
 
     public static final double CORAL_SLOW_ACCELERATION = 469469469469469469469469469.0;
     public static final double CORAL_JERK = 4000;
@@ -125,7 +125,7 @@ public class ElevatorConstants {
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_DEFAULT_POS = GROUND_TO_ALGAE_REST_POS_INCHES;
     public static final double ALGAE_PROCESSOR_POS = ALGAE_DEFAULT_POS; // 9.469
-    public static final double ALGAE_L2_POS = 29.5;
+    public static final double ALGAE_L2_POS = 32;
     public static final double ALGAE_L3_POS = 44;
     public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 13;
     public static final double ALGAE_GROUND_POS = 5;
