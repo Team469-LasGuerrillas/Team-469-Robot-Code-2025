@@ -322,9 +322,9 @@ public class Drive extends SubsystemBase {
     teleopDriveController = new TeleopDriveController();
 
     if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      setPose(new Pose2d(8, 6, Rotation2d.fromDegrees(0)));
+      setPose(new Pose2d(8, 6, Rotation2d.fromDegrees(0 + 120)));
     } else {
-      setPose(new Pose2d(8, 2, Rotation2d.fromDegrees(180)));
+      setPose(new Pose2d(8, 2, Rotation2d.fromDegrees(180 + 120)));
     }
   }
 
@@ -423,6 +423,8 @@ public class Drive extends SubsystemBase {
         case PID_TO_POINT -> {
           desiredSpeeds = FieldRobotSpeedsConversion.fieldToRobotSpeeds(linearController.update(), getRotation());
           desiredSpeeds.omegaRadiansPerSecond = headingController.update();
+
+          Logger.recordOutput("linearController/linearControllerDriveSubsystemVelocity", Math.hypot(desiredSpeeds.vxMetersPerSecond, desiredSpeeds.vyMetersPerSecond));
           break;
         }
 
@@ -695,6 +697,11 @@ public class Drive extends SubsystemBase {
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
   private ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  @AutoLogOutput(key = "SwerveChassisSpeeds/Velocity")
+  private double getNetVelocity() {
+    return Math.hypot(getChassisSpeeds().vxMetersPerSecond, getChassisSpeeds().vyMetersPerSecond);
   }
 
   @AutoLogOutput(key = "SwerveChassisSpeeds/Field")

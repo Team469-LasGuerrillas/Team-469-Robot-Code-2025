@@ -20,6 +20,8 @@ public class DriveConstants {
   public static final double MAX_LINEAR_ACCEL_GROSS = 0.23; // 0.16
   public static final double MAX_ANGULAR_ACCEL = 0.125;
 
+  public static final double AUTO_VELOCITY = 0.04;
+
   // Pathplanner PID constants
   public static final double PP_TRANSLATION_P = 9;
   public static final double PP_TRANSLATION_I = 2;

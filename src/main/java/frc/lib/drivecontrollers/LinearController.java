@@ -2,6 +2,8 @@ package frc.lib.drivecontrollers;
 
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -19,7 +21,7 @@ public class LinearController {
   private final ProfiledPIDController yController;
   private final Supplier<Pose2d> goalPoseSupplier;
 
-  double maxLinearVelocity = DriveConstants.TELEOP_MAX_LINEAR_VELOCITY;
+  double maxLinearVelocity = DriveConstants.AUTO_VELOCITY;
   double maxLinearAcceleration = DriveConstants.MAX_LINEAR_ACCEL_FINE;
 
   ChassisSpeeds outputLinearSpeeds;
@@ -73,7 +75,7 @@ public class LinearController {
 
     xController.reset(
       Drive.getInstance().getPose().getX(), 
-      0 // Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
+      Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
     );
 
     yController.reset(
@@ -95,6 +97,9 @@ public class LinearController {
     ChassisSpeeds outputLinearSpeeds = new ChassisSpeeds(xOutput, yOutput, 0);
     if (Math.abs(xController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS 
         || Math.abs(yController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS) {
+          double netVelocity = Math.hypot(xOutput, yOutput);
+
+          Logger.recordOutput("linearController/linearControllerVelocity", netVelocity);
           return outputLinearSpeeds;
     }
     else {
