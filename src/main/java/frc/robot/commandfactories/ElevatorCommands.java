@@ -16,7 +16,7 @@ public class ElevatorCommands {
     return Commands.startRun(() -> elevator.setTargetPosFromZero(coralPosition, algaePosition), () -> elevator.setTargetPosFromZero(coralPosition, algaePosition), elevator);
   }
 
-  public static Command setTargetPosFromZeroAutoScore(DoubleSupplier nextCoralPos, DoubleSupplier nextAlgaePos) {
+  public static Command setTargetPosFromZeroAutoScore(Double nextCoralPos, Double nextAlgaePos) {
     return Commands.run(() -> {
       AutoScore.setNextCoralElevatorPos(nextCoralPos);
       AutoScore.setNextAlgaeElevatorPos(nextAlgaePos);

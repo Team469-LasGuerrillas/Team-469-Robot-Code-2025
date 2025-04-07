@@ -89,7 +89,7 @@ public class AlgaeWristEndEffector extends SubsystemBase {
 
     @AutoLogOutput
     public double getNextAlgaeWristPosition() {
-        return AutoScore.getNextAlgaeWristPos().getAsDouble();
+        return AutoScore.getNextAlgaeWristPos();
     }
 }
 

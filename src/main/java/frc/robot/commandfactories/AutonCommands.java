@@ -16,7 +16,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.CoralIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
-import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 
 public class AutonCommands {
@@ -40,7 +39,7 @@ public class AutonCommands {
           ),
           DriveCommands.pidToReefPose(reefPosition), // Drive to reef
           CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_FINAL_RETAINING_VOLTAGE),
-          CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
+          CoralEndEffectorCommands.coralWrist(AutoScore::getNextCoralWristPos),
           Commands.sequence(
             Commands.waitUntil( // When we are "approximate" to the reef...
               () -> Drive.getInstance().isOnTarget(
@@ -49,23 +48,23 @@ public class AutonCommands {
                 DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)
             ),
             Commands.parallel(
-              AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
-              AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+              AlgaeEndEffectorCommands.algaeIntake((AutoScore::getNextAlgaeIntakeVol)),
+              AlgaeEndEffectorCommands.algaeWrist(AutoScore::getNextAlgaeWristPos),
               ElevatorCommands.setTargetPosFromZero(
-                AutoScore.getNextCoralElevatorPos(),
-                AutoScore.getNextAlgaeElevatorPos()
+                AutoScore::getNextCoralElevatorPos,
+                AutoScore::getNextAlgaeElevatorPos
               )
             )
           )
         ),
         Commands.deadline(
           GlobalCommands.coralRelease(), // Score the coral
-          CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
-          AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
-          AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+          CoralEndEffectorCommands.coralWrist(AutoScore::getNextCoralWristPos),
+          AlgaeEndEffectorCommands.algaeIntake(AutoScore::getNextAlgaeIntakeVol),
+          AlgaeEndEffectorCommands.algaeWrist(AutoScore::getNextAlgaeWristPos),
           ElevatorCommands.setTargetPosFromZero(
-            AutoScore.getNextCoralElevatorPos(),
-            AutoScore.getNextAlgaeElevatorPos()
+            AutoScore::getNextCoralElevatorPos,
+            AutoScore::getNextAlgaeElevatorPos
           )
         ),
         Commands.parallel(
@@ -73,12 +72,12 @@ public class AutonCommands {
             () -> FieldLayout.reefPositionToPose2d(reefPosition).transformBy(FieldLayout.L2_TRANSFORM)
           ),
           CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE),
-          CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
-          AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
-          AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+          CoralEndEffectorCommands.coralWrist(AutoScore::getNextCoralWristPos),
+          AlgaeEndEffectorCommands.algaeIntake(AutoScore::getNextAlgaeIntakeVol),
+          AlgaeEndEffectorCommands.algaeWrist(AutoScore::getNextAlgaeWristPos),
           ElevatorCommands.setTargetPosFromZero(
-            AutoScore.getNextCoralElevatorPos(),
-            AutoScore.getNextAlgaeElevatorPos()
+            AutoScore::getNextCoralElevatorPos,
+            AutoScore::getNextAlgaeElevatorPos
           )
         )
       )
@@ -106,7 +105,7 @@ public class AutonCommands {
             ),
             DriveCommands.pidToReefPose(reefPosition), // Drive to reef
             CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_FINAL_RETAINING_VOLTAGE),
-            CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
+            CoralEndEffectorCommands.coralWrist(AutoScore::getNextCoralWristPos),
             Commands.sequence(
               Commands.waitUntil( // When we are "approximate" to the reef...
                 () -> Drive.getInstance().isOnTarget(
@@ -115,11 +114,11 @@ public class AutonCommands {
                   DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)
               ),
               Commands.parallel(
-                AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
-                AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+                AlgaeEndEffectorCommands.algaeIntake(AutoScore::getNextAlgaeIntakeVol),
+                AlgaeEndEffectorCommands.algaeWrist(AutoScore::getNextAlgaeWristPos),
                 ElevatorCommands.setTargetPosFromZero(
-                  AutoScore.getNextCoralElevatorPos(),
-                  AutoScore.getNextAlgaeElevatorPos()
+                  AutoScore::getNextCoralElevatorPos,
+                  AutoScore::getNextAlgaeElevatorPos
                 )
               )
             )
@@ -127,12 +126,12 @@ public class AutonCommands {
         ),
         Commands.deadline(
           GlobalCommands.coralRelease(), // Score the coral
-          CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
-          AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
-          AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
+          CoralEndEffectorCommands.coralWrist(AutoScore::getNextCoralWristPos),
+          AlgaeEndEffectorCommands.algaeIntake(AutoScore::getNextAlgaeIntakeVol),
+          AlgaeEndEffectorCommands.algaeWrist(AutoScore::getNextAlgaeWristPos),
           ElevatorCommands.setTargetPosFromZero(
-            AutoScore.getNextCoralElevatorPos(),
-            AutoScore.getNextAlgaeElevatorPos()
+            AutoScore::getNextCoralElevatorPos,
+            AutoScore::getNextAlgaeElevatorPos
           )
         )
       );

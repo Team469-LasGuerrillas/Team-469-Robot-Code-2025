@@ -45,11 +45,11 @@ public class AlgaeEndEffectorCommands {
         );
     }
 
-    public static Command algaeWristAutoScore(DoubleSupplier nextPos) {
+    public static Command algaeWristAutoScore(Double nextPos) {
         return Commands.run(() -> AutoScore.setNextAlgaeWristPos(nextPos), new Subsystem[]{});
     }
 
-    public static Command algaeIntakeAutoScore(DoubleSupplier nextVol) {
+    public static Command algaeIntakeAutoScore(Double nextVol) {
         return Commands.run(() -> AutoScore.setNextAlgaeIntakeVol(nextVol), new Subsystem[]{});
     }
 }
