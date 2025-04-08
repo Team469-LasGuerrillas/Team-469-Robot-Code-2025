@@ -80,7 +80,7 @@ public class LinearController {
 
     yController.reset(
       Drive.getInstance().getPose().getY(), 
-      0// Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
+      Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
     );
   }
 

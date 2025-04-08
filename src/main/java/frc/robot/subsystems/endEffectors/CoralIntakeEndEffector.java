@@ -77,6 +77,13 @@ public class CoralIntakeEndEffector extends SubsystemBase {
         if (!hasCoral()) setVoltage(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE);
         else setVoltage(() -> 0);
     }
+
+    public void setOutakeVoltage() {
+        if (CoralWristEndEffector.getInstance().getRequestedPosition() 
+            == CoralEndEffectorConstants.CORAL_L1_POS)
+            setVoltage(() -> CoralEndEffectorConstants.CORAL_L1_INTAKE_OUT_VOLTAGE);
+        else setVoltage(() -> CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE);
+    }
     
     @AutoLogOutput
     public boolean hasCoral() {

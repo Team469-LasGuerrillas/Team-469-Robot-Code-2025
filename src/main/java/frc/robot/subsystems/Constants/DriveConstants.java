@@ -10,6 +10,15 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
 
 public class DriveConstants {
+  public static final double DRIVE_BASE_RADIUS =
+  Math.max(
+      Math.max(
+          Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+          Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
+      Math.max(
+          Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+          Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
+    
   // Pathplanner constants
   public static final double ROBOT_MASS_KG = 19.5;
   public static final double ROBOT_MOI = 0.41;
@@ -20,8 +29,6 @@ public class DriveConstants {
   public static final double MAX_LINEAR_ACCEL_GROSS = 0.23; // 0.16
   public static final double MAX_ANGULAR_ACCEL = 0.125;
 
-  public static final double AUTO_VELOCITY = 0.04;
-
   // Pathplanner PID constants
   public static final double PP_TRANSLATION_P = 9;
   public static final double PP_TRANSLATION_I = 2;
@@ -31,7 +38,7 @@ public class DriveConstants {
   public static final double PP_HEADING_D = 0.0;
 
   // Heading Controller
-  public static final double HEADING_P = 4;
+  public static final double HEADING_P = 3;
   public static final double HEADING_I = 0.0;
   public static final double HEADING_D = 0.0;
 
@@ -48,8 +55,8 @@ public class DriveConstants {
   public static final double LINEAR_D_FINE = 0; // 0.3
 
   public static final double LINEAR_P_GROSS = 4.5; // 7.25
-  public static final double LINEAR_I_GROSS = 0;
-  public static final double LINEAR_D_GROSS = 2.75; // 0.3
+  public static final double LINEAR_I_GROSS = 0.7;
+  public static final double LINEAR_D_GROSS = 0; // 0.3
 
   public static final double LINEAR_TOLERANCE_METERS = 0.005;
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.1;
@@ -59,7 +66,7 @@ public class DriveConstants {
   public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 2;
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
-  public static final double FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER = 1;
+  public static final double FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER = 1 / 50;
 
   // Teleop driving constants
   public static final double STICK_DEADBAND = 0.006;
@@ -68,7 +75,9 @@ public class DriveConstants {
 
   public static final double TELEOP_MAX_LINEAR_VELOCITY =
       TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
-  public static final double TELEOP_MAX_ANGULAR_VELOCITY = TELEOP_MAX_LINEAR_VELOCITY / 0.5;
+  public static final double TELEOP_MAX_ANGULAR_VELOCITY = TELEOP_MAX_LINEAR_VELOCITY / DRIVE_BASE_RADIUS;
+
+  public static final double AUTO_VELOCITY = 0.04;
 
   public static final Matrix<N3, N1> FUSED_STD_DEVS = VecBuilder.fill(0.025, 0.025, 0.05);
   public static final Matrix<N3, N1> VR_STD_DEVS = VecBuilder.fill(0.01, 0.01, 0.01);

@@ -143,10 +143,8 @@ public class GlobalCommands {
   }
 
   public static Command coralL1() {
-    // TODO: Remove falsse && in end condition check (JCAO: Forcing command to never end)
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralElevatorOnTarget() && coralWristEndEffector.isCoralWristOnTarget());}),
-      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS),
-      ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L1_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS)
     );
   }
 
@@ -187,7 +185,8 @@ public class GlobalCommands {
   public static Command coralRelease() {
     return Commands.deadline(
       Commands.waitSeconds(0.375),
-      CoralEndEffectorCommands.coralIntake(() ->  CoralEndEffectorConstants.CORAL_INTAKE_OUT_VOLTAGE));
+      CoralEndEffectorCommands.coralOutake()
+    );
   }
 
   public static Command coralReleaseNoRequire() {
