@@ -308,11 +308,11 @@ public class Elevator extends SubsystemBase {
 
     @AutoLogOutput
     public double getNextCoralElevatorPosition() {
-        return AutoScore.getNextCoralElevatorPos();
+        return AutoScore.getNextCoralElevatorPos().getAsDouble();
     }
 
     @AutoLogOutput
     public double getNextAlgaeElevatorPosition() {
-        return AutoScore.getNextAlgaeElevatorPos();
+        return AutoScore.getNextAlgaeElevatorPos().getAsDouble();
     }
 }

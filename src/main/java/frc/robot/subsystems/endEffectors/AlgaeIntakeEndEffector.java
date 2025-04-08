@@ -76,6 +76,6 @@ public class AlgaeIntakeEndEffector extends SubsystemBase {
 
     @AutoLogOutput
     public double getNextAlgaeIntakeVoltage() {
-        return AutoScore.getNextAlgaeIntakeVol();
+        return AutoScore.getNextAlgaeIntakeVol().getAsDouble();
     }
 }

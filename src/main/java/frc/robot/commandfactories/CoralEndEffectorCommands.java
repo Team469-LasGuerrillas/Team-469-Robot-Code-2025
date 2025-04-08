@@ -33,7 +33,7 @@ public class CoralEndEffectorCommands {
         return Commands.startRun(() -> coralWristEndEffector.setDefault(), () -> coralWristEndEffector.setDefault(), coralWristEndEffector);
     }
 
-    public static Command coralWristAutoScore(Double nextPos) {
+    public static Command coralWristAutoScore(DoubleSupplier nextPos) {
         return Commands.run(() -> AutoScore.setNextCoralWristPos(nextPos), new Subsystem[]{});
     }
 }
