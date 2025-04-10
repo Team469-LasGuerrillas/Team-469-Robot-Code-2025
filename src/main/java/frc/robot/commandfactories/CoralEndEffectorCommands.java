@@ -25,8 +25,8 @@ public class CoralEndEffectorCommands {
         return Commands.startRun(() -> coralIntakeEndEffector.setDefault(), () -> coralIntakeEndEffector.setDefault(), coralIntakeEndEffector);
     }
 
-    public static Command coralOutake() {
-        return Commands.startRun(() -> coralIntakeEndEffector.setOutakeVoltage(), () -> coralIntakeEndEffector.setOutakeVoltage(), coralIntakeEndEffector);
+    public static Command coralDynamicOutakeNoRequire() {
+        return Commands.startRun(() -> coralIntakeEndEffector.setOutakeVoltage(), () -> coralIntakeEndEffector.setOutakeVoltage(), new Subsystem[]{});
     }
 
     public static Command coralWrist(DoubleSupplier position) {

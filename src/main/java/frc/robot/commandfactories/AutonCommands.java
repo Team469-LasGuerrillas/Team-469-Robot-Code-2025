@@ -171,30 +171,8 @@ public class AutonCommands {
   }
       
   public static Command descoreAlgaeFromReefPosition(ReefPositions reefPosition) {
-    Pose2d transformedReefPose = FieldLayout.reefPositionToPose2d(reefPosition).transformBy(FieldLayout.ALGAE_TRANSFORM);
-    
     return Commands.sequence(
       Commands.deadline( // Drive back from reef and lower elevator
-        Commands.waitUntil(
-          () -> Drive.getInstance().isOnTarget(
-              transformedReefPose, 
-              DriveConstants.LINEAR_TOLERACE_TO_SCORE_METERS, 
-              DriveConstants.HEADING_TOLERANCE_TO_SCORE_DEGREES)
-          && Elevator.getInstance().isCoralElevatorOnTarget()
-          && Elevator.getInstance().isAlgaeElevatorOnTarget()
-        ),
-        DriveCommands.pidToPoint(() -> transformedReefPose),
-        GlobalCommands.coralL3NoAlgae() 
-      ),
-      Commands.deadline( // Set Algae Position
-        Commands.waitUntil(
-          () -> AlgaeWristEndEffector.getInstance().isOnTarget()
-          && Elevator.getInstance().isCoralElevatorOnTarget()
-          && Elevator.getInstance().isAlgaeElevatorOnTarget()
-        ), 
-        GlobalCommands.coralL3()
-      ),
-      Commands.deadline( // Drive back to reef
         Commands.waitUntil(
           () -> Drive.getInstance().isOnTarget(
               reefPosition, 
@@ -203,8 +181,8 @@ public class AutonCommands {
           && Elevator.getInstance().isCoralElevatorOnTarget()
           && Elevator.getInstance().isAlgaeElevatorOnTarget()
         ),
-        DriveCommands.pidToReefPose(reefPosition),
-        GlobalCommands.coralL3() 
+        GlobalCommands.coralL3(),
+        DriveCommands.pidToReefPose(reefPosition)
       )
     );
   }

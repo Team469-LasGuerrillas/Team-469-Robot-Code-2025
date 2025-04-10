@@ -25,7 +25,9 @@ import frc.lib.Dashboard;
 import frc.lib.interfaces.motor.MotorIO;
 import frc.lib.interfaces.sensor.SensorIO;
 import frc.lib.interfaces.vision.VisionIO;
+import frc.lib.util.FieldLayout;
 import frc.robot.autons.Autons;
+import frc.robot.commandfactories.AutonCommands;
 import frc.robot.commandfactories.DriveCommands;
 import frc.robot.commandfactories.ElevatorCommands;
 import frc.robot.commandfactories.GlobalCommands;
@@ -172,11 +174,18 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    driver.a().whileTrue(Autons.threePieceLeft());
+    driver.a().whileTrue(GlobalCommands.algaeProcessorDrive());
 
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
-        DriveCommands.autoScoreToClosestReefPoseRight()
+      DriveCommands.autoScoreToClosestReefPoseRight()
     );
+
+    // Commands.deferredProxy(() -> 
+    // Commands.sequence(
+    //   AutonCommands.driveAndAutoScoreInAuton(FieldLayout.findClosestReefPoseRight()),
+    //   AutonCommands.descoreAlgaeFromReefPosition(FieldLayout.findClosestReefPoseRight())
+    // )
+    // )
 
     driver.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
         DriveCommands.autoScoreToClosestReefPoseLeft()
@@ -233,7 +242,7 @@ public class RobotContainer {
 
     operator.povDown().whileTrue(GlobalCommands.coralL4());
 
-    operator.button(8).or(operator.button(9)).whileTrue(GlobalCommands.coralL1());
+    operator.button(9).or(operator.button(10)).whileTrue(GlobalCommands.coralL1());
     
     // // JCAO: Removed due to bug causing loss of coral wrist
     // // JCAO: Removed at detroit

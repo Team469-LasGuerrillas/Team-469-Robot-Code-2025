@@ -18,6 +18,7 @@ import frc.lib.util.math.GeomUtil;
 import frc.lib.util.math.ToleranceUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
 import frc.robot.subsystems.constants.CoralEndEffectorConstants;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
@@ -44,6 +45,8 @@ public class Elevator extends SubsystemBase {
     double coralRequestedAcceleration;
 
     int isOnTargetLoopCount = 0;
+
+    double dynamicOffset;
 
     private Elevator(MotorIO coralElevatorMotor, MotorIO coralElevatorMotorFollower, MotorIO algaeElevatorMotor) {
         this.coralElevatorMotor = coralElevatorMotor;
@@ -92,6 +95,24 @@ public class Elevator extends SubsystemBase {
             updatedAlgaeRequestedHeight = algaeRequestedHeight.getAsDouble() - (coralRequestedHeight.getAsDouble() - ElevatorConstants.MAX_CORAL_HEIGHT_IN_FIRST_STAGE_FROM_GROUND_INCHES);
         }
 
+        double errorFromLinearControllerTarget = 
+            Drive.getInstance().getErrorFromLinearControllerTargetMeters();
+
+        if (errorFromLinearControllerTarget > DriveConstants.ERROR_FOR_DYNAMIC_ELEVATOR_METERS)
+            errorFromLinearControllerTarget = 0;
+
+        dynamicOffset = 0;
+        //     if (isReefRequestedHeight()) 
+        //         dynamicOffset =
+        //         Units.metersToInches(errorFromLinearControllerTarget) 
+        //         * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER;
+
+        // dynamicOffset = ToleranceUtil.clamp(
+        //     dynamicOffset, 
+        //     -ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE + 3, 
+        //     ElevatorConstants.DYNAMIC_ELEVATOR_CLAMP_RANGE + 3);
+
+        Logger.recordOutput("Elevator/dynamicOffset", dynamicOffset);
 
         if (isAlgaeWristLegal() && isCoralWristLegal()) {
             coralRequestedVelocity = ElevatorConstants.CORAL_VELOCITY;
@@ -107,18 +128,13 @@ public class Elevator extends SubsystemBase {
             ) {
                 coralRequestedVelocity = ElevatorConstants.CORAL_SLOW_VELOCITY; 
                 coralRequestedAcceleration = ElevatorConstants.CORAL_SLOW_ACCELERATION;   
-            }        
-            double dynamicOffset = 0;
-            // if (isReefRequestedHeight()) 
-            //     dynamicOffset = coralRequestedHeight.getAsDouble()
-            //     + (Units.metersToInches(Drive.getInstance().getErrorFromLinearControllerTargetMeters()) 
-            //     * ElevatorConstants.DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER);
-
+            }   
+            
             coralElevatorMotor.setDynamicMagicalPositionSetpoint(
                 coralRequestedHeight.getAsDouble() + dynamicOffset, appliedFF, coralRequestedVelocity, coralRequestedAcceleration, ElevatorConstants.CORAL_JERK
             );
 
-            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
+            algaeElevatorMotor.setMagicalPositionSetpoint(updatedAlgaeRequestedHeight + dynamicOffset, ElevatorConstants.ALGAE_FEEDFORWARD_VOLTS);
         }
 
         if (isCoralElevatorOnTarget()) isOnTargetLoopCount++;
@@ -192,7 +208,7 @@ public class Elevator extends SubsystemBase {
 
     private boolean isAlgaeWristLegal() {
         boolean algaeOutCaseIsLegal = (AlgaeWristEndEffector.getInstance().getWristPosition() > AlgaeEndEffectorConstants.ALGAE_EXTENSION_THRESHOLD
-            && algaeRequestedHeight.getAsDouble() > ElevatorConstants.MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT) ||
+            && algaeRequestedHeight.getAsDouble() + dynamicOffset > ElevatorConstants.MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT) ||
             (!GeomUtil.isLookingAtReef() 
             && !GeomUtil.isWithinReefRadius());
 
@@ -204,7 +220,7 @@ public class Elevator extends SubsystemBase {
     private boolean isCoralWristLegal() {
         boolean coralIntakingCaseIsLegal =
             (CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW
-            && coralRequestedHeight.getAsDouble() < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW);
+            && coralRequestedHeight.getAsDouble() + dynamicOffset < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW);
 
         boolean coralOutCase = CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
 
@@ -240,7 +256,7 @@ public class Elevator extends SubsystemBase {
 
     public boolean isCoralElevatorOnTarget(double tolerance) {
         boolean target = ToleranceUtil.epsilonEquals(
-            coralRequestedHeight.getAsDouble(), coralElevatorInputs.unitPosition, tolerance);
+            coralRequestedHeight.getAsDouble() + dynamicOffset, coralElevatorInputs.unitPosition, tolerance);
 
         return target;
     }
@@ -252,7 +268,7 @@ public class Elevator extends SubsystemBase {
     @AutoLogOutput
     public boolean isAlgaeElevatorOnTarget() {
         return ToleranceUtil.epsilonEquals(
-            algaeRequestedHeight.getAsDouble(), algaeElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
+            algaeRequestedHeight.getAsDouble() + dynamicOffset, algaeElevatorInputs.unitPosition, ElevatorConstants.IS_ON_TARGET_THRESHOLD);
     }
 
     // True: Closer to Algae L3; False: Closer to Algae L2

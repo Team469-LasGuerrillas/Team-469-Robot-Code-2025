@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -17,8 +18,8 @@ import frc.robot.subsystems.drive.Drive;
 
 public class LinearController {
   
-  private final ProfiledPIDController xController;
-  private final ProfiledPIDController yController;
+  private final PIDController xController;
+  private final PIDController yController;
   private final Supplier<Pose2d> goalPoseSupplier;
 
   double maxLinearVelocity = DriveConstants.AUTO_VELOCITY;
@@ -46,42 +47,39 @@ public class LinearController {
     }
 
     xController =
-        new ProfiledPIDController(
+        new PIDController(
             pValue,
             iValue,
             dValue,
-            new TrapezoidProfile.Constraints(
-              maxLinearVelocity,
-              maxLinearAcceleration
-            ),
             0.02);
     xController.setTolerance(DriveConstants.LINEAR_TOLERANCE_METERS);
     xController.setIZone(DriveConstants.I_ZONE_METERS);
 
     yController =
-    new ProfiledPIDController(
+    new PIDController(
         pValue,
         iValue,
         dValue,
-        new TrapezoidProfile.Constraints(
-          maxLinearVelocity,
-          maxLinearAcceleration
-        ),
         0.02);
     yController.setTolerance(DriveConstants.LINEAR_TOLERANCE_METERS);
     yController.setIZone(DriveConstants.I_ZONE_METERS);
 
     this.goalPoseSupplier = goalPoseSupplier;
+    double initialXVel = Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER;
+    double initialYVel = Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER;
 
-    xController.reset(
-      Drive.getInstance().getPose().getX(), 
-      Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
-    );
+    System.out.println("Initial Velocity X: " + initialXVel + ". Initial Velocity Y: " + initialYVel);
+    Logger.recordOutput("linearController/linearControllerInitialVelocity",new ChassisSpeeds(initialXVel, initialYVel, 0));
 
-    yController.reset(
-      Drive.getInstance().getPose().getY(), 
-      Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
-    );
+    // xController.reset(
+    //   Drive.getInstance().getPose().getX(), 
+    //   Drive.getInstance().getFieldVelocity().vxMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
+    // );
+
+    // yController.reset(
+    //   Drive.getInstance().getPose().getY(), 
+    //   Drive.getInstance().getFieldVelocity().vyMetersPerSecond * DriveConstants.FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER
+    // );
   }
 
   public ChassisSpeeds update() {
@@ -94,9 +92,10 @@ public class LinearController {
       yController.calculate(
         Drive.getInstance().getPose().getY(), goalPoseSupplier.get().getY());
     
-    ChassisSpeeds outputLinearSpeeds = new ChassisSpeeds(xOutput, yOutput, 0);
-    if (Math.abs(xController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS 
-        || Math.abs(yController.getPositionError()) > DriveConstants.LINEAR_TOLERANCE_METERS) {
+    ChassisSpeeds outputLinearSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xOutput, yOutput, 0, Drive.getInstance().getRotation());
+    Logger.recordOutput("linearController/linearControllerVelocity", outputLinearSpeeds);
+    if (Math.abs(xController.getError()) > DriveConstants.LINEAR_TOLERANCE_METERS 
+        || Math.abs(yController.getError()) > DriveConstants.LINEAR_TOLERANCE_METERS) {
           double netVelocity = Math.hypot(xOutput, yOutput);
 
           Logger.recordOutput("linearController/linearControllerVelocity", netVelocity);
@@ -108,17 +107,13 @@ public class LinearController {
   }
 
   public boolean atXGoal() {
-    return ToleranceUtil.epsilonEquals(
-        xController.getSetpoint().position,
-        xController.getGoal().position,
-        Units.degreesToRadians(DriveConstants.LINEAR_TOLERANCE_METERS));
+    return Math.abs(xController.getError()) <
+        DriveConstants.LINEAR_TOLERANCE_METERS;
   }
 
   public boolean atYGoal() {
-    return ToleranceUtil.epsilonEquals(
-        yController.getSetpoint().position,
-        yController.getGoal().position,
-        Units.degreesToRadians(DriveConstants.LINEAR_TOLERANCE_METERS));
+    return Math.abs(yController.getError()) <
+        DriveConstants.LINEAR_TOLERANCE_METERS;
   }
 
   public Pose2d getTargetPose() {
@@ -126,19 +121,19 @@ public class LinearController {
   }
 
   public double getError() {
-    double xError = xController.getPositionError(); 
-    double yError = yController.getPositionError();
+    double xError = xController.getError(); 
+    double yError = yController.getError();
     return Math.hypot(xError, yError);
   }
 
   public double getTargetDistanceFromReefCenter() {
     double xError;
-    if (Station.isRed()) xError = Math.abs(FieldLayout.REEF_CENTER_RED.getX() - xController.getGoal().position);
-    else xError = Math.abs(FieldLayout.REEF_CENTER_BLUE.getX() - xController.getGoal().position);
+    if (Station.isRed()) xError = Math.abs(FieldLayout.REEF_CENTER_RED.getX() - goalPoseSupplier.get().getX());
+    else xError = Math.abs(FieldLayout.REEF_CENTER_BLUE.getX() - goalPoseSupplier.get().getX());
 
     double yError;
-    if (Station.isRed()) yError = Math.abs(FieldLayout.REEF_CENTER_RED.getY() - yController.getGoal().position);
-    else yError = Math.abs(FieldLayout.REEF_CENTER_BLUE.getY() - yController.getGoal().position);
+    if (Station.isRed()) yError = Math.abs(FieldLayout.REEF_CENTER_RED.getY() - goalPoseSupplier.get().getY());
+    else yError = Math.abs(FieldLayout.REEF_CENTER_BLUE.getY() - goalPoseSupplier.get().getY());
 
     return Math.hypot(xError, yError);
   }

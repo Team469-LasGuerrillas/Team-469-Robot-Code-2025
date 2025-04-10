@@ -108,6 +108,7 @@ public class CoralWristEndEffector extends SubsystemBase {
         return AutoScore.getNextCoralWristPos().getAsDouble();
     }
 
+    @AutoLogOutput
     public double getRequestedPosition() {
         return requestedPosition.getAsDouble();
     }

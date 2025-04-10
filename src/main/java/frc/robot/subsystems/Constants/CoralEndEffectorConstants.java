@@ -54,11 +54,11 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_WRIST_FLIP_THRESHOLD_HIGH = 0.5;
     public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
     public static final double CORAL_BARGE_POS = CORAL_WRIST_FLIP_THRESHOLD_HIGH;
-    public static final double IDLE_WRIST_THRESHOLD = 0.49;
+    public static final double IDLE_WRIST_THRESHOLD = 0.45;
     public static final double IS_ON_TARGET_THRESHOLD = 0.019;
     public static final double HORIZONTAL_POSITION = 0.045;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1;
-    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL = 3.25;
+    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL = 4;
     
     public static final int NUM_OF_ON_TARGET_LOOPS = 7;
     
@@ -75,18 +75,18 @@ public class CoralEndEffectorConstants {
             .withStatorCurrentLimit(80) // TODO: Determine Current Limits
         ).withSlot0(
             new Slot0Configs() // TODO: PID Tuning
-            .withKS(0)
+            .withKS(0.6)
             .withKV(0)
-            .withKP(247)
+            .withKP(150)
             .withKI(0)
-            .withKD(0)
+            .withKD(1)
         ).withSlot1(
             new Slot1Configs() // TODO: PID Tuning
-            .withKS(0)
+            .withKS(0.5)
             .withKV(0)
-            .withKP(330)
+            .withKP(175)
             .withKI(0)
-            .withKD(0)
+            .withKD(3)
         )
         .withMotionMagic(
             new MotionMagicConfigs()
@@ -124,8 +124,8 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_INTAKE_IN_VOLTAGE = -3.3;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
     public static final double CORAL_L1_INTAKE_OUT_VOLTAGE = 4;
-    public static final double CORAL_DEFAULT_VOLTAGE = -2;
-    public static final double CORAL_FINAL_RETAINING_VOLTAGE = -1.469;
+    public static final double CORAL_DEFAULT_VOLTAGE = -1.469;
+    public static final double CORAL_FINAL_RETAINING_VOLTAGE = CORAL_DEFAULT_VOLTAGE;
 
     private static TalonFXConfiguration coralIntakeMotorFxConfig = 
     new TalonFXConfiguration()

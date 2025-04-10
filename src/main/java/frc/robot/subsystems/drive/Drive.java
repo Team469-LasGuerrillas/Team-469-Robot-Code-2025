@@ -314,9 +314,9 @@ public class Drive extends SubsystemBase {
     teleopDriveController = new TeleopDriveController();
 
     if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      setPose(new Pose2d(8, 6, Rotation2d.fromDegrees(0 + 120)));
+      setPose(new Pose2d(8, 6, Rotation2d.fromDegrees(0)));
     } else {
-      setPose(new Pose2d(8, 2, Rotation2d.fromDegrees(180 + 120)));
+      setPose(new Pose2d(8, 2, Rotation2d.fromDegrees(180)));
     }
   }
 
@@ -413,7 +413,7 @@ public class Drive extends SubsystemBase {
         }
 
         case PID_TO_POINT -> {
-          desiredSpeeds = FieldRobotSpeedsConversion.fieldToRobotSpeeds(linearController.update(), getRotation());
+          desiredSpeeds = linearController.update();
           desiredSpeeds.omegaRadiansPerSecond = headingController.update();
 
           Logger.recordOutput("linearController/linearControllerDriveSubsystemVelocity", Math.hypot(desiredSpeeds.vxMetersPerSecond, desiredSpeeds.vyMetersPerSecond));
@@ -601,9 +601,9 @@ public class Drive extends SubsystemBase {
 
     for (int i = 0; i < 4; i++) {
       optimizedSetpointStates[i] = currentSetpoint.moduleStates()[i];
-      optimizedSetpointStates[i].optimize(modules[i].getAngle());
+      // optimizedSetpointStates[i].optimize(modules[i].getAngle()); // This should already be done by the poofs setpoint optimizer
 
-      optimizedSetpointTorques[i] = new SwerveModuleState(0.0, optimizedSetpointStates[i].angle);
+      optimizedSetpointTorques[i] = new SwerveModuleState(0.0, optimizedSetpointStates[i].angle); // I am too lazy to implement
     }
 
     SwerveDriveKinematics.desaturateWheelSpeeds(

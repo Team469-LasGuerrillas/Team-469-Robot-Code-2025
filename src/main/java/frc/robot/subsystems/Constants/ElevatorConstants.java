@@ -52,8 +52,8 @@ public class ElevatorConstants {
     public static final double CORAL_GROUND_INTAKE_POS = 1;
     public static final double CORAL_HUMAN_PLAYER_INTAKE_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_L1_POS = 24;
-    public static final double CORAL_L2_POS = 38;
-    public static final double CORAL_L3_POS = 54.5;
+    public static final double CORAL_L2_POS = 38.75;
+    public static final double CORAL_L3_POS = 55.25;
     public static final double CORAL_L4_POS = 81;
     public static final double CORAL_PROCESSOR_POS = CORAL_DEFAULT_POS; // 16.469
     public static final double CORAL_BARGE_POS = 88.5;
@@ -79,7 +79,7 @@ public class ElevatorConstants {
     public static final double CORAL_SLOW_UPPER = 53;
     public static final double CORAL_SLOW_LOWER = 26;
 
-    public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 5;
+    public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1.5;
     public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 4.69; // 4.69
     
     public static final int NUM_OF_ON_TARGET_LOOPS = 5;
@@ -125,9 +125,9 @@ public class ElevatorConstants {
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_DEFAULT_POS = GROUND_TO_ALGAE_REST_POS_INCHES;
     public static final double ALGAE_PROCESSOR_POS = ALGAE_DEFAULT_POS; // 9.469
-    public static final double ALGAE_L2_POS = 32;
+    public static final double ALGAE_L2_POS = 34;
     public static final double ALGAE_L3_POS = 44;
-    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 13;
+    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 25;
     public static final double ALGAE_GROUND_POS = 5;
 
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =
