@@ -39,6 +39,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.Interpolator;
@@ -774,6 +775,14 @@ public class Drive extends SubsystemBase {
 
     return
       linearController.getTargetPose().getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
+      && headingController.atGoal(headingToleranceDegrees);
+  }
+
+  public boolean isOnTarget(Transform2d offset, double linearTolerance, double headingToleranceDegrees) {
+    if (linearController == null || headingController == null) return false;
+
+    return
+      linearController.getTargetPose().transformBy(offset).getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
       && headingController.atGoal(headingToleranceDegrees);
   }
 

@@ -123,7 +123,7 @@ public class DriveCommands {
       Commands.deadline(
         Commands.waitUntil(
           () -> (
-            Drive.getInstance().isOnTarget(DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
+            Drive.getInstance().isOnTarget(FieldLayout.HOLDING_TOLERANCE_TRANSFORM, DriveConstants.L1_LINEAR_TOLERANCE_METERS, DriveConstants.L1_HEADING_TOLERANCE_DEGREES)
             && Elevator.getInstance().isCoralElevatorOnTarget(ElevatorConstants.IS_ON_TARGET_HUGE)
             && AlgaeWristEndEffector.getInstance().isOnTarget()
             )

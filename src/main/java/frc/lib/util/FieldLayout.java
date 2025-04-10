@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.math.GeomUtil;
+import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 
 public class FieldLayout {
@@ -42,9 +43,11 @@ public class FieldLayout {
 
   public static double RADIANS_PER_METER_EQUIVALENCE = Math.PI / 4.69;
 
-  public static Transform2d L1_TRANSFORM = new Transform2d(0.4, 0, new Rotation2d());
-  public static Transform2d L2_TRANSFORM = new Transform2d(0.5, 0, new Rotation2d());
-  public static Transform2d ALGAE_TRANSFORM = new Transform2d(1.5, 0, new Rotation2d());
+  public static Transform2d L1_TRANSFORM = new Transform2d(0.2, 0, new Rotation2d());
+  public static Transform2d L2_TRANSFORM = new Transform2d(0.4, 0, new Rotation2d());
+  public static Transform2d ALGAE_TRANSFORM = new Transform2d(1.35, 0, new Rotation2d());
+
+  public static Transform2d HOLDING_TOLERANCE_TRANSFORM = new Transform2d(DriveConstants.L1_LINEAR_TOLERANCE_METERS - 0.05, 0, new Rotation2d());
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
 
