@@ -242,7 +242,7 @@ public class RobotContainer {
 
     operator.povDown().whileTrue(GlobalCommands.coralL4());
 
-    operator.button(9).or(operator.button(10)).whileTrue(GlobalCommands.coralL1());
+    operator.button(9).or(operator.button(10)).whileTrue(GlobalCommands.coralL1AutoScore());
     
     // // JCAO: Removed due to bug causing loss of coral wrist
     // // JCAO: Removed at detroit

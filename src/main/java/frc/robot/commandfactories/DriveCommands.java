@@ -1,5 +1,6 @@
 package frc.robot.commandfactories;
 
+import java.lang.reflect.Field;
 import java.util.function.Supplier;
 
 import javax.xml.crypto.dsig.Transform;
@@ -16,11 +17,13 @@ import frc.lib.util.FieldLayout;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.lib.util.math.GeomUtil;
 import frc.robot.subsystems.constants.AlgaeEndEffectorConstants;
+import frc.robot.subsystems.constants.CoralEndEffectorConstants;
 import frc.robot.subsystems.constants.DriveConstants;
 import frc.robot.subsystems.constants.ElevatorConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
+import frc.robot.subsystems.endEffectors.CoralWristEndEffector;
 
 public class DriveCommands {
   public static Command acceptTeleopFieldOriented(CommandXboxController controller, boolean isDefault) {
@@ -108,7 +111,17 @@ public class DriveCommands {
   }
 
   public static Command pidToReefPose(ReefPositions position) {
-    Pose2d reefPose = FieldLayout.reefPositionToPose2d(position);
+    final Pose2d reefPose;
+
+    if (CoralWristEndEffector.getInstance().getRequestedPosition() == CoralEndEffectorConstants.CORAL_L1_POS) {
+      if (FieldLayout.reefPositionPoseLeft.containsKey(position)) {
+        reefPose = FieldLayout.reefPositionToPose2d(position).transformBy(FieldLayout.TROUGH_TRANSFORM_LEFT);
+      } else {
+        reefPose = FieldLayout.reefPositionToPose2d(position).transformBy(FieldLayout.TROUGH_TRANSFORM_RIGHT);
+      }
+    } else {
+        reefPose = FieldLayout.reefPositionToPose2d(position);
+    }
 
     // return pidToPoint(() -> reefPose);
     final Transform2d newTransform;

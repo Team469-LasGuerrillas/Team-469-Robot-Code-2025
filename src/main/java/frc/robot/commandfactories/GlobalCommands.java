@@ -150,6 +150,20 @@ public class GlobalCommands {
     );
   }
 
+  public static Command coralL1AutoScore() {
+    return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralElevatorOnTarget() && coralWristEndEffector.isCoralWristOnTarget());}),
+      CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS),
+      AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L1),
+      CoralEndEffectorCommands.coralWristAutoScore(() -> CoralEndEffectorConstants.CORAL_L1_POS),
+      AlgaeEndEffectorCommands.algaeIntakeAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
+      AlgaeEndEffectorCommands.algaeWristAutoScore(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L1),
+      ElevatorCommands.setTargetPosFromZeroAutoScore(
+        () -> ElevatorConstants.CORAL_L1_POS, 
+        () -> ElevatorConstants.ALGAE_DEFAULT_POS
+      )
+    );
+  }
+
   public static Command algaeProcessor() {
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralElevatorOnTarget() && algaeWristEndEffector.isOnTarget());}),
       // CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_PROCESSOR_POS),
