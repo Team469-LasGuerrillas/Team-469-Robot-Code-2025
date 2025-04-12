@@ -35,11 +35,11 @@ public class MotorIOTalonFX implements MotorIO {
 
   protected final MotorConfigs mConfig;
 
-  private final VelocityTorqueCurrentFOC velocityControl = new VelocityTorqueCurrentFOC(0);
-  private final MotionMagicVelocityTorqueCurrentFOC motionMagicVelocityControl = new MotionMagicVelocityTorqueCurrentFOC(0.0);
-  private final PositionTorqueCurrentFOC positionControl = new PositionTorqueCurrentFOC(0.0);
-  private final MotionMagicTorqueCurrentFOC motionMagicPositionControl = new MotionMagicTorqueCurrentFOC(0.0);
-  private final DynamicMotionMagicTorqueCurrentFOC dynamicMotionMagicPositionControl = new DynamicMotionMagicTorqueCurrentFOC(0, 0, 0, 0);
+  private final VelocityVoltage velocityControl = new VelocityVoltage(0);
+  private final MotionMagicVelocityVoltage motionMagicVelocityControl = new MotionMagicVelocityVoltage(0.0);
+  private final PositionVoltage positionControl = new PositionVoltage(0.0);
+  private final MotionMagicVoltage motionMagicPositionControl = new MotionMagicVoltage(0.0);
+  private final DynamicMotionMagicVoltage dynamicMotionMagicPositionControl = new DynamicMotionMagicVoltage(0, 0, 0, 0);
 
   private StatusSignal<Angle> positionSignal;
   private StatusSignal<AngularVelocity> velocitySignal;
@@ -152,7 +152,7 @@ public class MotorIOTalonFX implements MotorIO {
   @Override
   public void setMagicalPositionSetpoint(double units, double feedForward) {
     talon.setControl(
-        motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot));
+        motionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot).withEnableFOC(true));
   }
 
   @Override
@@ -162,7 +162,7 @@ public class MotorIOTalonFX implements MotorIO {
     dynamicMotionMagicPositionControl.Jerk = jerkUnits;
     
     talon.setControl(
-      dynamicMotionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot)
+      dynamicMotionMagicPositionControl.withPosition(clampPosition(units)).withFeedForward(feedForward).withSlot(slot).withEnableFOC(true)
     );
   }
 

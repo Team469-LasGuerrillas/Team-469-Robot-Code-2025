@@ -2,10 +2,13 @@ package frc.robot.autons;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.lib.util.AutoScore;
+import frc.lib.util.FieldLayout;
 import frc.lib.util.Station;
 import frc.lib.util.FieldLayout.ReefPositions;
 import frc.robot.commandfactories.AutonCommands;
+import frc.robot.commandfactories.DriveCommands;
 
 public class Autons {
   public static Command centerOnePiece() {
@@ -20,12 +23,16 @@ public class Autons {
   }
 
   public static Command centerOnePiecePlusAlgae() {
-    ReefPositions targetReefPosition = ReefPositions.DLB;
+    ReefPositions targetReefPosition;
     if (Station.isRed()) targetReefPosition = ReefPositions.DLR;
+    else targetReefPosition = ReefPositions.DLB;
         
+    AutoScore.resetAutoScoreToL4();
+
     return Commands.sequence(
-      AutonCommands.driveAndScoreL4ToReefPosition(targetReefPosition),
-      AutonCommands.descoreAlgaeFromReefPosition(targetReefPosition),
+      AutonCommands.driveAndAutoScoreInAuton(targetReefPosition, true), // Coral L4
+      Commands.runOnce(() -> AutoScore.resetAutoScoreToL3()),
+      AutonCommands.driveAndAutoScoreL3InAuton(targetReefPosition, true),
       AutonCommands.scoreAlgaeInBarge()
     );
   }

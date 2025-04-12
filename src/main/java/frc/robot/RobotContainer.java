@@ -69,12 +69,13 @@ public class RobotContainer {
   private final CoralIntakeEndEffector coralIntakeEndEffector;
   private final Climb climb;
   private final Elevator elevator;
-  private final LEDSubsystem led;
+  // private final LEDSubsystem led;
 
   private final Vision limelightLeft;
   private final Vision limelightRight;
-  private final Vision arducamOne;
-  private final Vision arducamTwo;
+  private final Vision limelightCenter;
+  // private final Vision arducamOne;
+  // private final Vision arducamTwo;
   
   // Controller
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -112,10 +113,11 @@ public class RobotContainer {
         
                 limelightLeft = new Vision(VisionConstants.LIMELIGHT_LEFT);
                 limelightRight = new Vision(VisionConstants.LIMELIGHT_RIGHT);
-                arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
-                arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
+                limelightCenter = new Vision(VisionConstants.LIMELIGHT_CENTER);
+                // arducamOne = new Vision(VisionConstants.ARDUCAM_ONE);
+                // arducamTwo = new Vision(VisionConstants.ARDUCAM_TWO);
         
-              led = new LEDSubsystem();
+              // led = new LEDSubsystem();
 
                 break;
         
@@ -145,10 +147,11 @@ public class RobotContainer {
         
                     limelightLeft = new Vision(new VisionIO() {});
                     limelightRight = new Vision(new VisionIO() {});
-                    arducamOne = new Vision(new VisionIO() {});
-                    arducamTwo = new Vision(new VisionIO() {});
+                    limelightCenter = new Vision(new VisionIO() {});
+                    // arducamOne = new Vision(new VisionIO() {});
+                    // arducamTwo = new Vision(new VisionIO() {});
           
-                led = new LEDSubsystem();
+                // led = new LEDSubsystem();
 
                 break;
             }
@@ -174,11 +177,13 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    driver.a().whileTrue(GlobalCommands.algaeProcessorDrive());
+    driver.x().whileTrue(GlobalCommands.algaeProcessorDrive());
 
     driver.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(
       DriveCommands.autoScoreToClosestReefPoseRight()
     );
+
+    driver.a().whileTrue(Autons.centerOnePiecePlusAlgae());
 
     // Commands.deferredProxy(() -> 
     // Commands.sequence(
@@ -207,12 +212,14 @@ public class RobotContainer {
     driver.povDown().whileTrue(GlobalCommands.fastRetract());
 
     driver.povLeft().whileTrue(GlobalCommands.slowReset());
+
+    driver.y().whileTrue(GlobalCommands.algaeGroundIntake());
   }
 
   private void configureOperatorBindings() {
     operator.leftTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.humanPlayerIntake());
     
-    operator.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.algaeGroundIntake());
+    operator.rightTrigger(DriveConstants.TRIGGER_DEADBAND).whileTrue(GlobalCommands.lollipopPickup());
 
     operator.leftBumper().whileTrue(GlobalCommands.algaeBarge());
 
@@ -242,12 +249,9 @@ public class RobotContainer {
 
     operator.povDown().whileTrue(GlobalCommands.coralL4());
 
-    operator.button(9).or(operator.button(10)).whileTrue(GlobalCommands.coralL1AutoScore());
-    
-    // // JCAO: Removed due to bug causing loss of coral wrist
-    // // JCAO: Removed at detroit
-    // //operator.a().whileTrue(GlobalCommands.coralL1());
+    operator.button(10).whileTrue(GlobalCommands.coralL1());
 
+    operator.button(9).whileTrue(GlobalCommands.algaeGroundIntake());
   }
 
   /**

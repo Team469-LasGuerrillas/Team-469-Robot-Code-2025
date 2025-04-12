@@ -79,6 +79,7 @@ public class AlgaeEndEffectorConstants {
     public static final double IS_ON_TARGET_THRESHOLD = 0.01;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
     public static final double ALGAE_WRIST_HORZIONTAL_POS = 0.23;
+    public static final double ALGAE_LOLLIPOP_POS = 0.173;
     public static final double ALGAE_EXTENSION_THRESHOLD = 0.15;
 
     private static TalonFXConfiguration algaeWristMotorFxConfig = 

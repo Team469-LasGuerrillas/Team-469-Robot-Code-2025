@@ -120,6 +120,7 @@ public class Elevator extends SubsystemBase {
 
             if (coralElevatorInputs.velocityUnitsPerSecond <= 0) {
                 coralRequestedAcceleration = ElevatorConstants.CORAL_DOWN_ACCELERATION;
+                coralRequestedVelocity = ElevatorConstants.CORAL_DOWN_VELOCITY;
             }
 
             if (coralElevatorInputs.unitPosition < ElevatorConstants.CORAL_SLOW_UPPER 

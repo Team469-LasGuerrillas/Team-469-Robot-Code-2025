@@ -50,4 +50,12 @@ public class AutoScore {
         setNextCoralElevatorPos(() -> ElevatorConstants.CORAL_L4_POS);
         setNextAlgaeElevatorPos(() -> ElevatorConstants.ALGAE_L3_POS);
     }
+
+    public static void resetAutoScoreToL3() {
+        setNextCoralWristPos(() -> CoralEndEffectorConstants.CORAL_L3_POS);
+        setNextAlgaeWristPos(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L2_L3);
+        setNextAlgaeIntakeVol(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_IN_VOLTAGE);
+        setNextCoralElevatorPos(() -> ElevatorConstants.CORAL_L3_POS);
+        setNextAlgaeElevatorPos(() -> ElevatorConstants.ALGAE_L2_POS);
+    }
 }

@@ -3,6 +3,8 @@ package frc.lib.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.crypto.dsig.Transform;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,8 +34,8 @@ public class FieldLayout {
   public static final Pose2d HUMAN_PLAYER_BLUE_RIGHT = new Pose2d(1.5, FIELD_WIDTH - 7.35, Rotation2d.fromDegrees(-130));
   public static final Pose2d HUMAN_PLAYER_RED_RIGHT = new Pose2d(FIELD_LENGTH - 1.5, 7.35, Rotation2d.fromDegrees(-130 + 180));
 
-  public static final Pose2d BARGE_POSITION_RED = new Pose2d(FIELD_LENGTH/2 + 1.5, FIELD_WIDTH/2 - 3, Rotation2d.fromDegrees(90));
-  public static final Pose2d BARGE_POSITION_BLUE = new Pose2d(FIELD_LENGTH/2 - 1.5, FIELD_WIDTH/2 + 3, Rotation2d.fromDegrees(-90));
+  public static final Pose2d BARGE_POSITION_RED = new Pose2d(FIELD_LENGTH - 7.2, FIELD_WIDTH - 5.3, Rotation2d.fromDegrees(0));
+  public static final Pose2d BARGE_POSITION_BLUE = new Pose2d(7.2, 5.3, Rotation2d.fromDegrees(180));
 
   public static final Pose2d PROCESSOR_BLUE = new Pose2d(5.9, 0.75, new Rotation2d(0.5 * Math.PI));
   public static final Pose2d PROCESSOR_RED = new Pose2d(FIELD_LENGTH - 5.9, FIELD_WIDTH - 0.75, new Rotation2d(-0.5 * Math.PI));
@@ -47,6 +49,7 @@ public class FieldLayout {
   public static Transform2d TROUGH_TRANSFORM_LEFT = new Transform2d(0.2, 0, Rotation2d.fromDegrees(30));
   public static Transform2d TROUGH_TRANSFORM_RIGHT = new Transform2d(0.2, 0, Rotation2d.fromDegrees(-30));
   public static Transform2d L2_TRANSFORM = new Transform2d(0.4, 0, new Rotation2d());
+  public static Transform2d L3_TRANSFORM = new Transform2d(1.25, 0, new Rotation2d());
   public static Transform2d ALGAE_TRANSFORM = new Transform2d(1.35, 0, new Rotation2d());
 
   public static Transform2d HOLDING_TOLERANCE_TRANSFORM = new Transform2d(L1_TRANSFORM.getX() - DriveConstants.L1_LINEAR_TOLERANCE_METERS, 0, new Rotation2d());

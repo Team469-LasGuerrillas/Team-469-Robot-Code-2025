@@ -28,7 +28,7 @@ public class ElevatorConstants {
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE = GROUND_TO_CORAL_REST_POS_INCHES + 3;
 
     public static final double IS_ON_TARGET_THRESHOLD = 0.25;
-    public static final double IS_ON_TARGET_HUGE = 20;
+    public static final double IS_ON_TARGET_HUGE = 5;
 
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerFxConfiguration = 
@@ -54,17 +54,19 @@ public class ElevatorConstants {
     public static final double CORAL_L1_POS = 24;
     public static final double CORAL_L2_POS = 38.75;
     public static final double CORAL_L3_POS = 55.25;
-    public static final double CORAL_L4_POS = 81;
+    public static final double CORAL_L4_POS = 81 + 1.5; // TODO: I added 1.5 cause elevator skipping
+    public static final double CORAL_LOLLIPOP_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_PROCESSOR_POS = CORAL_DEFAULT_POS; // 16.469
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 35;
-    public static final double CORAL_ACCELERATION = 330; // 350 250
-    public static final double CORAL_DOWN_ACCELERATION = 110; // 350 250
+    public static final double CORAL_SLOW_VELOCITY = 50;
+    public static final double CORAL_ACCELERATION = 600; // 350 250
+    public static final double CORAL_DOWN_ACCELERATION = 200; // 350 250
+    public static final double CORAL_DOWN_VELOCITY = 70;
 
-    public static final double CORAL_SLOW_ACCELERATION = 469469469469469469469469469.0;
-    public static final double CORAL_JERK = 4000;
+    public static final double CORAL_SLOW_ACCELERATION = 5000.0;
+    public static final double CORAL_JERK = 0;
     
     public static final double CORAL_FEEDFORWARDS_WHEN_ZERO = 0;
     public static final double CORAL_FEEDFORWARD_VOLTS_L0 = 0.4625;
@@ -76,7 +78,7 @@ public class ElevatorConstants {
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L0 = 30.96;
     public static final double CORAL_FEEDFORWARDS_HEIGHT_L1 = 61.99;
 
-    public static final double CORAL_SLOW_UPPER = 53;
+    public static final double CORAL_SLOW_UPPER = 56;
     public static final double CORAL_SLOW_LOWER = 26;
 
     public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1.5;
@@ -94,7 +96,7 @@ public class ElevatorConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(100))
+            .withStatorCurrentLimit(120))
               .withSlot0(
             new Slot0Configs()
                 .withKS(0)
@@ -125,9 +127,10 @@ public class ElevatorConstants {
     /* ALGAE ELEVATOR MOTOR */
     public static final double ALGAE_DEFAULT_POS = GROUND_TO_ALGAE_REST_POS_INCHES;
     public static final double ALGAE_PROCESSOR_POS = ALGAE_DEFAULT_POS; // 9.469
-    public static final double ALGAE_L2_POS = 34;
+    public static final double ALGAE_L2_POS = 33.5;
     public static final double ALGAE_L3_POS = 44;
-    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 25;
+    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 22;
+    public static final double ALGAE_LOLLIPOP_POS = ALGAE_DEFAULT_POS;
     public static final double ALGAE_GROUND_POS = 5;
 
     private static TalonFXConfiguration algaeElevatorTalonFXConfiguration =
