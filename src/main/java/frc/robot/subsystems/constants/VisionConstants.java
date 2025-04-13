@@ -29,7 +29,7 @@ public class VisionConstants {
 
   public static final double ENABLE_REEF_UPDATES_TA = 0.4;
   public static final double LAST_GOOD_UPDATE_TIME_THRESHOLD = 0.469;
-  public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 90;
+  public static final double LOOKING_AT_REEF_THRESHOLD_DEGREES = 78;
   public static final double REEF_RADIUS = 2.5;
   public static final double SMALL_REEF_RADIUS = 2;
 

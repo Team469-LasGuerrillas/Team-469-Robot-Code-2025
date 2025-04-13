@@ -22,7 +22,7 @@ public class Dashboard {
 
     tab
     .add("Vision Odometry", m_visionField)
-    .withSize(7, 6)
+    .withSize(6, 6)
     .withPosition(7, 0);
 
     // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
@@ -37,8 +37,8 @@ public class Dashboard {
 
     tab
     .add("Auton Chooser", autoChooser)
-    .withSize(1, 3)
-    .withPosition(14, 0);
+    .withSize(2, 5)
+    .withPosition(13, 0);
   }
 
   public static Command getAutonomousCommand() {

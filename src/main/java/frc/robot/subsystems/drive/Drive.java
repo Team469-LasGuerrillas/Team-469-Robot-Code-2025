@@ -775,15 +775,19 @@ public class Drive extends SubsystemBase {
 
     return
       linearController.getTargetPose().getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
-      && headingController.atGoal(headingToleranceDegrees);
+      && ToleranceUtil.epsilonEqualsRadialDegrees(
+        linearController.getTargetPose().getRotation().getDegrees(), 
+        getPose().getRotation().getDegrees(), headingToleranceDegrees
+      );
   }
 
   public boolean isOnTarget(Transform2d offset, double linearTolerance, double headingToleranceDegrees) {
     if (linearController == null || headingController == null) return false;
 
+    Pose2d targetPose = linearController.getTargetPose().transformBy(offset);
     return
-      linearController.getTargetPose().transformBy(offset).getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
-      && headingController.atGoal(headingToleranceDegrees);
+      targetPose.getTranslation().getDistance(getPose().getTranslation()) < linearTolerance
+      && ToleranceUtil.epsilonEqualsRadialDegrees(targetPose.getRotation().getDegrees(), getPose().getRotation().getDegrees(), headingToleranceDegrees);
   }
 
   public boolean isOnTarget(Pose2d targetPose, double linearTolerance, double headingToleranceDegrees) {
@@ -799,6 +803,15 @@ public class Drive extends SubsystemBase {
     else targetPose = FieldLayout.reefPositionPoseRight.get(targetReefPosition);
     
     return isOnTarget(targetPose, linearTolerance, headingToleranceDegrees);
+  }
+
+  public boolean isOnTarget(double linearTolerance, double headingToleranceDegrees, int numOfOnTargetLoops) {
+    if (isOnTarget(linearTolerance, headingToleranceDegrees))
+     isOnTargetLoopCount++;
+    else isOnTargetLoopCount = 0;
+
+    if (isOnTargetLoopCount >= numOfOnTargetLoops) return true;
+    return false;
   }
 
   public boolean isOnTarget(ReefPositions targetReefPosition, double linearTolerance, double headingToleranceDegrees, int numOfOnTargetLoops) {

@@ -20,6 +20,12 @@ import frc.robot.subsystems.endEffectors.AlgaeIntakeEndEffector;
 import frc.robot.subsystems.endEffectors.AlgaeWristEndEffector;
 
 public class AutonCommands {
+  public static Command driveAndDoNothing(ReefPositions reefPosition) {
+    return Commands.deferredProxy(
+      () -> Commands.deadline(Commands.waitSeconds(0.04), DriveCommands.pidToReefPose(reefPosition))
+    );
+  }
+
   public static Command driveAndAutoScore(ReefPositions reefPosition) {
     return Commands.deferredProxy(() -> 
       Commands.sequence(
@@ -72,7 +78,7 @@ public class AutonCommands {
           DriveCommands.pidToPoint(
             () -> FieldLayout.reefPositionToPose2d(reefPosition).transformBy(FieldLayout.L2_TRANSFORM), true
           ),
-          CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_DEFAULT_VOLTAGE),
+          CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_FINAL_RETAINING_VOLTAGE),
           CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
           AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
           AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
@@ -113,14 +119,13 @@ public class AutonCommands {
             CoralEndEffectorCommands.coralIntake(() -> CoralEndEffectorConstants.CORAL_FINAL_RETAINING_VOLTAGE),
             CoralEndEffectorCommands.coralWrist(AutoScore.getNextCoralWristPos()),
             Commands.sequence(
-              Commands.waitUntil( // When we are "approximate" to the reef...
-                () -> Drive.getInstance().isOnTarget(
-                  reefPosition, 
-                  DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
-                  DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)
+              Commands.waitUntil(() -> Drive.getInstance().isOnTarget(
+                reefPosition, 
+                DriveConstants.LINEAR_TOLERANCE_TO_RAISE_ELEVATOR, 
+                DriveConstants.HEADING_TOLERANCE_TO_RAISE_ELEVATOR)
               ),
               Commands.parallel(
-                AlgaeEndEffectorCommands.algaeIntake((AutoScore.getNextAlgaeIntakeVol())),
+                AlgaeEndEffectorCommands.algaeIntake(AutoScore.getNextAlgaeIntakeVol()),
                 AlgaeEndEffectorCommands.algaeWrist(AutoScore.getNextAlgaeWristPos()),
                 ElevatorCommands.setTargetPosFromZero(
                   AutoScore.getNextCoralElevatorPos(),
@@ -325,9 +330,19 @@ public class AutonCommands {
     return
       Commands.deadline(
         Commands.waitUntil(
-          () -> CoralIntakeEndEffector.getInstance().hasCoral()), // Run this group until we have a coral
-        DriveCommands.pidToPoint(() -> targetHPPose, false), // Drive to HP station
+          () -> CoralIntakeEndEffector.getInstance().hasCoral() 
+          || Drive.getInstance().isOnTarget(
+            DriveConstants.HP_LINEAR_TOLERANCE_METERS, 
+            DriveConstants.HP_HEADING_TOLERANCE_DEGREES, 
+            AutonConstants.NUM_OF_ON_TARGET_LOOPS_FOR_HP_DRIVE_AWAY
+          )
+        ), // Run this group until we have a coral
+        // Drive to HP station
         GlobalCommands.humanPlayerIntake(), // Put elevator in HP load position
+        Commands.sequence(
+          Commands.waitUntil(() -> Elevator.getInstance().isCoralElevatorOnTarget(75.0)),
+          DriveCommands.pidToPoint(() -> targetHPPose, false)
+        ),
         AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
         AlgaeEndEffectorCommands.algaeWristDefault(),
         ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_DEFAULT_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
@@ -342,9 +357,18 @@ public class AutonCommands {
     return 
       Commands.deadline(
         Commands.waitUntil(
-          () -> CoralIntakeEndEffector.getInstance().hasCoral()), // Run this group until we have a coral
-        DriveCommands.pidToPoint(() -> targetHPPose, false), // Drive to HP station
+          () -> CoralIntakeEndEffector.getInstance().hasCoral()  
+          || Drive.getInstance().isOnTarget(
+            DriveConstants.HP_LINEAR_TOLERANCE_METERS, 
+            DriveConstants.HP_HEADING_TOLERANCE_DEGREES, 
+            AutonConstants.NUM_OF_ON_TARGET_LOOPS_FOR_HP_DRIVE_AWAY
+          )
+        ), // Run this group until we have a coral
         GlobalCommands.humanPlayerIntake(), // Put elevator in HP load position
+        Commands.sequence(
+          Commands.waitUntil(() -> Elevator.getInstance().isCoralElevatorOnTarget(75.0)),
+          DriveCommands.pidToPoint(() -> targetHPPose, false)
+        ),
         AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
         AlgaeEndEffectorCommands.algaeWristDefault(),
         ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_DEFAULT_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)

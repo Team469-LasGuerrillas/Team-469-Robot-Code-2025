@@ -38,18 +38,26 @@ public class Autons {
   }
 
   public static Command threePieceLeft() {
-    ReefPositions EL = ReefPositions.ERB;
+    ReefPositions EL;
     if (Station.isRed()) EL = ReefPositions.ERR;
-    ReefPositions FL = ReefPositions.FLB;
+    else EL = ReefPositions.ERB;
+
+    ReefPositions FL;
     if (Station.isRed()) FL = ReefPositions.FLR;
-    ReefPositions FR = ReefPositions.FRB;
+    else FL = ReefPositions.FLB;
+
+    ReefPositions FR;
     if (Station.isRed()) FR = ReefPositions.FRR;
-    ReefPositions AL = ReefPositions.ALB;
+    else FR = ReefPositions.FRB;
+
+    ReefPositions AL;
     if (Station.isRed()) AL = ReefPositions.ALR;
+    else AL = ReefPositions.ALB;
 
     AutoScore.resetAutoScoreToL4();
 
-    return Commands.sequence(
+    return 
+    Commands.sequence(
       AutonCommands.driveAndAutoScoreInAuton(EL),
       AutonCommands.driveAndIntakeFromHumanPlayerLeft(),
       AutonCommands.driveAndAutoScoreInAuton(FL),

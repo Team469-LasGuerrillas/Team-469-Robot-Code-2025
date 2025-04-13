@@ -9,7 +9,6 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -23,12 +22,14 @@ public class ElevatorConstants {
     public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 5.125;
 
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH = GROUND_TO_CORAL_REST_POS_INCHES + 5;
-    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW = GROUND_TO_CORAL_REST_POS_INCHES + 1.5; // + 0.75; // 0.75 is for Reduced tolerance for flip -- @ Detroit
+    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL = GROUND_TO_CORAL_REST_POS_INCHES + 1.5; // + 0.75; // 0.75 is for Reduced tolerance for flip -- @ Detroit
+    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITHOUT_CORAL = 
+        MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL + 6;
     public static final double MIN_ELEVATOR_HEIGHT_FOR_ALGAE_OUT = GROUND_TO_CORAL_REST_POS_INCHES + 5;
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE = GROUND_TO_CORAL_REST_POS_INCHES + 3;
 
     public static final double IS_ON_TARGET_THRESHOLD = 0.25;
-    public static final double IS_ON_TARGET_HUGE = 5;
+    public static final double IS_ON_TARGET_HUGE = 15;
 
     /* CORAL ELEVATOR MOTOR FOLLOWER */
     private static TalonFXConfiguration coralElevatorFollowerFxConfiguration = 
@@ -52,18 +53,18 @@ public class ElevatorConstants {
     public static final double CORAL_GROUND_INTAKE_POS = 1;
     public static final double CORAL_HUMAN_PLAYER_INTAKE_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_L1_POS = 24;
-    public static final double CORAL_L2_POS = 38.75;
-    public static final double CORAL_L3_POS = 55.25;
-    public static final double CORAL_L4_POS = 81 + 1.5; // TODO: I added 1.5 cause elevator skipping
+    public static final double CORAL_L2_POS = 38.75 + 3;
+    public static final double CORAL_L3_POS = 55.25 + 3;
+    public static final double CORAL_L4_POS = 81 + 5; 
     public static final double CORAL_LOLLIPOP_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_PROCESSOR_POS = CORAL_DEFAULT_POS; // 16.469
     public static final double CORAL_BARGE_POS = 88.5;
 
     public static final double CORAL_VELOCITY = 100; // 60
-    public static final double CORAL_SLOW_VELOCITY = 50;
-    public static final double CORAL_ACCELERATION = 600; // 350 250
-    public static final double CORAL_DOWN_ACCELERATION = 200; // 350 250
-    public static final double CORAL_DOWN_VELOCITY = 70;
+    public static final double CORAL_SLOW_VELOCITY = 50; // 35 at states
+    public static final double CORAL_ACCELERATION = 330; // 330 at states, 100 at troy, 600 MAX
+    public static final double CORAL_DOWN_ACCELERATION = 110; // 110 at states, 100 at troy
+    public static final double CORAL_DOWN_VELOCITY = 60; // new after states
 
     public static final double CORAL_SLOW_ACCELERATION = 5000.0;
     public static final double CORAL_JERK = 0;
@@ -84,7 +85,7 @@ public class ElevatorConstants {
     public static final double DYNAMIC_ELEVATOR_HEIGHT_MAGIC_NUMBER = 1.5;
     public static final double DYNAMIC_ELEVATOR_CLAMP_RANGE = 4.69; // 4.69
     
-    public static final int NUM_OF_ON_TARGET_LOOPS = 5;
+    public static final int NUM_OF_ON_TARGET_LOOPS = 2;
     
     private static TalonFXConfiguration coralElevatorTalonFXConfiguration =
     new TalonFXConfiguration()
@@ -96,7 +97,7 @@ public class ElevatorConstants {
     .withCurrentLimits(
         new CurrentLimitsConfigs()
             .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(120))
+            .withStatorCurrentLimit(100))
               .withSlot0(
             new Slot0Configs()
                 .withKS(0)

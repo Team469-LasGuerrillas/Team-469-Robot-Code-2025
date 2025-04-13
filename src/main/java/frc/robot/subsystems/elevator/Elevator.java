@@ -221,7 +221,7 @@ public class Elevator extends SubsystemBase {
     private boolean isCoralWristLegal() {
         boolean coralIntakingCaseIsLegal =
             (CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW
-            && coralRequestedHeight.getAsDouble() + dynamicOffset < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW);
+            && coralRequestedHeight.getAsDouble() + dynamicOffset < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL);
 
         boolean coralOutCase = CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
 

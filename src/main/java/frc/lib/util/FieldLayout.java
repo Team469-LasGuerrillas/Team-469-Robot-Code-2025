@@ -52,7 +52,7 @@ public class FieldLayout {
   public static Transform2d L3_TRANSFORM = new Transform2d(1.25, 0, new Rotation2d());
   public static Transform2d ALGAE_TRANSFORM = new Transform2d(1.35, 0, new Rotation2d());
 
-  public static Transform2d HOLDING_TOLERANCE_TRANSFORM = new Transform2d(L1_TRANSFORM.getX() - DriveConstants.L1_LINEAR_TOLERANCE_METERS, 0, new Rotation2d());
+  public static Transform2d HOLDING_TOLERANCE_TRANSFORM = new Transform2d(DriveConstants.L1_LINEAR_TOLERANCE_METERS - 0.05, 0, new Rotation2d());
 
   public static Pose2d REEF_CENTER_BLUE = new Pose2d(4.5, aprilTagFieldLayout.getFieldWidth() / 2, new Rotation2d());
 

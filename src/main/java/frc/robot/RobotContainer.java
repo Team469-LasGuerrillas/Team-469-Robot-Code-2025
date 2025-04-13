@@ -252,6 +252,8 @@ public class RobotContainer {
     operator.button(10).whileTrue(GlobalCommands.coralL1());
 
     operator.button(9).whileTrue(GlobalCommands.algaeGroundIntake());
+
+    // operator.leftStick().or(operator.rightStick()).toggleOnTrue(GlobalCommands.coralL4NoAlgae());
   }
 
   /**

@@ -39,6 +39,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.constants.DriveConstants;
 
 import static frc.robot.util.PhoenixUtil.*;
 
@@ -249,11 +250,16 @@ public class ModuleIOTalonFX implements ModuleIO {
   @Override
   public void setDriveVelocity(double velocityRadPerSec) {
     double velocityRotPerSec = Units.radiansToRotations(velocityRadPerSec);
-    driveTalon.setControl(
-        switch (constants.DriveMotorClosedLoopOutput) {
-          case Voltage -> velocityVoltageRequest.withVelocity(velocityRotPerSec);
-          case TorqueCurrentFOC -> velocityTorqueCurrentRequest.withVelocity(velocityRotPerSec);
-        });
+
+    if (Math.abs(velocityRotPerSec) > DriveConstants.MIN_SPEED_FOR_OUTPUT) {
+        driveTalon.setControl(
+            switch (constants.DriveMotorClosedLoopOutput) {
+            case Voltage -> velocityVoltageRequest.withVelocity(velocityRotPerSec);
+            case TorqueCurrentFOC -> velocityTorqueCurrentRequest.withVelocity(velocityRotPerSec);
+            });
+    } else {
+        driveTalon.setVoltage(0);
+    }
   }
 
   @Override

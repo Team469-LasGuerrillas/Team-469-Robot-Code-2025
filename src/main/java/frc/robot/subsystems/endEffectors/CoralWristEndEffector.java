@@ -70,7 +70,12 @@ public class CoralWristEndEffector extends SubsystemBase {
         } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH;
-        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW
+        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITHOUT_CORAL
+            && !CoralIntakeEndEffector.getInstance().hasCoral()
+            && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW) {
+            return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
+        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL
+            && CoralIntakeEndEffector.getInstance().hasCoral()
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
         } else {

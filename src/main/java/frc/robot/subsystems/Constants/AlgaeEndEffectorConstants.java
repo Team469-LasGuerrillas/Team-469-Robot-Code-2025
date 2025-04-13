@@ -97,7 +97,7 @@ public class AlgaeEndEffectorConstants {
             new Slot0Configs()
             .withKS(0)
             .withKV(0)
-            .withKP(30)
+            .withKP(35)
             .withKI(0)
             .withKD(0))
         .withMotionMagic(

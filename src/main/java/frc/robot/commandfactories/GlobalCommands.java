@@ -143,6 +143,12 @@ public class GlobalCommands {
     );
   }
 
+  public static Command coralL2WithoutCoralEE() {
+    return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralElevatorOnTarget() && coralWristEndEffector.isCoralWristOnTarget());}),
+      ElevatorCommands.setTargetPosFromZero(() -> ElevatorConstants.CORAL_L2_POS, () -> ElevatorConstants.ALGAE_DEFAULT_POS)
+    );
+  }
+
   public static Command coralL2AutoScore() {
     return Commands.parallel(
             CoralEndEffectorCommands.coralWristAutoScore(() -> CoralEndEffectorConstants.CORAL_L2_POS),

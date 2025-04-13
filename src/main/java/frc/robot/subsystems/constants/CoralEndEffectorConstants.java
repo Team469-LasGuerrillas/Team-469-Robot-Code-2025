@@ -47,7 +47,7 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L2_POS = 0.675;
     public static final double CORAL_L1_POS = 0.49;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
-    public static final double CORAL_HP_INTAKE_POS = 0.153; // 0.136
+    public static final double CORAL_HP_INTAKE_POS = 0.172; // 0.136
     public static final double CORAL_WRIST_DEFAULT_POS = 0.4;
     public static final double CORAL_PROCESSOR_POS = CORAL_L1_POS;
 
@@ -60,7 +60,7 @@ public class CoralEndEffectorConstants {
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_W_CORAL = 4;
     
-    public static final int NUM_OF_ON_TARGET_LOOPS = 7;
+    public static final int NUM_OF_ON_TARGET_LOOPS = 2;
     
     private static TalonFXConfiguration coralWristMotorFxConfig = 
     new TalonFXConfiguration()
@@ -86,7 +86,7 @@ public class CoralEndEffectorConstants {
             .withKV(0)
             .withKP(175)
             .withKI(0)
-            .withKD(3)
+            .withKD(2)
         )
         .withMotionMagic(
             new MotionMagicConfigs()
@@ -124,8 +124,8 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_INTAKE_IN_VOLTAGE = -3.3;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
     public static final double CORAL_L1_INTAKE_OUT_VOLTAGE = 4;
-    public static final double CORAL_DEFAULT_VOLTAGE = -1.469;
-    public static final double CORAL_FINAL_RETAINING_VOLTAGE = CORAL_DEFAULT_VOLTAGE;
+    public static final double CORAL_DEFAULT_VOLTAGE = -3.3; // -1.469
+    public static final double CORAL_FINAL_RETAINING_VOLTAGE = -1;
 
     private static TalonFXConfiguration coralIntakeMotorFxConfig = 
     new TalonFXConfiguration()

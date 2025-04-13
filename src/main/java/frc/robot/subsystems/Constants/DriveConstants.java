@@ -40,30 +40,34 @@ public class DriveConstants {
   // Heading Controller
   public static final double HEADING_P = 6;
   public static final double HEADING_I = 0.0;
-  public static final double HEADING_D = 0.0;
+  public static final double HEADING_D = 0.5;
 
   public static final double HEADING_TOLERANCE_DEGREES = 0.4;
-  public static final double L1_HEADING_TOLERANCE_DEGREES = 5;
+  public static final double L1_HEADING_TOLERANCE_DEGREES = 4;
+  public static final double HP_HEADING_TOLERANCE_DEGREES = 3;
   public static final double HEADING_TOLERANCE_TO_SCORE_DEGREES = 1.5;
 
   public static final double HEADING_TOLERANCE_TO_RAISE_ELEVATOR = 90;
   public static final double HEADING_TOLERANCE_TO_START_HP_INTAKE = 10;
 
   // Linear Controller
-  public static final double LINEAR_P_FINE = 2.5;
-  public static final double LINEAR_I_FINE = 1;
+  public static final double MIN_SPEED_FOR_OUTPUT = 0.000001;
+
+  public static final double LINEAR_P_FINE = 3;
+  public static final double LINEAR_I_FINE = 0.5;
   public static final double LINEAR_D_FINE = 0.4;
 
-  public static final double LINEAR_P_GROSS = 4;
+  public static final double LINEAR_P_GROSS = 3; // 4.25
   public static final double LINEAR_I_GROSS = 0;
-  public static final double LINEAR_D_GROSS = 1;
+  public static final double LINEAR_D_GROSS = 1.5; // 3.5
 
   public static final double LINEAR_TOLERANCE_METERS = 0.005;
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.2;
+  public static final double HP_LINEAR_TOLERANCE_METERS = 0.075;
   public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.025;
   public static final double I_ZONE_METERS = 0.1;
 
-  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 1.625;
+  public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 1.469; // 1.625
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 0.3;
 
   public static final double FIELD_VELOCITY_CORRECTION_FACTOR_MAGIC_NUMBER = 1.0;
