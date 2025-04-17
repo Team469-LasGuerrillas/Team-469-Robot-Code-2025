@@ -67,7 +67,7 @@ public class RobotContainer {
   private final AlgaeIntakeEndEffector algaeIntakeEndEffector;
   private final CoralWristEndEffector coralWristEndEffector;
   private final CoralIntakeEndEffector coralIntakeEndEffector;
-  private final Climb climb;
+  // private final Climb climb;
   private final Elevator elevator;
   // private final LEDSubsystem led;
 
@@ -104,7 +104,7 @@ public class RobotContainer {
 
               coralIntakeEndEffector = CoralIntakeEndEffector.createInstance(CoralEndEffectorConstants.coralIntakeMotor, CoralEndEffectorConstants.canRange);
 
-              climb = Climb.createInstance(ClimbConstants.climbMotor);
+              // climb = Climb.createInstance(ClimbConstants.climbMotor);
 
               elevator = Elevator.createInstance(
                 ElevatorConstants.coralElevatorMotor, 
@@ -141,7 +141,7 @@ public class RobotContainer {
   
                 coralIntakeEndEffector = CoralIntakeEndEffector.createInstance(new MotorIO() {}, new SensorIO() {});
   
-                climb = Climb.createInstance(new MotorIO() {});
+                // climb = Climb.createInstance(new MotorIO() {});
   
                 elevator = Elevator.createInstance(new MotorIO() {}, new MotorIO() {}, new MotorIO() {});
         
@@ -171,7 +171,7 @@ public class RobotContainer {
     algaeWristEndEffector.setDefaultCommand(GlobalCommands.defaultAlgaeWristEndEffector());
     algaeIntakeEndEffector.setDefaultCommand(GlobalCommands.defaultAlgaeIntakeEndEffector());
     coralIntakeEndEffector.setDefaultCommand(GlobalCommands.defaultCoralIntakeEndEffector());
-    climb.setDefaultCommand(GlobalCommands.defaultClimb());
+    // climb.setDefaultCommand(GlobalCommands.defaultClimb());
 
     elevator.setDefaultCommand(GlobalCommands.defaultElevator());
   }
@@ -245,7 +245,7 @@ public class RobotContainer {
 
     operator.back().whileTrue(GlobalCommands.coralL2());
 
-    operator.start().whileTrue(GlobalCommands.coralL3NoAlgae());
+    operator.start().whileTrue(GlobalCommands.coralL3());
 
     operator.povDown().whileTrue(GlobalCommands.coralL4());
 

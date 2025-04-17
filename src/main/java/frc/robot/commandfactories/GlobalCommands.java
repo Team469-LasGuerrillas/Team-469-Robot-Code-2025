@@ -164,7 +164,10 @@ public class GlobalCommands {
   public static Command coralL1() {
     return Commands.deadline(Commands.waitUntil(() -> {return false && (elevator.isCoralElevatorOnTarget() && coralWristEndEffector.isCoralWristOnTarget());}),
       CoralEndEffectorCommands.coralWrist(() -> CoralEndEffectorConstants.CORAL_L1_POS),
-      AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L1)
+      AlgaeEndEffectorCommands.algaeWrist(() -> AlgaeEndEffectorConstants.ALGAE_WRIST_L1),
+      ElevatorCommands.setTargetPosFromZero(
+        () -> ElevatorConstants.CORAL_DEFAULT_POS + 2, 
+        () -> ElevatorConstants.ALGAE_DEFAULT_POS)
     );
   }
 

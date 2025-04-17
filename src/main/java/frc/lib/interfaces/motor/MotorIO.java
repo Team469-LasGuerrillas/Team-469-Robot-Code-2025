@@ -12,6 +12,7 @@ public interface MotorIO {
   @AutoLog
   class MotorIOInputs {
     public boolean connected = false;
+    public boolean isFOCEnabled = false;
 
     public double velocityUnitsPerSecond = 0.0;
     public double appliedVolts = 0.0;

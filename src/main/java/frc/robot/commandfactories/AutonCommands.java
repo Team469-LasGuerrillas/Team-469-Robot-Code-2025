@@ -340,7 +340,7 @@ public class AutonCommands {
         // Drive to HP station
         GlobalCommands.humanPlayerIntake(), // Put elevator in HP load position
         Commands.sequence(
-          Commands.waitUntil(() -> Elevator.getInstance().isCoralElevatorOnTarget(75.0)),
+          Commands.waitUntil(() -> Elevator.getInstance().isCoralElevatorOnTarget(DriveConstants.ELEVATOR_TOLERANCE_BEFORE_DRIVING_TO_HP)),
           DriveCommands.pidToPoint(() -> targetHPPose, false)
         ),
         AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),
@@ -366,7 +366,7 @@ public class AutonCommands {
         ), // Run this group until we have a coral
         GlobalCommands.humanPlayerIntake(), // Put elevator in HP load position
         Commands.sequence(
-          Commands.waitUntil(() -> Elevator.getInstance().isCoralElevatorOnTarget(75.0)),
+          Commands.waitUntil(() -> Elevator.getInstance().isCoralElevatorOnTarget(DriveConstants.ELEVATOR_TOLERANCE_BEFORE_DRIVING_TO_HP)),
           DriveCommands.pidToPoint(() -> targetHPPose, false)
         ),
         AlgaeEndEffectorCommands.algaeIntake(() -> AlgaeEndEffectorConstants.ALGAE_INTAKE_DEFAULT_VOLTAGE),

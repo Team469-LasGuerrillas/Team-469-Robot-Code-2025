@@ -66,6 +66,8 @@ public class CoralWristEndEffector extends SubsystemBase {
     private double getClosestAllowedPosition(double targetPosition) {
         if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() <= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE
             && targetPosition > CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD) {
+            if (targetPosition == CoralEndEffectorConstants.CORAL_L1_POS) 
+                return CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD_2;
             return CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD;
         } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH) {

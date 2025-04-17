@@ -20,9 +20,9 @@ public class DriveConstants {
           Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
     
   // Pathplanner constants
-  public static final double ROBOT_MASS_KG = 19.5;
-  public static final double ROBOT_MOI = 0.41;
-  public static final double WHEEL_COF = 1.5;
+  public static final double ROBOT_MASS_KG = 65.77;
+  public static final double ROBOT_MOI = 2; // 4.5
+  public static final double WHEEL_COF = 1.8;
 
   // Pathfinding constants
   public static final double MAX_LINEAR_ACCEL_FINE = 0.4; // 0.09
@@ -55,17 +55,18 @@ public class DriveConstants {
 
   public static final double LINEAR_P_FINE = 3;
   public static final double LINEAR_I_FINE = 0.7;
-  public static final double LINEAR_D_FINE = 0;
+  public static final double LINEAR_D_FINE = 0.4;
 
   public static final double LINEAR_P_GROSS = 3;
   public static final double LINEAR_I_GROSS = 0;
-  public static final double LINEAR_D_GROSS = 2;
+  public static final double LINEAR_D_GROSS = 1.5;
 
   public static final double LINEAR_TOLERANCE_METERS = 0.005;
   public static final double L1_LINEAR_TOLERANCE_METERS = 0.2;
   public static final double HP_LINEAR_TOLERANCE_METERS = 0.075;
   public static final double LINEAR_TOLERACE_TO_SCORE_METERS = 0.025;
   public static final double I_ZONE_METERS = 0.1;
+  public static final double ELEVATOR_TOLERANCE_BEFORE_DRIVING_TO_HP = 65;
 
   public static final double LINEAR_TOLERANCE_TO_RAISE_ELEVATOR = 2.125; // 1.625
   public static final double LINEAR_TOLERANCE_TO_START_HP_INTAKE = 1;

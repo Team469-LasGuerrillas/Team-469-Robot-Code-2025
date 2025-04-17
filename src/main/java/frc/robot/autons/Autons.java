@@ -55,7 +55,7 @@ public class Autons {
     else AL = ReefPositions.ALB;
 
     AutoScore.resetAutoScoreToL4();
-
+  
     return 
     Commands.sequence(
       AutonCommands.driveAndAutoScoreInAuton(EL),
@@ -69,14 +69,21 @@ public class Autons {
   }
 
   public static Command threePieceRight() {
-    ReefPositions CR = ReefPositions.CLB;
+    ReefPositions CR;
     if (Station.isRed()) CR = ReefPositions.CLR;
-    ReefPositions BR = ReefPositions.BRB;
+    else CR = ReefPositions.CLB;
+
+    ReefPositions BR;
     if (Station.isRed()) BR = ReefPositions.BRR;
-    ReefPositions BL = ReefPositions.BLB;
+    else BR = ReefPositions.BRB;
+
+    ReefPositions BL;
     if (Station.isRed()) BL = ReefPositions.BLR;
-    ReefPositions AR = ReefPositions.ARB;
+    else BL = ReefPositions.BLB;
+
+    ReefPositions AR;
     if (Station.isRed()) AR = ReefPositions.ARR;
+    else AR = ReefPositions.ARB;
 
     AutoScore.resetAutoScoreToL4();
 

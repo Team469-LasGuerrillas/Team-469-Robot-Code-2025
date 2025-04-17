@@ -72,12 +72,12 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_WRIST_DEFAULT_POS = 0.03;
     public static final double ALGAE_WRIST_DEFAULT_POS_WA = 0.12;
     public static final double ALGAE_WRIST_PROCESSOR_POS = 0.19;
-    public static final double ALGAE_WRIST_BARGE_POS = 0.11;
+    public static final double ALGAE_WRIST_BARGE_POS = 0.085;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
     public static final double ALGAE_WRIST_L2_L3 = 0.32;
     public static final double ALGAE_WRIST_L1 = 0.13;
     public static final double IS_ON_TARGET_THRESHOLD = 0.01;
-    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.4;
+    public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL = 0.45;
     public static final double ALGAE_WRIST_HORZIONTAL_POS = 0.23;
     public static final double ALGAE_LOLLIPOP_POS = 0.173;
     public static final double ALGAE_EXTENSION_THRESHOLD = 0.15;
@@ -99,7 +99,7 @@ public class AlgaeEndEffectorConstants {
             .withKV(0)
             .withKP(35)
             .withKI(0)
-            .withKD(0))
+            .withKD(0.03))
         .withMotionMagic(
             new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(80)

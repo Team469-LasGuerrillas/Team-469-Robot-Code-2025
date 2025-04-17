@@ -45,7 +45,7 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_L4_POS = 0.69;
     public static final double CORAL_L3_POS = 0.675;
     public static final double CORAL_L2_POS = 0.675;
-    public static final double CORAL_L1_POS = 0.49;
+    public static final double CORAL_L1_POS = 0.51;
     public static final double CORAL_GROUND_INTAKE_POS = 0;
     public static final double CORAL_HP_INTAKE_POS = 0.172; // 0.136
     public static final double CORAL_WRIST_DEFAULT_POS = 0.4;
@@ -55,6 +55,7 @@ public class CoralEndEffectorConstants {
     public static final double CORAL_WRIST_FLIP_THRESHOLD_LOW = 0.4;
     public static final double CORAL_BARGE_POS = CORAL_WRIST_FLIP_THRESHOLD_HIGH;
     public static final double IDLE_WRIST_THRESHOLD = 0.45;
+    public static final double IDLE_WRIST_THRESHOLD_2 = 0.52;
     public static final double IS_ON_TARGET_THRESHOLD = 0.019;
     public static final double HORIZONTAL_POSITION = 0.045;
     public static final double VOLTAGE_TO_MAINTAIN_HORIZONTAL_WO_CORAL = 1;
@@ -123,7 +124,7 @@ public class CoralEndEffectorConstants {
     /* CORAL INTAKE MOTOR */
     public static final double CORAL_INTAKE_IN_VOLTAGE = -3.3;
     public static final double CORAL_INTAKE_OUT_VOLTAGE = 12;
-    public static final double CORAL_L1_INTAKE_OUT_VOLTAGE = 4;
+    public static final double CORAL_L1_INTAKE_OUT_VOLTAGE = 2;
     public static final double CORAL_DEFAULT_VOLTAGE = -3.3; // -1.469
     public static final double CORAL_FINAL_RETAINING_VOLTAGE = -1;
 

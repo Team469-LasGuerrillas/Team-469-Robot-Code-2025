@@ -32,6 +32,7 @@ public class Dashboard {
     // );
 
     autoChooser.setDefaultOption("1 Piece Center", Autons.centerOnePiece());
+    autoChooser.addOption("1 Piece + Algae", Autons.centerOnePiecePlusAlgae());
     autoChooser.addOption("3 Piece Left", Autons.threePieceLeft());
     autoChooser.addOption("3 Piece Right", Autons.threePieceRight());
 

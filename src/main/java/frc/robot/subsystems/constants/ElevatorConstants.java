@@ -53,9 +53,9 @@ public class ElevatorConstants {
     public static final double CORAL_GROUND_INTAKE_POS = 1;
     public static final double CORAL_HUMAN_PLAYER_INTAKE_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_L1_POS = 24;
-    public static final double CORAL_L2_POS = 38.75 + 3;
-    public static final double CORAL_L3_POS = 55.25 + 3;
-    public static final double CORAL_L4_POS = 81 + 5; 
+    public static final double CORAL_L2_POS = 38.75;
+    public static final double CORAL_L3_POS = 55.25; 
+    public static final double CORAL_L4_POS = 81; 
     public static final double CORAL_LOLLIPOP_POS = CORAL_DEFAULT_POS;
     public static final double CORAL_PROCESSOR_POS = CORAL_DEFAULT_POS; // 16.469
     public static final double CORAL_BARGE_POS = 88.5;
