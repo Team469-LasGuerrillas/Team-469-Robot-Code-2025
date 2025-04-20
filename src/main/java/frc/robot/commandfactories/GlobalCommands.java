@@ -224,7 +224,7 @@ public class GlobalCommands {
 
   public static Command algaeRelease() {
     return Commands.deadline(
-      Commands.waitSeconds(2),
+      Commands.waitSeconds(4),
       AlgaeEndEffectorCommands.algaeDynamicIntakeOut());
   }
 

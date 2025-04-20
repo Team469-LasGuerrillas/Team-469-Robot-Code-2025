@@ -72,7 +72,7 @@ public class AlgaeEndEffectorConstants {
     public static final double ALGAE_WRIST_DEFAULT_POS = 0.03;
     public static final double ALGAE_WRIST_DEFAULT_POS_WA = 0.12;
     public static final double ALGAE_WRIST_PROCESSOR_POS = 0.19;
-    public static final double ALGAE_WRIST_BARGE_POS = 0.085;
+    public static final double ALGAE_WRIST_BARGE_POS = 0.12;
     public static final double ALGAE_WRIST_GROUND_POS = 0.25;
     public static final double ALGAE_WRIST_L2_L3 = 0.32;
     public static final double ALGAE_WRIST_L1 = 0.13;

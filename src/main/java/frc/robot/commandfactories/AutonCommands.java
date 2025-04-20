@@ -294,19 +294,25 @@ public class AutonCommands {
   }
 
   public static Command scoreAlgaeInBarge() {
-    Pose2d bargePose;
-    if (Station.isRed()) bargePose = FieldLayout.BARGE_POSITION_RED;
-    else bargePose = FieldLayout.BARGE_POSITION_BLUE;
+    // Pose2d bargePose;
+    // if (Station.isRed()) bargePose = FieldLayout.BARGE_POSITION_RED;
+    // else bargePose = FieldLayout.BARGE_POSITION_BLUE;
 
     return Commands.sequence(
       Commands.deadline( // Drive to barge
         Commands.waitUntil(
           () -> Drive.getInstance().isOnTarget(
-            bargePose, 
+            Station.isRed() 
+            ? FieldLayout.BARGE_POSITION_RED 
+            : FieldLayout.BARGE_POSITION_BLUE, 
             0.25, 
             5)
         ),
-        DriveCommands.pidToPoint(() -> bargePose)
+        DriveCommands.pidToPoint(
+          () -> Station.isRed() 
+          ? FieldLayout.BARGE_POSITION_RED 
+          : FieldLayout.BARGE_POSITION_BLUE
+        )
       ),
       Commands.deadline( // Raise elevator
         Commands.waitUntil(

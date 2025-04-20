@@ -21,7 +21,7 @@ public class ElevatorConstants {
     public static final double GROUND_TO_CORAL_REST_POS_INCHES = 12.125;
     public static final double GROUND_TO_ALGAE_REST_POS_INCHES = 5.125;
 
-    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH = GROUND_TO_CORAL_REST_POS_INCHES + 5;
+    public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH = GROUND_TO_CORAL_REST_POS_INCHES + 5.5;
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL = GROUND_TO_CORAL_REST_POS_INCHES + 1.5; // + 0.75; // 0.75 is for Reduced tolerance for flip -- @ Detroit
     public static final double MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITHOUT_CORAL = 
         MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL + 6;
@@ -130,7 +130,7 @@ public class ElevatorConstants {
     public static final double ALGAE_PROCESSOR_POS = ALGAE_DEFAULT_POS; // 9.469
     public static final double ALGAE_L2_POS = 33.5;
     public static final double ALGAE_L3_POS = 44;
-    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 22;
+    public static final double ALGAE_BARGE_POS = CORAL_BARGE_POS - 14;
     public static final double ALGAE_LOLLIPOP_POS = ALGAE_DEFAULT_POS;
     public static final double ALGAE_GROUND_POS = 5;
 
@@ -154,7 +154,7 @@ public class ElevatorConstants {
             .withMotionMagic(
                 new MotionMagicConfigs()
                 .withMotionMagicCruiseVelocity(100)
-                .withMotionMagicAcceleration(150));
+                .withMotionMagicAcceleration(150.00469));
 
     private static MotorConfigs algaeElevatorMotorConfigs = 
     new MotorConfigs()

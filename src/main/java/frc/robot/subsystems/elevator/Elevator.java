@@ -219,10 +219,14 @@ public class Elevator extends SubsystemBase {
     }
 
     private boolean isCoralWristLegal() {
+
+        // Coral is in the HP load, but we need to go up
         boolean coralIntakingCaseIsLegal =
             (CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW
+            && CoralWristEndEffector.getInstance().getRequestedPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW
             && coralRequestedHeight.getAsDouble() + dynamicOffset < ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL);
 
+        // If coral wrist is on scoring side, we can do whatever we wamt
         boolean coralOutCase = CoralWristEndEffector.getInstance().getWristPosition() > CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
 
         return coralIntakingCaseIsLegal || coralOutCase;

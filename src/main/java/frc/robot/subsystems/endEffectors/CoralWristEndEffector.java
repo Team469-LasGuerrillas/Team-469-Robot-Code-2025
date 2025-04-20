@@ -64,19 +64,23 @@ public class CoralWristEndEffector extends SubsystemBase {
     }
 
     private double getClosestAllowedPosition(double targetPosition) {
-        if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() <= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE
+        if ((Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() <= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE
+            || Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() <= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_IDLE)
             && targetPosition > CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD) {
             if (targetPosition == CoralEndEffectorConstants.CORAL_L1_POS) 
                 return CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD_2;
             return CoralEndEffectorConstants.IDLE_WRIST_THRESHOLD;
-        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH
+        } else if ((Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH
+            || Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_HIGH)
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_HIGH;
-        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITHOUT_CORAL
+        } else if ((Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITHOUT_CORAL
+            || Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITHOUT_CORAL)
             && !CoralIntakeEndEffector.getInstance().hasCoral()
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
-        } else if (Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL
+        } else if ((Elevator.getInstance().getCurrentCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL
+            || Elevator.getInstance().getRequestedCoralElevatorPosFromGroundInches() >= ElevatorConstants.MAX_ELEVATOR_HEIGHT_FOR_CORAL_FLIP_LOW_WITH_CORAL)
             && CoralIntakeEndEffector.getInstance().hasCoral()
             && targetPosition < CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW) {
             return CoralEndEffectorConstants.CORAL_WRIST_FLIP_THRESHOLD_LOW;
